@@ -1,0 +1,89 @@
+/* Put your css in here */
+
+body {
+  padding-top: 10px;
+  padding-right: 10px;
+  padding-left: 10px;
+  color: white;
+  background: #000;
+}
+
+@media (max-width: 768px) { /* TARGET PHONE ONLY */
+  /* Remove any padding from the body */
+  .right-icon, .left-icon {
+    margin-top: 20px;
+  }
+  
+  .title {
+    margin-top: 10px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 992px) { /* EVERYTHING IN BETWEEN */
+  /* Remove any padding from the body */
+  .right-icon, .left-icon {
+    margin-top: 15px;
+  }
+  
+  .title {
+    margin-top: 10px;
+  }
+}
+
+@media (min-width: 992px) { /* DESKTOP ONLY */
+  /* Remove any padding from the body */
+  .small-container {
+    margin: 0 auto;
+    max-width: 500px;
+  }
+
+  .right-icon, .left-icon {
+    margin-top: 15px;
+  }
+  
+  .title {
+    margin-top: 10px;
+  }
+}
+
+.table-body > tr:hover {
+  color: black;
+}
+
+.title-block {
+  margin-bottom: 200px;
+}
+
+.home-btns a, .goal-btns a, .tracker-btns a {
+  margin-bottom: 20px;
+}
+
+.btn-description {
+  margin: 0 auto;
+  padding: 0;
+}
+
+.heading {
+  margin-top: 60px;
+  margin-bottom: 100px;
+}
+
+.nav-title {
+  font-size: 20px;
+}
+
+.rating-box .description {
+  margin-bottom: 50px;
+}
+
+.rating-box .ratings {
+  margin-bottom: 200px;
+}
+
+.progress-btn {
+  margin-top: 100px;
+}
+
+.rating i {
+  margin-top: 30px;
+}
