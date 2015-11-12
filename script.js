@@ -42,7 +42,7 @@ $(document).ready(function() {
             error: function(res, err) {
                 console.warn(res, err, "Error has occured");
             }
-        }).then(function() {
+        }).then(function(res) {
             console.log("Here is Activities Avail:", activityList);
 
             createActivies(activityList);
@@ -63,12 +63,13 @@ $(document).ready(function() {
         		var tr = document.createElement('tr');
         		tr.className = "table-data";
         		tr.addEventListener("click", function(ev){
-        		    console.log(["Clicked with Data", ev], ["Children", ev.target.parentNode.children]);
+        		  //  console.log(["Clicked with Data", ev], ["Children", ev.target.parentNode.children]);
         		    var children = ev.target.parentNode.children;
-        		    var o = {
-        		        item: children[0].innerHTML
-        		    };
+        		    var o = { id: children[3].innerHTML };
+        		    var url = "/activityDescription.html";
         		    
+        		    console.log("Object to send", o);
+        		    encodeAndSend(url, o);
         		    
         		}, false);
 
@@ -108,6 +109,73 @@ $(document).ready(function() {
 
     } else if (pageTitle[0].id == "activityScreen") {
         console.log("This is Activity Screen");
+
+    } else if (pageTitle[0].id == "activityDescription") {
+        console.log("This is Activity Description Screen");
+        
+        var postData = window.location.search;
+        var d = decodeData(postData);
+        
+        console.log("Post Data", d);
+        
+        var activities = new Parse.Query("ActivityList");
+        var activity = [];
+
+        // Grab All Users Activities
+        activities.equalTo("objectId", d.id);
+        activities.find({
+            success: function(res) {
+                // console.log(res, "Amount of items", res.length);
+                res.forEach(function(e, i, a) {
+                    
+                    e.attributes.objectId = e.id;
+                    activity.push({data: e.attributes, id: e.id});
+                    
+                    console.log(["activity object", activity]);
+                });
+            },
+            error: function(res, err) {
+                console.warn(res, err, "Error has occured");
+            }
+        }).then(function(res) {
+            console.log("Here is the data:", d);
+
+            var query = new Parse.Query("ActivityList");
+            var a = [];
+            var obj = JSON.parse(d);
+            
+            console.log("Searching for ID", obj.id);
+            
+            query.get(obj.id, {
+                success: function(res) {
+                    console.log([res, "Amount of items", res.length]);
+                    // res.forEach(function(e, i, a) {
+                        
+                    //     e.attributes.objectId = e.id;
+                    //     activity.push({data: e.attributes, id: e.id});
+                        
+                    //     console.log(["activity object", activity]);
+                    // });
+                },
+                error: function(res, err) {
+                    console.warn(res, err, "Error has occured");
+                }
+            }).then(function(res){
+                var data = res.attributes;
+                var pTitle = document.getElementsByClassName('activity-title');
+                var pType = document.getElementsByClassName('activity-type');
+                var pInst = document.getElementsByClassName('activity-instructions');
+                
+                console.log("Attribs", data);
+                
+                pTitle[0].innerHTML = data.item;
+                pType[0].innerHTML = data.type;
+                pInst[0].innerHTML = data.instructions;
+                
+            });
+        });
+        
+        
 
     } else if (pageTitle[0].id == "activityScreen") {
         console.log("This is Activity Screen");
