@@ -46,6 +46,10 @@ body {
   }
 }
 
+.hidden {
+  visibility: hidden;
+}
+
 .table-body > tr:hover {
   color: black;
 }

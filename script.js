@@ -34,9 +34,10 @@ $(document).ready(function() {
             success: function(res) {
                 // console.log(res, "Amount of items", res.length);
                 res.forEach(function(e, i, a) {
-                    // console.log("Each Item", e);
-                    activityList.push(e.attributes);
-                })
+                    // console.log(["Each Item", e], "ID", e.id);
+                    e.attributes.objectId = e.id;
+                    activityList.push({data: e.attributes, id: e.id});
+                });
             },
             error: function(res, err) {
                 console.warn(res, err, "Error has occured");
@@ -46,34 +47,53 @@ $(document).ready(function() {
 
             createActivies(activityList);
         });
-
-
+        
+        
         function createActivies(al) {
         	// console.log(["Activity List", al], ["Type", typeof al], ["Is Array?", Array.isArray(al)]);
 
         	al.forEach(function(e,i,a){
+        	   // console.log("ELEMENT", e);
         		var table = window.commands.table = document.getElementById('activitiesTable');
-        		var itemName = e.item;
-        		var itemType = e.type;
-        		var itemInstructions = e.instructions;
+        		var itemName = e.data.item;
+        		var itemType = e.data.type;
+        		var itemInstructions = e.data.instructions;
+        		var objId = e.id;
         		
         		var tr = document.createElement('tr');
+        		tr.className = "table-data";
+        		tr.addEventListener("click", function(ev){
+        		    console.log(["Clicked with Data", ev], ["Children", ev.target.parentNode.children]);
+        		    var children = ev.target.parentNode.children;
+        		    var o = {
+        		        item: children[0].innerHTML
+        		    };
+        		    
+        		    
+        		}, false);
 
         		var td1 = document.createElement('td');
         		var td2 = document.createElement('td');
         		var td3 = document.createElement('td');
+        		var hd = document.createElement('td');
 
         		var text1 = document.createTextNode(itemName);
         		var text2 = document.createTextNode(itemType);
         		var text3 = document.createTextNode(itemInstructions);
+        		var hidden = document.createTextNode(objId);
 
         		td1.appendChild(text1);
         		td2.appendChild(text2);
         		td3.appendChild(text3);
+        		hd.appendChild(hidden);
 
         		tr.appendChild(td1);
         		tr.appendChild(td2);
         		tr.appendChild(td3);
+        		hd.className = "table-id";
+        		hd.style.visibility = "hidden";
+        		hd.style.display = "none";
+        		tr.appendChild(hd);
         		
         		table.tBodies[0].appendChild(tr);
 
