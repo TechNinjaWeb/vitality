@@ -99,6 +99,26 @@ $(document).ready(function() {
         console.log("This is Caloric Goals Page");
 
     }
+    
+    function encodeAndSend(url, data) {
+        var s = JSON.stringify(data);
+        var u = url + "?";
+        var encData = encodeURIComponent(s);
+        
+        window.location.replace(u+encData);
+        
+    }
+    
+    function decodeData(data) {
+        var d = data.replace("?", "");
+        var o = decodeURIComponent(d);
+        
+        return o;
+        
+    }
+    
+    window.commands.sendData = encodeAndSend;
+    window.commands.grabData = decodeData;
 });
 
 // POST DATA TO NEW URL
