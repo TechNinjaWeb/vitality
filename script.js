@@ -107,9 +107,6 @@ $(document).ready(function() {
 
 
 
-    } else if (pageTitle[0].id == "activityScreen") {
-        console.log("This is Activity Screen");
-
     } else if (pageTitle[0].id == "activityDescription") {
         console.log("This is Activity Description Screen");
         
@@ -148,14 +145,9 @@ $(document).ready(function() {
             
             query.get(obj.id, {
                 success: function(res) {
-                    console.log([res, "Amount of items", res.length]);
-                    // res.forEach(function(e, i, a) {
-                        
-                    //     e.attributes.objectId = e.id;
-                    //     activity.push({data: e.attributes, id: e.id});
-                        
-                    //     console.log(["activity object", activity]);
-                    // });
+                    console.log(["Response from Activity Get", res]);
+                    
+                    activity.push({ data: res.attributes, id: res.id });
                 },
                 error: function(res, err) {
                     console.warn(res, err, "Error has occured");
@@ -166,7 +158,7 @@ $(document).ready(function() {
                 var pType = document.getElementsByClassName('activity-type');
                 var pInst = document.getElementsByClassName('activity-instructions');
                 
-                console.log("Attribs", data);
+                // console.log("Attribs", data);
                 
                 pTitle[0].innerHTML = data.item;
                 pType[0].innerHTML = data.type;
@@ -174,8 +166,24 @@ $(document).ready(function() {
                 
             });
         });
+
+		var startBtn = document.getElementsByClassName('start-btn');
+        startBtn[0].addEventListener("click", function(e){
+        	console.log("Starting Activity", activity);
+
+        	var url = "/activityTimer.html";
+        	encodeAndSend(url, activity[0]);
+        });
         
         
+
+    } else if (pageTitle[0].id == "activityTimer") {
+        console.log("This is Activity Timer Screen");
+
+        // var typeList = ["Physical", "Emotional", "Self-Image"];
+        var trackBy = ["Countdown", "Stopwatch"];
+        var timer = ["Body Measurement", "Calories"];
+
 
     } else if (pageTitle[0].id == "activityScreen") {
         console.log("This is Activity Screen");

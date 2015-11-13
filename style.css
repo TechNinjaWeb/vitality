@@ -47,6 +47,7 @@ body {
 }
 
 .hidden {
+  display: none;
   visibility: hidden;
 }
 
@@ -69,7 +70,7 @@ body {
 
 .heading {
   margin-top: 60px;
-  margin-bottom: 100px;
+  margin-bottom: 80px;
 }
 
 .nav-title {
@@ -91,3 +92,34 @@ body {
 .rating i {
   margin-top: 30px;
 }
+
+/*  RIPPED FROM SITE
+    http://codepen.io/_Billy_Brown/pen/dbJeh -- Stopwatch
+      and
+    http://codepen.io/chrisgrabinski/pen/lnrwi -- Timer
+*/
+
+.stopwatch {
+  font-size: 25px;
+  /*height: 100%;*/
+  /*line-height: 100vh;*/
+  text-align: center;
+  text-shadow: 0 0 0.2em lime;
+}
+
+.results {
+  border-color: lime;
+  margin: 0 auto;
+  /*position: fixed;*/
+  /*right: 0;*/
+  /*bottom: 0;*/
+  /*left: 0;*/
+  width: 10em;
+}
+
+.controls {
+  margin-top: 15px;
+}
+
+/*  END OF STOPWATCH
+*/
