@@ -55,6 +55,7 @@ $(document).ready(function() {
         	al.forEach(function(e,i,a){
         	   // console.log("ELEMENT", e);
         		var table = window.commands.table = document.getElementById('activitiesTable');
+        		var nameList = ["Physical", "Emotional", "Social"];
         		var itemName = e.data.item;
         		var itemType = e.data.type;
         		var itemInstructions = e.data.instructions;
@@ -79,21 +80,23 @@ $(document).ready(function() {
         		var hd = document.createElement('td');
 
         		var text1 = document.createTextNode(itemName);
-        		var text2 = document.createTextNode(itemType);
+        		var text2 = document.createTextNode(nameList[itemType -1]);
         		var text3 = document.createTextNode(itemInstructions);
         		var hidden = document.createTextNode(objId);
 
         		td1.appendChild(text1);
         		td2.appendChild(text2);
         		td3.appendChild(text3);
+        		
         		hd.appendChild(hidden);
+        		hd.className = "table-id";
+        		hd.style.visibility = "hidden";
+        		hd.style.display = "none";
 
         		tr.appendChild(td1);
         		tr.appendChild(td2);
         		tr.appendChild(td3);
-        		hd.className = "table-id";
-        		hd.style.visibility = "hidden";
-        		hd.style.display = "none";
+        		
         		tr.appendChild(hd);
         		
         		table.tBodies[0].appendChild(tr);
@@ -113,7 +116,7 @@ $(document).ready(function() {
         var postData = window.location.search;
         var d = decodeData(postData);
         
-        console.log("Post Data", d);
+        // console.log("Post Data", d);
         
         var activities = new Parse.Query("ActivityList");
         var activity = [];
@@ -145,7 +148,7 @@ $(document).ready(function() {
             
             query.get(obj.id, {
                 success: function(res) {
-                    console.log(["Response from Activity Get", res]);
+                    // console.log(["Response from Activity Get", res]);
                     
                     activity.push({ data: res.attributes, id: res.id });
                 },
@@ -153,6 +156,7 @@ $(document).ready(function() {
                     console.warn(res, err, "Error has occured");
                 }
             }).then(function(res){
+            	var nameList = ["Physical", "Emotional", "Social"];
                 var data = res.attributes;
                 var pTitle = document.getElementsByClassName('activity-title');
                 var pType = document.getElementsByClassName('activity-type');
@@ -161,7 +165,7 @@ $(document).ready(function() {
                 // console.log("Attribs", data);
                 
                 pTitle[0].innerHTML = data.item;
-                pType[0].innerHTML = data.type;
+                pType[0].innerHTML = nameList[data.trackBy -1];
                 pInst[0].innerHTML = data.instructions;
                 
             });
@@ -177,12 +181,42 @@ $(document).ready(function() {
         
         
 
-    } else if (pageTitle[0].id == "activityTimer") {
+    }  else if (pageTitle[0].id == "activityTimer") {
         console.log("This is Activity Timer Screen");
-
         // var typeList = ["Physical", "Emotional", "Self-Image"];
-        var trackBy = ["Countdown", "Stopwatch"];
-        var timer = ["Body Measurement", "Calories"];
+
+        var timers = document.querySelectorAll("#timespan, .timer-controls");
+    	var stopwatch = document.querySelectorAll("#stopwatch, .stopwatch-controls");
+    	window.commands.timers = {timespan: timers, stopwatch: stopwatch};
+
+        (function unHideTimer() {
+        	var d = JSON.parse(decodeData(window.location.search));
+
+        	// console.log(["TIMERS AND CONTROLS", {timers: timers, stopwatch: stopwatch}] );
+
+        	if (d.data.trackBy == 1) {
+        		// console.log("Activity Type is " + d.data.trackBy);
+        		
+        		stopwatch[0].classList.remove("hidden");
+        		stopwatch[1].classList.remove("hidden");
+        		
+        	} else if (d.data.trackBy == 2) {
+        		// console.log("Activity Type is " + d.data.trackBy);
+
+        		timers[0].classList.remove("hidden");
+        		timers[1].classList.remove("hidden");
+
+        	} else if (d.data.trackBy == 3) {
+        		// console.log("Activity Type is " + d.data.trackBy);
+
+        		timers[0].classList.remove("hidden");
+        		timers[1].classList.remove("hidden");
+        	}
+
+        })();
+
+
+        // window.commands.unHideTimer = unHideTimer;
 
 
     } else if (pageTitle[0].id == "activityScreen") {

@@ -48,18 +48,19 @@
             <h2 class="heading-title text-center">Begin Your Activity</h2>
         </div>
         <div class="content container">
+            
             <!-- STOPWATCH RIPPED FROM SITE -->
-            <div class="stopwatch text-center small-container"></div>
-            <!-- <div id="countdown" class="text-center stopwatch">20:00</div> -->
+            <div id="stopwatch" class="stopwatch text-center small-container hidden"></div>
             <div id="timespan" class="stopwatch text-center small-container hidden"></div>
+
             <nav class="navbar navbar-default navbar-fixed-bottom">
-                <div class="timer controls text-center">
+                <div class="stopwatch-controls controls text-center hidden">
                     <a href="#" class="col-xs-3 activity-control start" onClick="Stopwatch.start();"><i class="fa fa-lg fa-play"></i></a>
                     <a href="#" class="col-xs-3 activity-control lap" onClick="Stopwatch.lap();"><i class="fa fa-lg fa-clock-o"></i></a>
                     <a href="#" class="col-xs-3 activity-control stop" onClick="Stopwatch.stop();"><i class="fa fa-pause"></i></a>
                     <a href="#" class="col-xs-3 activity-control restart" onClick="Stopwatch.restart();"><i class="fa fa-lg fa-refresh"></i></a>
                 </div>
-                <div class="timer controls text-center hidden">
+                <div class="timer-controls controls text-center hidden">
                     <a href="#" class="col-xs-4 activity-control start" onClick="countdown();"><i class="fa fa-lg fa-play"></i></a>
                     <a href="#" class="col-xs-4 activity-control stop" onClick="cdpause();"><i class="fa fa-pause"></i></a>
                     <a href="#" class="col-xs-4 activity-control restart" onClick="cdreset();"><i class="fa fa-lg fa-refresh"></i></a>
