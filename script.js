@@ -184,9 +184,12 @@ $(document).ready(function() {
     }  else if (pageTitle[0].id == "activityTimer") {
         console.log("This is Activity Timer Screen");
         // var typeList = ["Physical", "Emotional", "Self-Image"];
+        var postData = JSON.parse(decodeURIComponent(window.location.search).replace("?", ""));
 
         var timers = document.querySelectorAll("#timespan, .timer-controls");
     	var stopwatch = document.querySelectorAll("#stopwatch, .stopwatch-controls");
+    	var isComplete = false;
+
     	window.commands.timers = {timespan: timers, stopwatch: stopwatch};
 
         (function unHideTimer() {
@@ -215,8 +218,57 @@ $(document).ready(function() {
 
         })();
 
+        function saveActivity() {
+        	var stopwatch = document.getElementById('stopwatch');
+        	var timespan = document.getElementById('timespan');
+        	var lapTimes = document.getElementsByClassName('lap-times');
+        	var data, url, d;
+        	var laps = [];
+        	
+        	isComplete = true;
+        	document.getElementById('saveActivity').classList.remove('hidden');
 
-        // window.commands.unHideTimer = unHideTimer;
+        	if (lapTimes.length >= 1 && isComplete == true) {
+        		console.log("There are Laps to be tracked");
+        		Array.prototype.forEach.call(lapTimes, function(e){
+					// console.log(e.children);
+					laps.push([e.children[0].innerHTML, e.children[1].innerHTML]);
+				});
+				data = {userName: postData.data.userName, item: postData.data.item, time: stopwatch.innerHTML, laps: laps};
+        	} else if (lapTimes.length <= 0) {
+        		console.log("No Laptimes, Must be countdown function");
+        		data = {userName: postData.data.userName, item: postData.data.item};
+        	} else {
+        		console.log("No lap information");
+        	}
+        	// console.log("Finished Tracking", laps);
+
+        	
+        	var DB = Parse.Object.extend("TimeTracker");
+        	var s = new DB();
+        	
+        	s.save(data, {
+    			success: function(res) {
+    				console.log(["Saved Data with response", res]);
+    			},
+    			error: function(res,err) {
+    				console.warn(["Error Occured", err], ["Response", res]);
+    			}
+    		});
+
+        	if (postData.data.trackBy == 1 || postData.data.trackBy == 2) {
+        		url = "/trackerPage.html";
+        		d = {message: "You've Completed "+ postData.data.item + " Activity!"};
+        	} else {
+        		url = "/ratingsPage.html";
+        		d = {message: ""};
+        	}
+
+        	return encodeAndSend(url, d);
+        }
+
+
+        window.commands.saveActivity = saveActivity;
 
 
     } else if (pageTitle[0].id == "activityScreen") {
@@ -231,9 +283,24 @@ $(document).ready(function() {
     }
     
     function encodeAndSend(url, data) {
+    	var h = window.location.pathname.split("/");
+			h.shift(), h.pop(), host = h.join("/");
+			
         var s = JSON.stringify(data);
         var u = url + "?";
         var encData = encodeURIComponent(s);
+
+        // if (!data || data == 'undefined' || data == null)
+        // 	data = {message: "Data is null"};
+
+        if (window.location.href[0] == "f") {
+        	u = "file:///" + host + u;
+        	console.log(["You're running on local host"], ["pathname", window.location.pathname], ["Sending to u", u]);
+
+        	return window.location.replace(u+encData);
+        }
+        		
+        // console.log(["URL OUT u", u.contains(',')]);
         
         window.location.replace(u+encData);
         

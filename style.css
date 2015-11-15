@@ -8,25 +8,99 @@ body {
   background: #000;
 }
 
-@media (max-width: 768px) { /* TARGET PHONE ONLY */
+/*ORIENTATION PORTRAIT*/
+
+@media (max-width: 768px)  and (orientation: portrait) { /* TARGET PHONE ONLY */
   /* Remove any padding from the body */
   .right-icon, .left-icon {
     margin-top: 20px;
   }
   
-  .title {
-    margin-top: 10px;
+  .home-title {
+    margin-top: 100px;
+  }
+
+  .title-block {
+    margin-bottom: 150px;
+  }
+
+  .rating-box .description {
+    margin-bottom: 50px;
+  }
+
+  .rating-box .ratings {
+    margin-bottom: 200px;
   }
 }
 
-@media (min-width: 768px) and (max-width: 992px) { /* EVERYTHING IN BETWEEN */
+@media (min-width: 768px) and (max-width: 992px)  and (orientation: portrait) { /* EVERYTHING IN BETWEEN */
   /* Remove any padding from the body */
   .right-icon, .left-icon {
     margin-top: 15px;
   }
   
-  .title {
+  .home-title {
     margin-top: 10px;
+  }
+
+  .title-block {
+    margin-bottom: 150px;
+  }
+
+  .rating-box .description {
+    margin-bottom: 50px;
+  }
+
+  .rating-box .ratings {
+    margin-bottom: 200px;
+  }
+}
+
+/*ORITENTATION LANDSCAPE*/
+
+@media (max-width: 768px)  and (orientation: landscape) { /* TARGET PHONE ONLY */
+  /* Remove any padding from the body */
+  .right-icon, .left-icon {
+    margin-top: 20px;
+  }
+  
+  .home-title {
+    margin-top: 20px;
+  }
+
+  .title-block {
+    margin-bottom: 50px;
+  }
+
+  .rating-box .description {
+    margin-bottom: 50px;
+  }
+
+  .rating-box .ratings {
+    margin-bottom: 200px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 992px)  and (orientation: landscape) { /* EVERYTHING IN BETWEEN */
+  /* Remove any padding from the body */
+  .right-icon, .left-icon {
+    margin-top: 15px;
+  }
+  
+  .home-title {
+    margin-top: 150px;
+  }
+
+  .title-block {
+    margin-bottom: 150px;
+  }
+
+  .rating-box .description {
+    margin-bottom: 50px;
+  }
+
+  .rating-box .ratings {
+    margin-bottom: 200px;
   }
 }
 
@@ -41,8 +115,12 @@ body {
     margin-top: 15px;
   }
   
-  .title {
-    margin-top: 10px;
+  .home-title {
+    margin-top: 100px;
+  }
+
+  .title-block {
+    margin-bottom: 200px;
   }
 }
 
@@ -53,10 +131,6 @@ body {
 
 .table-body > tr:hover {
   color: black;
-}
-
-.title-block {
-  margin-bottom: 200px;
 }
 
 .home-btns a, .goal-btns a, .tracker-btns a {
@@ -75,14 +149,6 @@ body {
 
 .nav-title {
   font-size: 20px;
-}
-
-.rating-box .description {
-  margin-bottom: 50px;
-}
-
-.rating-box .ratings {
-  margin-bottom: 200px;
 }
 
 .progress-btn {
@@ -123,3 +189,8 @@ body {
 
 /*  END OF STOPWATCH
 */
+
+#saveActivity {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
