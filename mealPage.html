@@ -85,8 +85,9 @@
                   console.log("E", e, "URL", url);
                   var d = searchNutritionSiteFor(link.data.href, true).then(function(res){
                     // Sending you to your page
-                    console.log("RESPONSE", res, url)
-                    // window.commands.sendData(url, d);
+                    console.log("SEND TO URL WITH DATA", res, url);
+
+                    window.commands.sendData(url, res);
                   });
                 });
 

@@ -16,6 +16,9 @@ function searchNutritionSiteFor(item) {
     } else { // code for IE6, IE5
         xhr = new ActiveXObject("Microsoft.xhr");
     }
+    
+    xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+    xhr.setRequestHeader('Access-Control-Allow-Methods', 'GET');
     return new Promise(function(resolve, reject) {
         // IF SUCCESS RETURN DATA
         xhr.onreadystatechange = function() {
@@ -31,7 +34,7 @@ function searchNutritionSiteFor(item) {
                     site.innerHTML = xhr.responseText;
                     // console.log("XHR RESPONSE", xhr.responseText);
                     // http://nutritiondata.self.com/facts/fruits-and-fruit-juices/1843/2
-                    var nutritionInformation = site.querySelectorAll('.clearer.m-t13')
+                    var nutritionInformation = site.querySelectorAll('.clearer.m-t13');
                     console.log("SITE ", $(site));
                     var servingSize = window.commands.servingSize = site.querySelectorAll('#servingsize3');
                     var table = {};
