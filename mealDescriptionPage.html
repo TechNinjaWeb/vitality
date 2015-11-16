@@ -51,8 +51,56 @@
             <div class="add-meal-btns small-container">
                 <a href="#" class="track-btn-2 col-xs-12 btn btn-success">Add This Meal</a>
             </div>
+            <br>
+            <table id="nutritionFacts" class="nutrition-facts table col-xs-12"></table>
         </div>
     </div>
+    <script type="text/javascript">
+        var data = location.search, data = data.replace("?", ""), 
+        data = decodeURIComponent(data), 
+        data = JSON.parse(data);
+        // console.log("GOT DATA FROM URL", data);
+        
+        var nutritionTable = document.getElementById('nutritionFacts');
+            nutritionTable.style.marginTop = "100px";
+        var body = document.createElement('tbody');
+        var nutritionData = data["Nutrition Facts"];
+        var tTitle = document.createElement('tr');
+        var tItem = document.createElement('th');
+        var tValue = document.createElement('th');
+        var tDv = document.createElement('th');
+            tItem.innerHTML = "Nutrient";
+            tValue.innerHTML = "Value";
+            tDv.innerHTML = "Daily Value";
+            // Append Title Values
+            tTitle.appendChild(tItem);
+            tTitle.appendChild(tValue);
+            tTitle.appendChild(tDv);
+            body.appendChild(tTitle);
+        
+        for (var prop in nutritionData) {
+            // console.log("PREPARING TABLE FOR PROP", nutritionData[prop]);
+            var tr = document.createElement('tr');
+            var itemName = document.createElement('td');
+            var amount = document.createElement('td');
+            var dv = document.createElement('td');
+                itemName.innerHTML = prop;
+                amount.innerHTML = nutritionData[prop].amount;
+                dv.innerHTML = nutritionData[prop].dv;
+            
+            tr.appendChild(itemName);
+            tr.appendChild(amount);
+            tr.appendChild(dv);
+            
+            body.appendChild(tr);
+            
+            // console.log("TABLE ROW", tr);
+        }
+        nutritionTable.appendChild(body);
+          console.log("TABLE", body);
+         
+        // console.log("Nutrition Facts", data["Nutrition Facts"], "ALL DATA", data);
+    </script>
 </body>
 
 </html>

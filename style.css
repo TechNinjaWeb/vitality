@@ -191,10 +191,14 @@ body {
 */
 
 #saveActivity {
-    margin-top: 50px;
-    margin-bottom: 50px;
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 
 .search-box {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.add-meal-btns {
+  padding-bottom: 50px;
 }

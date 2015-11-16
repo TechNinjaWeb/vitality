@@ -63,7 +63,7 @@
       </div>
   </div>
   <script>
-    var searchTerm = document.getElementById('searchTerm');
+    // var searchTerm = document.getElementById('searchTerm');
     var searchBtn = document.getElementsByClassName('search-btn');
 
     searchBtn[0].addEventListener("click", function(e) {
@@ -82,7 +82,7 @@
                 link.value = resultsList;
                 link.data = e;
                 link.addEventListener("click", function(ev){
-                  console.log("E", e, "URL", url);
+                  // console.log("E", e, "URL", url);
                   var d = searchNutritionSiteFor(link.data.href, true).then(function(res){
                     // Sending you to your page
                     console.log("SEND TO URL WITH DATA", res, url);

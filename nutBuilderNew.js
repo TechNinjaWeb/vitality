@@ -9,7 +9,7 @@ function searchNutritionSiteFor(item) {
     // ELSE URL IS SEARCH ITEM
     !args[1] ? url = "http://www.nutritionvalue.org/search.php?food_query=" + item.replace(" ", "+") + "&page=" + args[2] : url = item;
 
-    console.log("URL", url);
+    // console.log("URL", url);
     // IEXPLORER XHR OBJECT
     if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
         xhr = new window.XMLHttpRequest();
@@ -21,7 +21,7 @@ function searchNutritionSiteFor(item) {
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4) {
                 // console.log("Arguments", args);
-                console.log("ARGUMENTS", arguments, "ARGS", args);
+                // console.log("ARGUMENTS", arguments, "ARGS", args);
                 results = !args[1] ? getResultsList() : getNutritionData();
 
                 function getNutritionData() {
@@ -59,8 +59,11 @@ function searchNutritionSiteFor(item) {
                     });
                     // REMOVE FIRST TABLE DATA = NO GOOD
                     newData.shift();
-                    console.log("NUTRITION TABLE", window.commands.data, "TABLE", table);
-                    var listObject = Array.prototype.slice.call(newData).reduce(function(p,c,i,a){var temp = buildNutritionList(c); console.log("type", typeof temp, "KEY", temp.key, !temp.key); !!temp.key ? p[temp.key] = temp : null; return p;}, {});
+                    // console.log("NUTRITION TABLE", window.commands.data, "TABLE", table);
+                    var listObject = Array.prototype.slice.call(newData).reduce(function(p,c,i,a){var temp = buildNutritionList(c); 
+                        // console.log("type", typeof temp, "KEY", temp.key, !temp.key, "DATA", temp); 
+                        !!temp.key ? p[temp.key] = temp[temp.key] : null; return p;
+                    }, {});
                     // console.log("List Object", listObject);
 					return resolve(listObject);
                 }
@@ -157,7 +160,7 @@ var buildNutritionList = function(data) {
                         return pr;
                     }, {});
                     
-                    o[nutItem].servingSize = servingSize[0];
+                    o[nutItem].servingSize = {amount: servingSize[0].trim(), dv: null};
                     for(prop in o) o.key = prop;
                     
                     // console.log("LIST", list, "e", e);
