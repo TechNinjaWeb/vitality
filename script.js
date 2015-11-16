@@ -271,6 +271,9 @@ $(document).ready(function() {
         window.commands.saveActivity = saveActivity;
 
 
+    } else if (pageTitle[0].id == "mealDescriptionPage") {
+        console.log("This is Meal Description Page");
+
     } else if (pageTitle[0].id == "activityScreen") {
         console.log("This is Activity Screen");
 
@@ -290,8 +293,8 @@ $(document).ready(function() {
         var u = url + "?";
         var encData = encodeURIComponent(s);
 
-        // if (!data || data == 'undefined' || data == null)
-        // 	data = {message: "Data is null"};
+        if (!data || data == 'undefined' || data == null)
+        	data = {message: "Data is null"};
 
         if (window.location.href[0] == "f") {
         	u = "file:///" + host + u;
@@ -299,8 +302,6 @@ $(document).ready(function() {
 
         	return window.location.replace(u+encData);
         }
-        		
-        // console.log(["URL OUT u", u.contains(',')]);
         
         window.location.replace(u+encData);
         
