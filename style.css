@@ -198,7 +198,6 @@ body {
 .search-box {
   margin-bottom: 20px;
 }
-
-.add-meal-btns {
-  padding-bottom: 50px;
+#mealDescriptionPage .heading {
+  margin-bottom: 25px;
 }

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Bootstrap, from Twitter</title>
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <meta name="referrer" content="origin" />
+    <!-- Le styles -->
+    <link data-require="bootstrap-css" data-semver="3.3.1" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+    <link data-require="bootstrap@*" data-semver="3.3.5" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+    <link data-require="bootstrap@*" data-semver="3.3.5" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/cosmo/bootstrap.min.css" />
+    <link data-require="bootstrap@*" data-semver="3.3.5" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="style.css">
+    <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>-->
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+    <link href="style.css" rel="stylesheet" />
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- Le fav and touch icons -->
+    <!--<link rel="shortcut icon" href="images/favicon.ico" />-->
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png" />
+    <!-- Le javascript
+    ================================================== -->
+    <script data-require="jquery" data-semver="2.1.4" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script data-require="bootstrap" data-semver="3.3.5" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="script.js"></script>
+</head>
+
+<body id="mealDescriptionPage">
+    <div id="page-container">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="header-container container">
+                <div class="left-icon col-xs-4"><a href="mealPage.html"><i class="fa fa-lg fa-arrow-left"></i></a></div>
+                <div class="title col-xs-4">
+                    <div class="nav-title text-center">Meal List</div>
+                </div>
+                <!-- <div class="right-icon col-xs-4 text-right add-meal-btns"><a href="#"><i class="fa fa-lg fa-plus"></i></a></div> -->
+            </div>
+        </nav>
+        <div class="page-content container">
+            <div class="heading col-xs-12">
+                <h2 class="heading-title text-center">Todays Meals</h2>
+            </div>
+            <table id="mealList" class="meal-list table small-container"></table>
+            
+        </div>
+    </div>
+    <script type="text/javascript">
+        var td = new Date().toJSON().slice(0,10);
+        var date = new Date();
+        var today = new Date(date.getTime());
+
+        // console.log("TODAYS DATE", td, "DATE", date, "TODAY", today);
+        
+        var query = new Parse.Query("Meals");
+            query.equalTo("userName", userName);
+            query.lessThanOrEqualTo("createdAt", today);
+            query.find({
+                success: function(res) {
+                    console.log("MEALS FOR TODAY", res);
+                    return res;
+                },
+                error: function(res,err) {
+                    console.warn(res,err);
+                }
+            }).then(function(res){
+                // BUILD TABLE
+                var mealTable = document.getElementById('mealList');
+                // mealTable.style.marginTop = "100px";
+                var body = document.createElement('tbody');
+                var mealList = res;
+                var tTitle = document.createElement('tr');
+                var tItem = document.createElement('th');
+                var tValue = document.createElement('th');
+                var delBtn = document.createElement('th');
+                    tItem.innerHTML = "Meal";
+                    tValue.innerHTML = "Calories";
+                    delBtn.innerHTML = "Remove";
+
+                    // Append Title Values
+                    tTitle.appendChild(tItem);
+                    tTitle.appendChild(tValue);
+                    tTitle.appendChild(delBtn);
+
+                    body.appendChild(tTitle);
+                
+                res.forEach(function(e){
+                    var tr = document.createElement('tr');
+                    var itemName = document.createElement('td');
+                    var calories = document.createElement('td');
+                        calories.className = "text-right";
+                        itemName.innerHTML = e.get("name");
+                        calories.innerHTML = e.get("data")["Nutrition Facts"]["Calories"]["amount"];
+
+                    var delCol = document.createElement('td');
+                    var delLink = document.createElement('a');
+                        delCol.className = "text-center";
+                    var del = document.createElement('icon');
+                        delLink.addEventListener("click", function(e){
+                            var d = e.target.parentNode.parentNode.parentNode.data;
+                            console.log("DELETE BUTTON HIT", d);
+                            var q = new Parse.Query("Meals");
+                                q.get(d.id, {
+                                    success: function(res) {
+                                        console.log("DELETING ITEM");
+                                        return res.destroy();
+                                        
+                                    },
+                                    error: function(res,err) {
+                                        console.warn(res,err);
+                                    }
+                                }).then(function(res){
+                                    console.log("DELETED", res)
+                                    window.location.reload();
+                                });
+                        });
+                        del.className = "fa fa-lg fa-ban";
+                    
+                    delLink.appendChild(del);
+                    delCol.appendChild(delLink);
+                    
+                    tr.appendChild(itemName);
+                    tr.appendChild(calories);
+                    tr.appendChild(delCol);
+                    
+                    tr.data = {date: e.get("data"), id: e.id};
+                    body.appendChild(tr);
+                    // console.log("GET NAME", e.get("name"));
+                    // console.log("CALORIES", e.get("data")["Nutrition Facts"]["Calories"]);
+                });
+             
+                mealTable.appendChild(body);
+                // console.log("TABLE", Array(body));
+                // console.log("DATA", mealList);
+            });
+        // console.log("Nutrition Facts", data["Nutrition Facts"], "ALL DATA", data);
+    </script>
+</body>
+
+</html>

@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="description" content="" />
     <meta name="author" content="" />
+    <meta name="referrer" content="origin" />
     <!-- Le styles -->
     <link data-require="bootstrap-css" data-semver="3.3.1" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
     <link data-require="bootstrap@*" data-semver="3.3.5" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
@@ -37,34 +38,40 @@
     <div id="page-container">
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="header-container container">
-                <div class="left-icon col-xs-4"><a href="index.html"><i class="fa fa-lg fa-home"></i></a></div>
+                <div class="left-icon col-xs-4"><a href="mealPage.html"><i class="fa fa-lg fa-arrow-left"></i></a></div>
                 <div class="title col-xs-4">
                     <div class="nav-title text-center">Nutrition Facts</div>
                 </div>
-                <div class="right-icon col-xs-4"></div>
+                <div class="right-icon col-xs-4 text-right add-meal-btns"><a href="#"><i class="fa fa-lg fa-plus"></i></a></div>
             </div>
         </nav>
         <div class="page-content container">
             <div class="heading col-xs-12">
                 <h2 class="heading-title text-center">Nutrition Information</h2>
             </div>
-            <div class="add-meal-btns small-container">
+            <table id="nutritionFacts" class="nutrition-facts table small-container"></table>
+            <div id="addMealBtn" class="add-meal-btns small-container">
                 <a href="#" class="track-btn-2 col-xs-12 btn btn-success">Add This Meal</a>
             </div>
-            <br>
-            <table id="nutritionFacts" class="nutrition-facts table col-xs-12"></table>
         </div>
     </div>
     <script type="text/javascript">
-        var data = location.search, data = data.replace("?", ""), 
-        data = decodeURIComponent(data), 
-        data = JSON.parse(data);
+        var url = "/mealPage.html";
+        var heading = document.getElementsByClassName('heading');
+            heading[0].style.marginBottom = "25px !important";
+            console.warn("HEADING", heading[0].style);
+
+        var d = location.search, d = d.replace("?", ""), 
+        d = decodeURIComponent(d), 
+        d = JSON.parse(d);
+        data = d.data;
+
         // console.log("GOT DATA FROM URL", data);
-        
+        var addMealBtn = document.getElementsByClassName('add-meal-btns');
         var nutritionTable = document.getElementById('nutritionFacts');
-            nutritionTable.style.marginTop = "100px";
+            // nutritionTable.style.marginTop = "100px";
         var body = document.createElement('tbody');
-        var nutritionData = data["Nutrition Facts"];
+        var nutritionData = window.commands.nutritionData = data["Nutrition Facts"];
         var tTitle = document.createElement('tr');
         var tItem = document.createElement('th');
         var tValue = document.createElement('th');
@@ -92,12 +99,35 @@
             tr.appendChild(amount);
             tr.appendChild(dv);
             
+            body.data = nutritionData;
             body.appendChild(tr);
             
             // console.log("TABLE ROW", tr);
         }
         nutritionTable.appendChild(body);
-          console.log("TABLE", body);
+        console.log("TABLE", Array(body));
+
+        Array.prototype.slice.call(addMealBtn).forEach(function(e){
+           e.addEventListener("click", function(ev){
+                // Save data to parse
+                // TRACK MEAL
+                var Meals = Parse.Object.extend("Meals");
+                var s = new Meals();
+                console.log("NAME", d.name, "data", d);
+                d.userName = userName;
+                
+                s.save(d, {
+                    success: function(res) {
+                        console.log(res);
+                        sendData(url, {msg: "Added Meal", response: res});
+                    },
+                    error: function(res,err) {
+                        console.warn(res,err);
+                        // ADD ERROR HANDLING
+                    }
+                })
+           }); 
+        });
          
         // console.log("Nutrition Facts", data["Nutrition Facts"], "ALL DATA", data);
     </script>

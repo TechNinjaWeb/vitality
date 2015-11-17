@@ -317,44 +317,6 @@ $(document).ready(function() {
     
     window.commands.sendData = encodeAndSend;
     window.commands.grabData = decodeData;
+    window.sendData = encodeAndSend;
+    window.grabData = decodeData;
 });
-
-// POST DATA TO NEW URL
-// function postAndRedirect(url, postData)
-// {
-//     var postFormStr = "<form method='POST' action='" + url + "'>\n";
-
-//     for (var key in postData)
-//     {
-//         if (postData.hasOwnProperty(key))
-//         {
-//             postFormStr += "<input type='hidden' name='" + key + "' value='" + postData[key] + "'></input>";
-//         }
-//     }
-
-//     postFormStr += "</form>";
-
-//     var formElement = $(postFormStr);
-
-//     $('body').append(formElement);
-//     $(formElement).submit();
-// }
-
-// OR
-
-// var myRedirect = function(redirectUrl, arg, value) {
-//   var form = $('<form action="' + redirectUrl + '" method="post">' +
-//   '<input type="hidden" name="'+ arg +'" value="' + value + '"></input>' + '</form>');
-//   $('body').append(form);
-//   $(form).submit();
-// };
-
-// SEND WITH 
-// myRedirect("/yourRedirectingUrl", "arg", "argValue");
-
-// OR
-// //your variable
-// var data = "brightcherry";
-
-// //passing the variable into the window.location URL
-// window.location.replace("/newpage/page.php?id=" + product_id);

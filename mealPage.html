@@ -42,7 +42,7 @@
               <div class="title col-xs-4">
                   <div class="nav-title text-center">Find a Meal</div>
               </div>
-              <div class="right-icon col-xs-4 text-right"><i class="fa fa-lg fa-plus"></i></div>
+              <div class="right-icon col-xs-4 text-right"><a href="/mealList.html"><i class="fa fa-lg fa-list"></i></a></div>
           </div>
       </nav>
       <div class="heading col-xs-12">
@@ -53,7 +53,7 @@
             <input id="searchTerm" class="search-input form-control" type="text" placeholder="Search For A Meal or Food Item" value="" />
             <span class="input-group-btn"><button class="search-btn btn btn-primary">Search</button></span>
         </div>
-        <div id="resultsList" class="links small-container"></div>
+        <div id="resultsList" class="links container"></div>
     <!-- <div class="goal-btns small-container">
       <a href="#" class="goal-btn-1 col-xs-12 btn btn-primary">Caloric Goal</a>
       <a href="#" class="goal-btn-2 col-xs-12 btn btn-success">Weight Goal</a>
@@ -85,9 +85,9 @@
                   // console.log("E", e, "URL", url);
                   var d = searchNutritionSiteFor(link.data.href, true).then(function(res){
                     // Sending you to your page
-                    console.log("SEND TO URL WITH DATA", res, url);
-
-                    window.commands.sendData(url, res);
+                    // console.log("SEND TO URL WITH DATA", res, url);
+                    // alert("RES NAME " + e.name);
+                    window.commands.sendData(url, {data: res, name: e.name});
                   });
                 });
 
