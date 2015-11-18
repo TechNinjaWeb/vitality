@@ -16,9 +16,13 @@ function searchNutritionSiteFor(item) {
     } else { // code for IE6, IE5
         xhr = new ActiveXObject("Microsoft.xhr");
     }
+    
     return new Promise(function(resolve, reject) {
         // IF SUCCESS RETURN DATA
         xhr.onreadystatechange = function() {
+            // xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+            // xhr.setRequestHeader('Origin', 'http://vitality-techninja.c9users.io/');
+        
             if (xhr.readyState == 4) {
                 // console.log("Arguments", args);
                 // console.log("ARGUMENTS", arguments, "ARGS", args);
@@ -91,12 +95,12 @@ function searchNutritionSiteFor(item) {
                 }
                 return results;
             }
-        }
+        };
 
         xhr.open('GET', url, true);
 
         xhr.send();
-    })
+    });
 
 }
 

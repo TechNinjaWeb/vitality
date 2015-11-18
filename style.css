@@ -1,5 +1,9 @@
 /* Put your css in here */
-
+body, html {
+  width: 100%;
+  height: 100%;
+  min-width: 320px;
+}
 body {
   padding-top: 10px;
   padding-right: 10px;
@@ -21,7 +25,7 @@ body {
   }
 
   .title-block {
-    margin-bottom: 150px;
+    margin-bottom: 120px;
   }
 
   .rating-box .description {
@@ -31,7 +35,14 @@ body {
   .rating-box .ratings {
     margin-bottom: 200px;
   }
-
+  
+  .btn-responsive {
+    margin: 10px 6px;
+    padding:2px 10px;
+    font-size:80%;
+    line-height: 2;
+    border-radius:3px;
+  }
 }
 
 @media (min-width: 768px) and (max-width: 992px)  and (orientation: portrait) { /* EVERYTHING IN BETWEEN */
@@ -55,6 +66,13 @@ body {
   .rating-box .ratings {
     margin-bottom: 200px;
   }
+  
+  .btn-responsive {
+    margin: 10px 4px;
+    padding:4px 9px;
+    font-size:90%;
+    line-height: 2;
+  }
 }
 
 /*ORITENTATION LANDSCAPE*/
@@ -70,7 +88,7 @@ body {
   }
 
   .title-block {
-    margin-bottom: 50px;
+    margin-bottom: 100px;
   }
 
   .rating-box .description {
@@ -83,6 +101,14 @@ body {
 
   .share-btn {
    margin-top: -5px; 
+  }
+  
+  .btn-responsive {
+    margin: 10px 4px;
+    padding:2px 4px;
+    font-size:90%;
+    line-height: 2;
+    border-radius:3px;
   }
 }
 
@@ -97,7 +123,7 @@ body {
   }
 
   .title-block {
-    margin-bottom: 150px;
+    margin-bottom: 100px;
   }
 
   .rating-box .description {
@@ -106,6 +132,13 @@ body {
 
   .rating-box .ratings {
     margin-bottom: 200px;
+  }
+  
+  .btn-responsive {
+    margin: 10px 4px;
+    padding:4px 9px;
+    font-size:90%;
+    line-height: 2;
   }
 }
 
@@ -122,11 +155,16 @@ body {
   .title-block {
     margin-bottom: 150px;
   }
+  
+  .goal-btn {
+    margin-right: 14px;
+  }
 }
 
 .small-container {
   margin: 0 auto;
   max-width: 500px;
+  min-width: 320px;
 }
 
 .title {
@@ -209,4 +247,23 @@ body {
 }
 #mealDescriptionPage .heading {
   margin-bottom: 25px;
+}
+
+#bodyTracker .heading {
+  margin-bottom: 40px;
+}
+
+.save-btn  {
+    margin-right: 30px;
+}
+
+.goal-btns {
+    margin-bottom: 30px;
+}
+
+.table-style {
+  color: white;
+}
+.table-foot td {
+  font-size: 12px;
 }

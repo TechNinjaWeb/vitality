@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <title>Bootstrap, from Twitter</title>
+   <!--<meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+   <meta name="description" content="" />
+   <meta name="author" content="" />
+   <!-- Le styles -->
+   <link data-require="bootstrap-css" data-semver="3.3.1" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+   <link data-require="bootstrap@*" data-semver="3.3.5" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+   <link data-require="bootstrap@*" data-semver="3.3.5" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/cosmo/bootstrap.min.css" />
+   <link data-require="bootstrap@*" data-semver="3.3.5" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+   <link rel="stylesheet" href="style.css">
+   <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>-->
+   <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+
+   <link href="style.css" rel="stylesheet" />
+   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+   <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+   <!-- Le fav and touch icons -->
+   <!--<link rel="shortcut icon" href="images/favicon.ico" />-->
+   <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
+   <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png" />
+   <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png" />
+   <!-- Le javascript
+    ================================================== -->
+   <script data-require="jquery" data-semver="2.1.4" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+   <script data-require="bootstrap" data-semver="3.3.5" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+   <script src="script.js"></script>
+</head>
+
+<body id="goalsPage">
+   <div class="page-container">
+      <nav class="navbar navbar-default navbar-fixed-top">
+         <div class="header-container container">
+            <div class="left-icon col-xs-4"><a href="goalsPage.html"><i class="fa fa-lg fa-arrow-left"></i></a></div>
+            <div class="title col-xs-4">
+               <div class="nav-title text-center">Goals List</div>
+            </div>
+            <div class="right-icon col-xs-4 text-right"><i class="fa fa-lg fa-check"></i></div>
+         </div>
+      </nav>
+      <div class="heading col-xs-12">
+         <h2 class="heading-title text-center">Create A New Goal</h2>
+      </div>
+      <div class="page-content container">
+         <div class="goal-btns col-xs-12 text-center">
+            <div class="goal-btn btn btn-responsive btn-primary">Caloric</div>
+            <div class="goal-btn btn btn-responsive btn-success">Weight</div>
+            <div class="goal-btn btn btn-responsive btn-danger">Emotional</div>
+            <div class="goal-btn btn btn-responsive btn-info">Fitness</div>
+         </div>
+         <table class="goal-list table small-container">
+            <thead class="table-head">
+               <tr>
+                  <th>Goal</th>
+                  <th class="text-right">Remove</th>
+               </tr>
+            </thead>
+            <tbody class="table-body">
+               <tr>
+                  <td class="table-style">I will Eat an average of <span class="calories">1000</span> calories per day</td>
+                  <td class="text-right"><a class="delete-btn"><i class="fa fa-lg fa-ban"></i></a></td>
+               </tr>
+               <tr>
+                  <td style="color:white;">I will <span class="weight">lose</span> <span class="weight">5 pounds</span> per week</td>
+                  <td class="text-right"><a class="delete-btn"><i class="fa fa-lg fa-ban"></i></a></td>
+               </tr>
+            </tbody>
+            <tfoot class="table-foot">
+               <tr>
+                  <td class="text-right">To edit a goal, click the number or verb you want to change</td>
+                  <td></td>
+               </tr>
+            </tfoot>
+         </table>
+      </div>
+   </div>
+   <button class="testBtn btn btn-danger" onclick="window.commands.test()">ADD TEST DATA</button>
+   <script type="text/javascript">
+      var table = document.getElementsByClassName('goal-list');
+          table = table[0];
+      var tBody = document.getElementsByClassName('table-body');
+          tBody = tBody[0];
+      console.log("TABLE", table, "TBODY", tBody);
+      
+
+      window.commands.test = function() {
+         console.log("TEST FUNCTION SET");
+         var enterData = prompt("Enter Data To Add");
+         window.commands.createAndAppendTr(enterData, document.getElementsByTagName('tbody')[0], {innerHTML: "Yo Bro"});
+      };
+      
+      
+      function createAndAppendTr(data, table) {
+         var tr = document.createElement('tr');
+         var td = document.createElement('td');
+             td.innerHTML = data;
+             td.className = "table-style";
+         var i = document.createElement('i');
+             i.className = "fa fa-lg fa-ban";
+         var a = document.createElement('a');
+             a.className = "delete-btn";
+             a.addEventListener("click", removeBtn);
+         var del = document.createElement('td');
+             del.className = "text-right";
+             
+         // Add settings to TD
+         var args = Array.prototype.slice.call(arguments);
+             !!args[2] ? Array.prototype.slice.call(args[2]).forEach(function(e){
+                for (var prop in e) {
+                   td[prop] = e[prop];
+                }
+             }) : null;
+             // Add Icon to Anchor
+             a.appendChild(i);
+             // Add Anchor to Delete TD
+             del.appendChild(a);
+             // Add Table Data
+             tr.appendChild(td);
+             tr.appendChild(del);
+             table.appendChild(tr);
+             
+         function removeBtn(ev) {
+            var tr = ev.target.parentNode.parentNode.parentNode;
+            console.log("REMOVING", tr);
+            tr.remove();
+         }
+      }
+      window.commands.createAndAppendTr = createAndAppendTr;
+   </script>
+</body>
+
+</html>

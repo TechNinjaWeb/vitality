@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Bootstrap, from Twitter</title>
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <!-- Le styles -->
+    <link data-require="bootstrap-css" data-semver="3.3.1" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+    <link data-require="bootstrap@*" data-semver="3.3.5" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+    <link data-require="bootstrap@*" data-semver="3.3.5" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/cosmo/bootstrap.min.css" />
+    <link data-require="bootstrap@*" data-semver="3.3.5" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="style.css">
+    <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>-->
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+    <link href="style.css" rel="stylesheet" />
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- Le fav and touch icons -->
+    <!--<link rel="shortcut icon" href="images/favicon.ico" />-->
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png" />
+    <!-- Le javascript
+    ================================================== -->
+    <script data-require="jquery" data-semver="2.1.4" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script data-require="bootstrap" data-semver="3.3.5" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="script.js"></script>
+</head>
+
+<body id="bodyTracker">
+    <div class="page-container">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="header-container container">
+                <div class="left-icon col-xs-4"><a href="trackerPage.html"><i class="fa fa-lg fa-arrow-left"></i></a></div>
+                <div class="title col-xs-4">
+                    <div class="nav-title text-center">Body Tracker</div>
+                </div>
+                <div class="right-icon col-xs-4 text-right"><a href="#" class="save-icon"><i class="fa fa-lg fa-check"></i></a></div>
+            </div>
+        </nav>
+        <div class="page-content small-container">
+            <div class="heading col-xs-12">
+                <h2 class="heading-title text-center">Track Your Measurements</h2></div>
+            <div class="measurement-box col-xs-12">
+                <div class="form-group col-xs-6">
+                    <label for="heartRate" style="color:red;">Heart Rate (BPM)</label>
+                    <input type="number" class="form-control" id="heartRate" placeholder="Heart Rate" required="true">
+                </div>
+                <div class="form-group col-xs-6">
+                    <label for="weight" style="color:red;">Weight (Lbs)</label>
+                    <input type="number" class="form-control" id="weight" placeholder="Weight" required="true">
+                </div>
+                <div class="form-group col-xs-6">
+                    <label for="neck">Neck (in)</label>
+                    <input type="number" class="form-control" id="neck" placeholder="Neck Size">
+                </div>
+                <div class="form-group col-xs-6">
+                    <label for="shoulders">Shoulders (in)</label>
+                    <input type="number" class="form-control" id="shoulders" placeholder="Shoulders">
+                </div>
+                <div class="form-group col-xs-6">
+                    <label for="chest">Chest (in)</label>
+                    <input type="number" class="form-control" id="chest" placeholder="Chest">
+                </div>
+                <div class="form-group col-xs-6">
+                    <label for="waist">Waist (in)</label>
+                    <input type="number" class="form-control" id="waist" placeholder="Waist" required="true">
+                </div>
+                <div class="form-group col-xs-6">
+                    <label for="leftThigh">Left Thigh (in)</label>
+                    <input type="number" class="form-control" id="leftThigh" placeholder="Left Thigh">
+                </div>
+                <div class="form-group col-xs-6">
+                    <label for="rightThigh">Right Thigh (in)</label>
+                    <input type="number" class="form-control" id="rightThigh" placeholder="Right Thigh">
+                </div>
+                <div class="form-group col-xs-6">
+                    <label for="leftCalf">Left Calf (in)</label>
+                    <input type="number" class="form-control" id="leftCalf" placeholder="Left Calf">
+                </div>
+                <div class="form-group col-xs-6">
+                    <label for="rightCalf">Right Calf (in)</label>
+                    <input type="number" class="form-control" id="rightCalf" placeholder="Right Calf">
+                </div>
+                <div class="form-group col-xs-6">
+                    <label for="leftBicep">Left Bicep (in)</label>
+                    <input type="number" class="form-control" id="leftBicep" placeholder="Left Bicep">
+                </div>
+                <div class="form-group col-xs-6">
+                    <label for="leftForearm">Left Forearm (in)</label>
+                    <input type="number" class="form-control" id="leftForearm" placeholder="Left Forearm">
+                </div>
+                <div class="form-group col-xs-6">
+                    <label for="rightForearm">Right Forearm (in)</label>
+                    <input type="number" class="form-control" id="rightForearm" placeholder="Right Forearm">
+                </div>
+                <div class="form-group col-xs-6">
+                    <label for="glutes">Glutes (in)</label>
+                    <input type="number" class="form-control" id="glutes" placeholder="Glutes">
+                </div>
+            </div>
+            <div class="save-btn btn btn-primary pull-right"><div class="save">Save</div></div>
+        </div>
+    </div>
+    
+    <script type="text/javascript">
+        var saveBtns = document.querySelectorAll(".save-btn, .save-icon");
+        var form = document.getElementsByClassName('form-control');
+        
+        
+        Array.prototype.slice.call(saveBtns).forEach(function(e){
+            e.addEventListener("click", function(ev){
+                // console.log("SAVING MEASUREMENTS", "FORM ELEMENTS", form);
+                var measurements = Array.prototype.reduce.call(form, function(p,c,i,a){
+                    // console.log("HERE IS VALUE OF BOX", c);
+                    p[c.id] = c.value;
+                    return p;
+                }, {});
+                
+                function validate(f, val) {
+                    var count = 0;
+                    var v = Array.prototype.reduce.call(f, function(p,c,i,a){
+                        var req = c.attributes.required;
+                        // console.log("Attribs", e.attributes.required, "True?", req, "COUNT", count);
+                        req && !!c.value ? count++ : null;
+                        return count;
+                    }, count);
+                    var valid = v >= val ? true : false;
+                    // console.log("Valid?", valid, "How many to validate?", val);
+                    return valid;
+                }
+                // console.log("Measurements", measurements, "Valid?", validate(form, 3));
+                var Save = Parse.Object.extend("Measurements");
+                var s = new Save();
+                // Validate And Send Form Data
+                validate(form, 2) ? s.save(measurements, {
+                  success: function(res){
+                      console.log("Successfully Saved Data");
+                  },
+                  error: function(err, res) {
+                      console.log(["There was an error", err], ["Response", res]);
+                  }
+                }) : alert("Enter Required Values");
+            });  
+        });
+        
+    </script>
+</body>
+
+</html>
