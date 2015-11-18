@@ -42,7 +42,7 @@
             <div class="title col-xs-4">
                <div class="nav-title text-center">Goals List</div>
             </div>
-            <div class="right-icon col-xs-4 text-right"><i class="fa fa-lg fa-check"></i></div>
+            <div class="right-icon col-xs-4 text-right"><a class="save-goals-btn" href="#"><i class="fa fa-lg fa-check"></i></a></div>
          </div>
       </nav>
       <div class="heading col-xs-12">
@@ -78,15 +78,39 @@
       var table = document.getElementsByClassName('goal-list');
           table = table[0];
       var tBody = document.getElementsByClassName('table-body');
-          tBody = tBody[0];
+
       var goalBtns = document.getElementsByClassName('goal-btns');
       Array.prototype.slice.call(goalBtns).forEach(function(e){
          e.addEventListener("click", function(ev){
-            console.log("EVENT", ev.target.classList[0]);
-            createAndAppendTr(tBody, ev.target.classList[0]);
+            // console.log("EVENT", ev.target.classList[0]);
+            createAndAppendTr(tBody[0], ev.target.classList[0]);
          });
       });
-      console.log("TABLE", table, "TBODY", tBody);
+      
+      var saveGoalsBtn = document.getElementsByClassName('save-goals-btn');
+      saveGoalsBtn = saveGoalsBtn[0];
+      saveGoalsBtn.addEventListener('click', function(e){
+         var S = Parse.Object.extend("Goals");
+         var s = new S();
+         var goals = document.getElementsByClassName('table-style');
+
+         var saveObj = Array.prototype.slice.call(goals).reduce(function(p,c,i,a) {
+            var elem = c.childNodes;
+            var target = parseInt(elem[3].innerText, 10) || null;
+            var type = elem[3].className.split("-");
+            // console.log("TARGET", target, "ELEMS", elem, "TYPE", type[0]);
+            p[type[0]] = target;
+            return p;
+         }, {});
+         saveObj.userName = window.commands.userName;
+         // console.log("Save Object", saveObj);
+         s.save(saveObj, {
+            success: function(res){console.log("SAVED OBJ WITH RESPONSE", res); return res;},
+            error: function(err, res){console.warn(["ERROR HAS OCCURED", err], ["RESPONSE", res]); return {response: res, error: err};}
+         }).then(function(res){
+            console.log("DO SOMETHING WITH RESPONSE", res);
+         });
+      });
       
       function createAndAppendTr(table, type) {
          var tr = document.createElement('tr');
@@ -102,7 +126,7 @@
          var del = document.createElement('td');
              del.className = "text-right";
              
-         // Add settings to TD
+         // Add args[2] settings to TD
          var args = Array.prototype.slice.call(arguments);
              !!args[2] ? Array.prototype.slice.call(args[2]).forEach(function(e){
                 for (var prop in e) {
@@ -125,6 +149,7 @@
          }
       }
       function getTypeAndSendString(type) {
+         // ARGS = TYPE, ARRAY, OBJECT
          // Second argument can be activities list
          var args = Array.prototype.slice.call(arguments);
          var tempActivities = [{item: "Some Activity", 
@@ -136,31 +161,32 @@
             type: 2,
             trackBy: 1
          }];
-         var d = {
+         var d = args[2] || {
             calories: ["eat", 2000, "calories"],
             weight: ["lose", 10, "pounds"],
             emotion: ["feel", 5, "on the Rate Me scale"],
-            fitness: ["do", args[1] || tempActivities, 3]
+            fitness: [args[1] || tempActivities, 3]
          };
+         console.log("ARGUMENTS", args);
          var string = "I will ";
          if (type == "calories") {
-            string = string+ " <span class='calories-verb'>"+ d[type][0] +"</span> ";
-            string = string+ "<span class='calories-number'>"+ d[type][1] +" " + d[type][2] +" </span> per week";
+            string = string+ "<span class='calories-verb'>"+ d[type][0] +"</span> ";
+            string = string+ "<span class='calories-number'>"+ d[type][1] +" " + d[type][2] +"</span> per week";
             // console.log("STRING:", string);
          }
          if (type == "weight") {
-            string = string+ " <span class='weight-verb'>"+ d[type][0] +"</span> ";
+            string = string+ "<span class='weight-verb'>"+ d[type][0] +"</span> ";
             string = string+ "<span class='weight-number'>"+ d[type][1] +" " + d[type][2] +"</span> per week";
             // console.log("STRING:", string);
          }
          if (type == "emotion") {
-            string = string+ " <span class='emotion-verb'>"+ d[type][0] +"</span> ";
+            string = string+ "<span class='emotion-verb'>"+ d[type][0] +"</span> ";
             string = string+ "an average of <span class='emotion-number'>"+ d[type][1] +" " + d[type][2] +"</span> per week";
             // console.log("STRING:", string);
          }
          if (type == "fitness") {
-            string = string+ " <span class='fitness-verb'>"+ d[type][0] +"</span> ";
-            string = string+ "<span class='fitness-list'>"+ d[type][1][0].item +" " + d[type][2] +"</span> times per week";
+            string = string+ "do ";
+            string = string+ "<span class='fitness-list'>"+ d[type][0][0].item +"</span> <span class='fitness-number'>" + d[type][1] +" times</span> per week";
             // console.log("STRING:", string);
          }
          return string;
