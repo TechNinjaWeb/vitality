@@ -50,10 +50,10 @@
       </div>
       <div class="page-content container">
          <div class="goal-btns col-xs-12 text-center">
-            <div class="goal-btn btn btn-responsive btn-primary">Caloric</div>
-            <div class="goal-btn btn btn-responsive btn-success">Weight</div>
-            <div class="goal-btn btn btn-responsive btn-danger">Emotional</div>
-            <div class="goal-btn btn btn-responsive btn-info">Fitness</div>
+            <div class="calories goal-btn btn btn-responsive btn-primary">Caloric</div>
+            <div class="weight goal-btn btn btn-responsive btn-success">Weight</div>
+            <div class="emotion goal-btn btn btn-responsive btn-danger">Emotional</div>
+            <div class="fitness goal-btn btn btn-responsive btn-info">Fitness</div>
          </div>
          <table class="goal-list table small-container">
             <thead class="table-head">
@@ -63,14 +63,6 @@
                </tr>
             </thead>
             <tbody class="table-body">
-               <tr>
-                  <td class="table-style">I will Eat an average of <span class="calories">1000</span> calories per day</td>
-                  <td class="text-right"><a class="delete-btn"><i class="fa fa-lg fa-ban"></i></a></td>
-               </tr>
-               <tr>
-                  <td style="color:white;">I will <span class="weight">lose</span> <span class="weight">5 pounds</span> per week</td>
-                  <td class="text-right"><a class="delete-btn"><i class="fa fa-lg fa-ban"></i></a></td>
-               </tr>
             </tbody>
             <tfoot class="table-foot">
                <tr>
@@ -81,26 +73,26 @@
          </table>
       </div>
    </div>
-   <button class="testBtn btn btn-danger" onclick="window.commands.test()">ADD TEST DATA</button>
+   <!--<button class="testBtn btn btn-danger" onclick="window.commands.test()">ADD TEST DATA</button>-->
    <script type="text/javascript">
       var table = document.getElementsByClassName('goal-list');
           table = table[0];
       var tBody = document.getElementsByClassName('table-body');
           tBody = tBody[0];
+      var goalBtns = document.getElementsByClassName('goal-btns');
+      Array.prototype.slice.call(goalBtns).forEach(function(e){
+         e.addEventListener("click", function(ev){
+            console.log("EVENT", ev.target.classList[0]);
+            createAndAppendTr(tBody, ev.target.classList[0]);
+         });
+      });
       console.log("TABLE", table, "TBODY", tBody);
       
-
-      window.commands.test = function() {
-         console.log("TEST FUNCTION SET");
-         var enterData = prompt("Enter Data To Add");
-         window.commands.createAndAppendTr(enterData, document.getElementsByTagName('tbody')[0], {innerHTML: "Yo Bro"});
-      };
-      
-      
-      function createAndAppendTr(data, table) {
+      function createAndAppendTr(table, type) {
          var tr = document.createElement('tr');
          var td = document.createElement('td');
-             td.innerHTML = data;
+             // DETERMINE NUMBER OR VERB TYPE AND BUILD
+             td.innerHTML = getTypeAndSendString(type);
              td.className = "table-style";
          var i = document.createElement('i');
              i.className = "fa fa-lg fa-ban";
@@ -132,6 +124,48 @@
             tr.remove();
          }
       }
+      function getTypeAndSendString(type) {
+         // Second argument can be activities list
+         var args = Array.prototype.slice.call(arguments);
+         var tempActivities = [{item: "Some Activity", 
+            instructions: "Some Bullet Points", 
+            type: 1,
+            trackBy: 2
+         }, {item: "Some Other Activity", 
+            instructions: "Some More Bullet Points", 
+            type: 2,
+            trackBy: 1
+         }];
+         var d = {
+            calories: ["eat", 2000, "calories"],
+            weight: ["lose", 10, "pounds"],
+            emotion: ["feel", 5, "on the Rate Me scale"],
+            fitness: ["do", args[1] || tempActivities, 3]
+         };
+         var string = "I will ";
+         if (type == "calories") {
+            string = string+ " <span class='calories-verb'>"+ d[type][0] +"</span> ";
+            string = string+ "<span class='calories-number'>"+ d[type][1] +" " + d[type][2] +" </span> per week";
+            // console.log("STRING:", string);
+         }
+         if (type == "weight") {
+            string = string+ " <span class='weight-verb'>"+ d[type][0] +"</span> ";
+            string = string+ "<span class='weight-number'>"+ d[type][1] +" " + d[type][2] +"</span> per week";
+            // console.log("STRING:", string);
+         }
+         if (type == "emotion") {
+            string = string+ " <span class='emotion-verb'>"+ d[type][0] +"</span> ";
+            string = string+ "an average of <span class='emotion-number'>"+ d[type][1] +" " + d[type][2] +"</span> per week";
+            // console.log("STRING:", string);
+         }
+         if (type == "fitness") {
+            string = string+ " <span class='fitness-verb'>"+ d[type][0] +"</span> ";
+            string = string+ "<span class='fitness-list'>"+ d[type][1][0].item +" " + d[type][2] +"</span> times per week";
+            // console.log("STRING:", string);
+         }
+         return string;
+      }
+      window.commands.getTypeAndSendString = getTypeAndSendString;
       window.commands.createAndAppendTr = createAndAppendTr;
    </script>
 </body>
