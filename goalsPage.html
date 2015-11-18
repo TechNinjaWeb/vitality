@@ -62,6 +62,137 @@
       </table>
     </div>
   </div>
+  <script type="text/javascript">
+    var table = document.getElementsByClassName('table-body');
+    var conditions = [{
+      condition: "equalTo",
+      col: "userName",
+      val: window.commands.userName
+    }];
+    var goals = window.commands.queryParse('Goals', 'find', conditions);
+        goals.then(function(res){
+          // console.log("RESPONSE FROM FIRST CHAIN", res);
+          var data = Array.prototype.slice.call(res).reduce(function(p,c,i,a){
+            var d = {res: c, data: c.attributes};
+            // console.log("RES", c, "DATA", d);
+            p[c.id] = c.attributes;
+            return p;
+          }, {});
+          return buildTable(table, data);;
+    });
+
+    // console.log("GOALS", goals);
+    
+    function buildTable(table, data) {
+      console.log("TABLE", table, "DATA", data);
+      // console.log(["Activity List", al], ["Type", typeof al], ["Is Array?", Array.isArray(al)]);
+      for (var prop in data) {
+        console.log("ELEMENT", data[prop]);
+        var tmp = [{item: "Some Activity", 
+          instructions: "Some Bullet Points", 
+          type: 1,
+          trackBy: 2
+       }];
+        var d = data[prop];
+        var goals = document.createElement('tr');
+        goals.className = "goals-list";
+        
+        console.log("EACH DATA", d);
+        var goal = document.createElement('td');
+            goal.className = "goal";
+            goal.data = data;
+            goal.innerHTML = "TBA GETSTRING FUNCTION";
+        console.log("Get String",  getTypeAndSendString("fitness"));
+    
+        goals.appendChild(goal);
+    
+        table[0].appendChild(goals);
+    
+        // console.log(["Table", table], ["tr", tr], ["instructions", e.instructions]);
+        // console.log("This is Table tr To Add", tr);
+    
+      }
+    }
+    function createAndAppendTr(table, type) {
+       var tr = document.createElement('tr');
+       var td = document.createElement('td');
+           // DETERMINE NUMBER OR VERB TYPE AND BUILD
+           td.innerHTML = getTypeAndSendString(type);
+           td.className = "table-style";
+       var i = document.createElement('i');
+           i.className = "fa fa-lg fa-ban";
+       var a = document.createElement('a');
+           a.className = "delete-btn";
+           a.addEventListener("click", removeBtn);
+       var del = document.createElement('td');
+           del.className = "text-right";
+           
+       // Add args[2] settings to TD
+       var args = Array.prototype.slice.call(arguments);
+           !!args[2] ? Array.prototype.slice.call(args[2]).forEach(function(e){
+              for (var prop in e) {
+                 td[prop] = e[prop];
+              }
+           }) : null;
+           // Add Icon to Anchor
+           a.appendChild(i);
+           // Add Anchor to Delete TD
+           del.appendChild(a);
+           // Add Table Data
+           tr.appendChild(td);
+           tr.appendChild(del);
+           table.appendChild(tr);
+           
+       function removeBtn(ev) {
+          var tr = ev.target.parentNode.parentNode.parentNode;
+          console.log("REMOVING", tr);
+          tr.remove();
+       }
+    }
+    function getTypeAndSendString(type) {
+       // ARGS = TYPE, ARRAY, OBJECT
+       // Second argument can be activities list
+       var args = Array.prototype.slice.call(arguments);
+       var tempActivities = [{item: "Some Activity", 
+          instructions: "Some Bullet Points", 
+          type: 1,
+          trackBy: 2
+       }, {item: "Some Other Activity", 
+          instructions: "Some More Bullet Points", 
+          type: 2,
+          trackBy: 1
+       }];
+       var d = args[2] || {
+          calories: ["eat", 2000, "calories"],
+          weight: ["lose", 10, "pounds"],
+          emotion: ["feel", 5, "on the Rate Me scale"],
+          fitness: [args[1] || tempActivities, 3]
+       };
+       console.log("ARGUMENTS", args);
+       var string = "I will ";
+       if (type == "calories") {
+          string = string+ "<span class='calories-verb'>"+ d[type][0] +"</span> ";
+          string = string+ "<span class='calories-number'>"+ d[type][1] +" " + d[type][2] +"</span> per week";
+          // console.log("STRING:", string);
+       }
+       if (type == "weight") {
+          string = string+ "<span class='weight-verb'>"+ d[type][0] +"</span> ";
+          string = string+ "<span class='weight-number'>"+ d[type][1] +" " + d[type][2] +"</span> per week";
+          // console.log("STRING:", string);
+       }
+       if (type == "emotion") {
+          string = string+ "<span class='emotion-verb'>"+ d[type][0] +"</span> ";
+          string = string+ "an average of <span class='emotion-number'>"+ d[type][1] +" " + d[type][2] +"</span> per week";
+          // console.log("STRING:", string);
+       }
+       if (type == "fitness") {
+          string = string+ "do ";
+          string = string+ "<span class='fitness-list'>"+ d[type][0][0].item +"</span> <span class='fitness-number'>" + d[type][1] +" times</span> per week";
+          // console.log("STRING:", string);
+       }
+       return string;
+    }
+  </script>
 </body>
 
 </html>

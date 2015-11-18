@@ -54,18 +54,17 @@
         </div>
     </div>
     <script type="text/javascript">
-        var td = new Date().toJSON().slice(0,10);
         var date = new Date();
-        var today = new Date(date.getTime());
+        var today = new Date(date.setHours(0,0,0,0));
 
-        // console.log("TODAYS DATE", td, "DATE", date, "TODAY", today);
+        // console.log("DATE", date, "DATE -1", today , "TODAY", today);
         
         var query = new Parse.Query("Meals");
             query.equalTo("userName", userName);
-            query.lessThanOrEqualTo("createdAt", today);
+            query.greaterThanOrEqualTo("createdAt", today);
             query.find({
                 success: function(res) {
-                    console.log("MEALS FOR TODAY", res);
+                    // console.log("MEALS FOR TODAY", res);
                     return res;
                 },
                 error: function(res,err) {
@@ -118,12 +117,12 @@
                                         console.warn(res,err);
                                     }
                                 }).then(function(res){
-                                    console.log("DELETED", res)
+                                    console.log("DELETED", res);
                                     window.location.reload();
                                 });
-                        });
-                        del.className = "fa fa-lg fa-ban";
+                    });
                     
+                    del.className = "fa fa-lg fa-ban";
                     delLink.appendChild(del);
                     delCol.appendChild(delLink);
                     
