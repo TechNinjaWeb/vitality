@@ -119,7 +119,7 @@
                 s.save(d, {
                     success: function(res) {
                         console.log(res);
-                        sendData(url, {msg: "Added Meal", response: res});
+                        window.commands.sendData(url, {msg: "Added Meal", response: res});
                     },
                     error: function(res,err) {
                         console.warn(res,err);

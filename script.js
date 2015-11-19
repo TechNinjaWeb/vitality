@@ -2,9 +2,12 @@
 Parse.initialize("1TzcjXBFcvaFF3UURc6eKSvRspfVz1Yo7sY3pg8b", "MPljLULeWDIMk3i3GHSrXmS40PqiAc8UpNhPpYK3");
 
 var commands = window.commands = {};
-var userName = window.commands.userName = "Ray";
+var userName;
+if (Parse.User.current()) userName = Parse.User.current().get('username');
+else userName = window.commands.userName = "Ray";
+// console.log("USERNAME", userName);
 
-$(document).ready(function() {
+window.onload = function() {
     var pageTitle = window.commands.pageTitle = document.getElementsByTagName('body');
 
     if (pageTitle[0].id == "homePage") {
@@ -361,12 +364,12 @@ $(document).ready(function() {
 
     window.commands.sendData = encodeAndSend;
     window.commands.grabData = decodeData;
-});
+};
 
 function queryParse(Class, method, actions) {
     var query = new Parse.Query(Class);
     var response = [];
-    
+
     // Grab All Users query
     // query.equalTo("objectId", d.id);
     if (!!actions) {
@@ -426,3 +429,71 @@ function queryParse(Class, method, actions) {
 }
 
 window.commands.queryParse = queryParse;
+
+function createUser(userDetails) {
+    var user = new Parse.User();
+    // console.log("Received Parse Test User Data", "Attempting to Create Parse User");
+
+    // Using Parses user.set() method to set the Users
+    // login data before querying the server
+   
+   var userDetailsLength = Object.keys(userDetails).length
+   console.log("USER DETS LEN", userDetailsLength);
+   
+   for (var i = 0; i < userDetailsLength; i++) {
+       var field = Object.keys(userDetails)[i];
+       var value = userDetails[field];
+       user.set(field, value);
+       console.log("Setting Parse.User on", [field, value]);
+
+   }
+
+    user.signUp(null, {
+        success: function(user) {
+            console.log("Redirecting You To Home State");
+            window.commands.sendData('/index.html');
+        },
+        error: function(user, error) {
+            // Show the error message somewhere and let the user try again.
+            alert("Error: " + error.code + " " + error.message);
+        }
+    });
+
+};
+
+function login(username, password) {
+    // Capture the length of the array
+    // The last item in userDetailsLength array is the
+    // most recent data from the user
+    // Grab the username & password and send it
+    // into a Parse.User.logIn function
+    Parse.User.logIn(username, password, {
+        success: function(user) {
+            // Do stuff after successful login.
+            console.log("Success! Parse has logged in the user: " + username);
+            // Reload Window To Update Scope
+            window.commands.sendData("/index.html");
+        },
+        error: function(user, error) {
+            // The login failed. Check error to see why.
+            console.log(user, error);
+        }
+    });
+};
+
+function logout(sessionUser) {
+    console.log("I heard your request to logout")
+
+    if (Parse.User.current()) {
+        Parse.User.logOut();
+        console.log("User Logged Out");
+        window.commands.sendData('/index.html');
+    }
+    else {
+        console.log("Please Login");
+        window.commands.sendData('login.html');
+    }
+};
+window.commands.createUser = createUser;
+window.commands.login = login;
+window.commands.logout = logout;

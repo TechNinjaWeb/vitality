@@ -160,9 +160,9 @@
           // console.log("STRING:", string);
        }
        if (type == "fitness") {
-          string = string+ "do ";
-          string = string+ "<span class='fitness-list'>"+ d[0][0].item +"</span> <span class='fitness-number'>" + d[1] +" times</span> per week";
-          // console.log("STRING:", string);
+          string = string+ "<span class='fitness-verb'>"+ d[0] +"</span> ";
+          string = string+ "<span class='fitness-list'>"+ d[1].item +"</span> <span class='fitness-number'>" + d[2] +" times</span> per week";
+          // console.log("STRING:", string, d);
        }
        return {string: string, data: d};
     }

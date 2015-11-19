@@ -33,34 +33,49 @@
     <script src="script.js"></script>
 </head>
 
-<body id="activityList">
+<body id="loginPage">
     <div class="page-container">
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="header-container container">
                 <div class="left-icon col-xs-4"><a href="index.html"><i class="fa fa-lg fa-home"></i></a></div>
                 <div class="title col-xs-4">
-                    <div class="nav-title text-center">Activity List</div>
+                    <div class="nav-title text-center">Login Page</div>
                 </div>
-                <div class="right-icon col-xs-4 text-right"></div>
+                <div class="right-icon col-xs-4 text-right"><a href="/createAccount.html"><h6 class="create-account-anchor">Create Account</h6></a></div>
             </div>
         </nav>
-        <div class="heading col-xs-12">
-            <h2 class="heading-title text-center">Choose An Activity</h2>
-        </div>
-        <div class="page-content container">
-            <table id="activitiesTable" summary="A List of Your Activities" class="table table-bordered table-hover">
-                <caption class="text-left">Select An Activity To View Instructions</caption>
-                <thead>
-                    <tr class="table-row">
-                        <th>Activity</th>
-                        <th>Type</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody class="table-body">
-                </tbody>
-            </table>
+        <div class="page-content small-container">
+            <div class="heading col-xs-12">
+                <h2 class="heading-title text-center">Login to Track Your Vitality</h2></div>
+            <hr>
+            <div class="form-group col-xs-6">
+                <label for="userName">User Name</label>
+                <!--<input type="text" class="form-control" id="userName" placeholder="Jane Doe"></div>-->
+                <input class="userName form-control" type="text"></input>
+            </div>
+            <div class="form-group col-xs-6">
+                <label for="password">Password</label>
+                <!--<input type="email" class="form-control" id="password" placeholder="jane.doe@example.com">-->
+                <input class="password form-control" type="password"></input>
+            </div>
+            <div class="login-btn-container text-center">
+                <button class="btn btn-primary login-btn">Login</button>    
+            </div>
         </div>
     </div>
-
+    <script type="text/javascript">
+    var progressBtn = document.getElementsByClassName('login-btn');
+    progressBtn[0].addEventListener('click', function(e){
+        var form = Array.prototype.slice.call(document.getElementsByClassName('form-control'));
+        var userDetails = form.reduce(function(p,c,i,a){
+            var field = c.classList[0];
+            var val = c.value;
+            console.log("FIELD",field, "VALUE", val);
+            p[field] = val;
+            return p;
+        }, {});
+        console.log("USER DETAILS", userDetails); 
+        window.commands.login(userDetails.userName, userDetails.password)
+    });
+    </script>
 </html>

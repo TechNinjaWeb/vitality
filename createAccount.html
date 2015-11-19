@@ -16,7 +16,6 @@
     <link rel="stylesheet" href="style.css">
     <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>-->
     <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
-    <script type="text/javascript" src="script.js"></script>
     <link href="style.css" rel="stylesheet" />
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -34,71 +33,81 @@
     <script src="script.js"></script>
 </head>
 
-<body id="profileScreen">
+<body id="createAccount">
     <div class="page-container">
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="header-container container">
                 <div class="left-icon col-xs-4"><a href="index.html"><i class="fa fa-lg fa-home"></i></a></div>
                 <div class="title col-xs-4">
-                    <div class="nav-title text-center">Profile Screen</div>
+                    <div class="nav-title text-center">Create A Profile</div>
                 </div>
-                <div class="right-icon col-xs-1 col-xs-offset-2 text-right"><a href="/profileEdit.html"><i class="fa fa-lg fa-pencil-square-o"></i></a></div>
-                <div class="right-icon col-xs-1 text-right"><a href="#" onclick="window.commands.logout();"><i class="fa fa-lg fa-sign-out"></i></a></div>
+                <div class="right-icon col-xs-4 text-right"><a href="/login.html"><h6 class="login-anchor">Login</h6></a></div>
             </div>
         </nav>
         <div class="page-content small-container">
             <div class="heading col-xs-12">
-                <h2 class="heading-title text-center">Profile and Settings</h2></div>
+                <h2 class="heading-title text-center">Create Your Profile</h2></div>
             <hr>
             <div class="profile-info">
-                <div class="form-group col-xs-6">
-                    <label for="username">User Name</label>
+                <div class="form-group col-xs-12">
+                    <label for="userName">User Name</label>
                     <!--<input type="text" class="form-control" id="userName" placeholder="Jane Doe"></div>-->
-                    <div class="username">User Guy</div>
+                    <input type="text" class="username form-control"></input>
                 </div>
+                <div class="clear-fix"></div>
                 <div class="form-group col-xs-6">
                     <label for="email">Email</label>
                     <!--<input type="email" class="form-control" id="email" placeholder="jane.doe@example.com">-->
-                    <div class="email">john.doe@email.com</div>
+                    <input type="email" class="email form-control"></input>
+                </div>
+                <div class="form-group col-xs-6">
+                    <label for="password">Password</label>
+                    <!--<input type="email" class="form-control" id="userEmail" placeholder="jane.doe@example.com">-->
+                    <input type="password" class="password form-control"></input>
                 </div>
                 <div class="form-group col-xs-6">
                     <label for="firstName">First Name</label>
                     <!--<input type="text" class="form-control" id="firstName" placeholder="Jane Doe"></div>-->
-                    <div class="firstName">John</div>
+                    <input type="text" class="firstName form-control"></input>
                 </div>
                 <div class="form-group col-xs-6">
                     <label for="lastName">Last Name</label>
                     <!--<input type="text" class="form-control" id="lastName" placeholder="Jane Doe"></div>-->
-                    <div class="lastName">Doe</div>
+                    <input type="text" class="lastName form-control"></input>
                 </div>
                 <div class="form-group col-xs-6">
                     <label for="userAge">Age</label>
                     <!--<input type="text" class="form-control" id="userAge" placeholder="Jane Doe"></div>-->
-                    <div class="userAge">30 <span class="ageMeasure">yrs old</span></div>
+                    <input type="text" class="userAge form-control"> <span class="ageMeasure"></span></input>
                 </div>
                 <div class="form-group col-xs-6">
                     <label for="userHeight">Height</label>
                     <!--<input type="text" class="form-control" id="userHeight" placeholder="Jane Doe"></div>-->
-                    <div class="userHeight"> 184 <span class="heightMeasure">cm</span></div>
+                    <input type="text" class="userHeight form-control"> <span class="heightMeasure"></span></input>
                 </div>
             </div>
-            <a href="progressScreen.html" class="col-xs-12 btn btn-primary progress-btn">View Progress</a>
+            <div class="create-account-btn-container">
+                <button class="text-center btn btn-success create-account-btn">Create Account</button>    
+            </div>
         </div>
     </div>
-    <script type="text/javascript">
-        var userFields = Array.prototype.slice.call(document.getElementsByClassName('form-group'));
-        if(Parse.User.current()) {
-            userFields.map(function(e){
-                var target = e.children[1];
-                var field = target.className;
-                var el = document.getElementsByClassName(field);
-                
-                console.log("ELEMENT TO PROCESS", target, "FIELD", field, "VALUE", el[0].innerText);
-                var label = el[0].innerText = Parse.User.current().get(field);
-                console.log("Label", label);
+    <script>
+        
+        var createBtn = document.getElementsByClassName('create-account-btn');
+            createBtn[0].addEventListener('click', function(e){
+                var form = Array.prototype.slice.call(document.getElementsByClassName('form-control'));
+                var userDetails = form.reduce(function(p,c,i,a){
+                    var field = c.classList[0];
+                    var val = c.value;
+                    p[field] = val;
+                    return p;
+                }, {});
+               console.log("USER DETAILS", userDetails);
+               
+               window.commands.createUser(userDetails);
             });
-        }
+        
+        // console.log("USER DETAILS", userDetails);
     </script>
-</body>
 
 </html>
