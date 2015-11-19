@@ -284,3 +284,11 @@ a {
   width: 100%;
   margin-bottom: 20px;
 }
+
+.right-icons {
+    margin-top: 15px;
+}
+
+.right-icons span {
+    margin-right: 10px;
+}
