@@ -49,32 +49,63 @@
                 <h2 class="heading-title text-center">How well do you feel?</h2></div>
             <div class="rating-box col-xs-12">
                 <div class="description">Rate Your Mood From 1 to 5</div>
-                <form action="#">
-                    <ul class="ratings col-xs-12 text-center list-unstyled list-inline">
-                        <li class="rating">
-                            <a class="fa fa-lg fa-smile-o"></a>
-                        </li>
-                        <li class="rating">
-                            <a class="fa fa-lg fa-smile-o"></a>
-                        </li>
-                        <li class="rating">
-                            <a class="fa fa-lg fa-smile-o"></a>
-                        </li>
-                        <li class="rating">
-                            <a class="fa fa-lg fa-smile-o"></a>
-                        </li>
-                        <li class="rating">
-                            <a class="fa fa-lg fa-smile-o"></a>
-                        </li>
-                    </ul>
-                    <div class="ratings-navigation center-block">
-                        <button class="nav-back btn btn-danger col-xs-6"><i class="fa fa-lg fa-arrow-left"></i></button>
-                        <button onmouseclick="submit" class="nav-next btn btn-success col-xs-6"><i class="fa fa-lg fa-arrow-right"></i></button>
-                    </div>
-                </form>
+                <ul class="ratings col-xs-12 text-center list-unstyled list-inline">
+                    <li class="rating">
+                        <i class="fa fa-lg fa-smile-o"></i>
+                        <input type="checkbox" class="chk hidden" id="img2" name="img2" value="1" />
+                    </li>
+                    <li class="rating">
+                        <i class="fa fa-lg fa-smile-o"></i>
+                        <input type="checkbox" class="chk hidden" id="img2" name="img2" value="2" />
+                    </li>
+                    <li class="rating">
+                        <i class="fa fa-lg fa-smile-o"></i>
+                        <input type="checkbox" class="chk hidden" id="img2" name="img2" value="3" />
+                    </li>
+                    <li class="rating">
+                        <i class="fa fa-lg fa-smile-o"></i>
+                        <input type="checkbox" class="chk hidden" id="img2" name="img2" value="4" />
+                    </li>
+                    <li class="rating">
+                        <i class="fa fa-lg fa-smile-o"></i>
+                        <input type="checkbox" class="chk hidden" id="img2" name="img2" value="5" />
+                    </li>
+                </ul>
+                <div class="ratings-navigation center-block">
+                    <button class="nav-back btn btn-danger col-xs-6"><i class="fa fa-lg fa-arrow-left"></i></button>
+                    <button onclick="next()" class="nav-next btn btn-success col-xs-6"><i class="fa fa-lg fa-arrow-right"></i></button>
+                </div>
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+    var imgs = Array.prototype.slice.call(document.getElementsByClassName('rating'));
+    imgs.forEach(function(img) {
+      img.addEventListener('click', function(e) {
+          var el = Array.prototype.slice.call(e.target.parentNode.parentNode.children);
+          // console.log("ELEMS", el);
+          el.forEach(function(i){
+            var equal = e.target.parentNode == i;
+            // console.log("ARE WE EQUAL?", equal, i);
+            if (equal && i.children[1].checked == true) e.target.parentNode.children[1].checked = false;
+            if (equal && i.children[1].checked == false) e.target.parentNode.children[1].checked = true;
+            if (!equal && i.children[1].checked == true) i.children[1].checked = false;
+            if (!equal && i.children[1].checked == false) i.children[1].checked = false;
+            if (i.children[1].checked == true) i.children[0].style.color = "green";
+            else i.children[0].style.color = "white";
+            // else console.log("I'm probably not the same as target, but i still might be checked", i.children[1].checked);
+          });
+      });
+    });
+    function next(){
+        var ratings = Array.prototype.slice.call(document.getElementsByClassName('rating'));
+        var rating = ratings.reduce(function(o, rating, i, a){
+            if (rating.children[1].checked) o.emotional = parseInt(rating.children[1].value);
+            return o;
+        }, {});
+        commands.sendData('/fitnessRatings.html', rating);
+    }
+    </script>
 </body>
 
 </html>

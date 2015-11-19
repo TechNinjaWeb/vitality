@@ -296,7 +296,7 @@ $(document).ready(function() {
                 };
             }
             else {
-                url = "/ratingsPage.html";
+                url = "/emotionRatings.html";
                 d = {
                     message: ""
                 };
@@ -372,6 +372,7 @@ function queryParse(Class, method, actions) {
     if (!!actions) {
         actions.forEach(function(e) {
             query[e.condition](e.col, e.val);
+            !!e.limit ? query["limit"](e.limit) : null;
         });
     }
     if (method == "find") {

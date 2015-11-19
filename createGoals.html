@@ -82,7 +82,7 @@
       var goalBtns = document.getElementsByClassName('goal-btns');
       Array.prototype.slice.call(goalBtns).forEach(function(e){
          e.addEventListener("click", function(ev){
-            // console.log("EVENT", ev.target.classList[0]);
+            // console.log("EVENT", ev.target.classList[0], "LOOK FOR DATA", ev.target);
             createAndAppendTr(tBody[0], ev.target.classList[0]);
          });
       });
@@ -98,12 +98,15 @@
             var elem = c.childNodes;
             var target = parseInt(elem[3].innerText, 10) || null;
             var type = elem[3].className.split("-");
-            // console.log("TARGET", target, "ELEMS", elem, "TYPE", type[0]);
-            p[type[0]] = target;
+            var data = c.parentNode.data;
+
+            // console.log("TARGET", target, "ELEMS", elem, "TYPE", type[0], "DATA", data);
+            
+            p[type[0]] = data;
             return p;
          }, {});
          saveObj.userName = window.commands.userName;
-         // console.log("Save Object", saveObj);
+         console.log("Save Object", saveObj);
          s.save(saveObj, {
             success: function(res){console.log("SAVED OBJ WITH RESPONSE", res); return res;},
             error: function(err, res){console.warn(["ERROR HAS OCCURED", err], ["RESPONSE", res]); return {response: res, error: err};}
@@ -113,10 +116,13 @@
       });
       
       function createAndAppendTr(table, type) {
+         var getString = getTypeAndSendString(type);
          var tr = document.createElement('tr');
+             tr.data = getString.data;
          var td = document.createElement('td');
+         // console.log("STRING DATA", getString.data);
              // DETERMINE NUMBER OR VERB TYPE AND BUILD
-             td.innerHTML = getTypeAndSendString(type);
+             td.innerHTML = getString.string;
              td.className = "table-style";
          var i = document.createElement('i');
              i.className = "fa fa-lg fa-ban";
@@ -124,7 +130,7 @@
              a.className = "delete-btn";
              a.addEventListener("click", removeBtn);
          var del = document.createElement('td');
-             del.className = "text-right";
+             del.className = "text-center";
              
          // Add args[2] settings to TD
          var args = Array.prototype.slice.call(arguments);
@@ -152,6 +158,7 @@
          // ARGS = TYPE, ARRAY, OBJECT
          // Second argument can be activities list
          var args = Array.prototype.slice.call(arguments);
+         // console.log("ARGUMETNS", args);
          var tempActivities = [{item: "Some Activity", 
             instructions: "Some Bullet Points", 
             type: 1,
@@ -161,35 +168,41 @@
             type: 2,
             trackBy: 1
          }];
-         var d = args[2] || {
+         var d = args[1] || {
             calories: ["eat", 2000, "calories"],
             weight: ["lose", 10, "pounds"],
             emotion: ["feel", 5, "on the Rate Me scale"],
-            fitness: [args[1] || tempActivities, 3]
+            fitness: [args[2] || tempActivities, 3]
          };
-         console.log("ARGUMENTS", args);
+         // console.log("DATA TO USE", d);
+         var tmp;
          var string = "I will ";
          if (type == "calories") {
             string = string+ "<span class='calories-verb'>"+ d[type][0] +"</span> ";
             string = string+ "<span class='calories-number'>"+ d[type][1] +" " + d[type][2] +"</span> per week";
             // console.log("STRING:", string);
+            tmp = [d[type][0], d[type][1], d[type][2]];
          }
          if (type == "weight") {
             string = string+ "<span class='weight-verb'>"+ d[type][0] +"</span> ";
             string = string+ "<span class='weight-number'>"+ d[type][1] +" " + d[type][2] +"</span> per week";
             // console.log("STRING:", string);
+            tmp = [d[type][0], d[type][1], d[type][2]];
          }
          if (type == "emotion") {
             string = string+ "<span class='emotion-verb'>"+ d[type][0] +"</span> ";
             string = string+ "an average of <span class='emotion-number'>"+ d[type][1] +" " + d[type][2] +"</span> per week";
             // console.log("STRING:", string);
+            tmp = [d[type][0], d[type][1], d[type][2]];
          }
          if (type == "fitness") {
             string = string+ "do ";
             string = string+ "<span class='fitness-list'>"+ d[type][0][0].item +"</span> <span class='fitness-number'>" + d[type][1] +" times</span> per week";
             // console.log("STRING:", string);
+            tmp = ['do', d[type][0][0], d[type][1]];
          }
-         return string;
+         // console.log("DATA IS ARGS OR TEMP?", args[1]);
+         return {string: string, data: tmp};
       }
       window.commands.getTypeAndSendString = getTypeAndSendString;
       window.commands.createAndAppendTr = createAndAppendTr;

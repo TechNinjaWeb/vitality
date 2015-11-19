@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Bootstrap, from Twitter</title>
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <!-- Le styles -->
+    <link data-require="bootstrap-css" data-semver="3.3.1" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+    <link data-require="bootstrap@*" data-semver="3.3.5" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+    <link data-require="bootstrap@*" data-semver="3.3.5" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/cosmo/bootstrap.min.css" />
+    <link data-require="bootstrap@*" data-semver="3.3.5" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="style.css">
+    <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>-->
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+    <link href="style.css" rel="stylesheet" />
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- Le fav and touch icons -->
+    <!--<link rel="shortcut icon" href="images/favicon.ico" />-->
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png" />
+    <!-- Le javascript
+    ================================================== -->
+    <script data-require="jquery" data-semver="2.1.4" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script data-require="bootstrap" data-semver="3.3.5" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="script.js"></script>
+</head>
+
+<body id="ratingsPage" class="nutrition">
+    <div class="page-container">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="header-container container">
+                <div class="left-icon col-xs-4"><a href="index.html"><i class="fa fa-lg fa-home"></i></a></div>
+                <div class="title col-xs-4">
+                    <div class="nav-title text-center">Rate Me</div>
+                </div>
+                <div class="right-icon col-xs-4 text-right"><a href="activityScreen.html"><h6 class="btn-description">Skip Rating</h6></a></div>
+            </div>
+        </nav>
+        <div class="page-content small-container">
+            <div class="heading col-xs-12">
+                <h2 class="heading-title text-center">How healthy were your meals?</h2></div>
+            <div class="rating-box col-xs-12">
+                <div class="description">Rate Your Nutrition From 1 to 5</div>
+                <ul class="ratings col-xs-12 text-center list-unstyled list-inline">
+                    <li class="rating">
+                        <i class="fa fa-lg fa-smile-o"></i>
+                        <input type="checkbox" class="chk hidden" id="img2" name="img2" value="1" />
+                    </li>
+                    <li class="rating">
+                        <i class="fa fa-lg fa-smile-o"></i>
+                        <input type="checkbox" class="chk hidden" id="img2" name="img2" value="2" />
+                    </li>
+                    <li class="rating">
+                        <i class="fa fa-lg fa-smile-o"></i>
+                        <input type="checkbox" class="chk hidden" id="img2" name="img2" value="3" />
+                    </li>
+                    <li class="rating">
+                        <i class="fa fa-lg fa-smile-o"></i>
+                        <input type="checkbox" class="chk hidden" id="img2" name="img2" value="4" />
+                    </li>
+                    <li class="rating">
+                        <i class="fa fa-lg fa-smile-o"></i>
+                        <input type="checkbox" class="chk hidden" id="img2" name="img2" value="5" />
+                    </li>
+                </ul>
+                <div class="ratings-navigation center-block">
+                    <button class="nav-back btn btn-danger col-xs-6"><i class="fa fa-lg fa-arrow-left"></i></button>
+                    <button onclick="next()" class="nav-next btn btn-success col-xs-6"><i class="fa fa-lg fa-arrow-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+    var imgs = Array.prototype.slice.call(document.getElementsByClassName('rating'));
+    imgs.forEach(function(img) {
+      img.addEventListener('click', function(e) {
+          var el = Array.prototype.slice.call(e.target.parentNode.parentNode.children);
+          // console.log("ELEMS", el);
+          el.forEach(function(i){
+            var equal = e.target.parentNode == i;
+            // console.log("ARE WE EQUAL?", equal, i);
+            if (equal && i.children[1].checked == true) e.target.parentNode.children[1].checked = false;
+            if (equal && i.children[1].checked == false) e.target.parentNode.children[1].checked = true;
+            if (!equal && i.children[1].checked == true) i.children[1].checked = false;
+            if (!equal && i.children[1].checked == false) i.children[1].checked = false;
+            if (i.children[1].checked == true) i.children[0].style.color = "green";
+            else i.children[0].style.color = "white";
+            // else console.log("I'm probably not the same as target, but i still might be checked", i.children[1].checked);
+          });
+      });
+    });
+    function next(){
+        var data = location.search;
+            data = decodeURIComponent(data);
+            data = data.replace("?", "");
+            data = JSON.parse(data);
+        console.log("data from url", data);
+        var ratings = Array.prototype.slice.call(document.getElementsByClassName('rating'));
+        var rating = ratings.reduce(function(o, rating, i, a){
+            if (rating.children[1].checked) o.nutrition = parseInt(rating.children[1].value);
+            return o;
+        }, {});
+        for (var prop in data) rating[prop] = data[prop];
+        // console.log("RATINGS", rating);
+        window.commands.sendData('/energyRatings.html', rating);
+    }
+    </script>
+</body>
+
+</html>
