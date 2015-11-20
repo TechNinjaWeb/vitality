@@ -51,7 +51,7 @@
             <!-- STOPWATCH RIPPED FROM SITE -->
             <div id="stopwatch" class="stopwatch text-center small-container hidden"></div>
             <div id="timespan" class="stopwatch text-center small-container hidden"></div>
-            
+
             <button id="saveActivity" class="save-activity btn btn-success col-xs-12 small-container hidden">Save Activity</button>
 
             <table class="results col-xs-12"></table>
@@ -72,113 +72,224 @@
         </nav>
     </div>
     <script>
-    // STOPWATCH RIPPED FROM SITE
-    var Stopwatch = (function() {
-        var s;
-        return {
-            settings: {
-                stop: 1,
-                sw: document.querySelectorAll(".stopwatch")[0],
-                results: document.querySelectorAll(".results")[0],
-                mills: 0,
-                secs: 0,
-                mins: 0,
-                i: 1,
-                times: ["00:00:00"],
-                clearButton: "<a href=\"#\" class=\"button\" onClick=\"Stopwatch.clear();\">Clear</a>"
-            },
-            init: function() {
-                s = this.settings;
-                setInterval(this.timer, 1);
-            },
-            clear: function() {
-                s.i = 1,
-                    s.times = ["00:00:00"],
-                    s.results.innerHTML = s.clearButton;
-            },
-            lap: function() {
-                if (s.i === 1) {
-                    s.results.innerHTML = s.clearButton;
-                }
-                s.times.push(("0" + s.mins).slice(-2) + ":" + ("0" + s.secs).slice(-2) + ":" + ("0" + s.mills).slice(-2));
-                var diffTime = ("0" + Math.floor(s.times[s.i].split(":")[0] - s.times[s.i - 1].split(":")[0])).slice(-2) + ":" + ("0" + Math.floor(s.times[s.i].split(":")[1] - s.times[s.i - 1].split(":")[1])).slice(-2) + ":" + ("0" + (s.times[s.i].split(":")[2] - s.times[s.i - 1].split(":")[2])).slice(-2);
-                s.results.innerHTML = s.results.innerHTML + "<tr class='lap-times'><td>" + s.times[s.i] + "</td><td>" + diffTime + "</td></tr>";
-                s.i++;
-            },
-            restart: function() {
-                s.mills = 0,
-                    s.secs = 0,
-                    s.mins = 0;
-                this.start();
-            },
-            start: function() {
-                s.stop = 0;
-            },
-            stop: function() {
-                s.stop = 1;
-            },
-            timer: function() {
-                if (s.stop === 0) {
-                    if (s.mills === 100) {
-                        s.secs++;
-                        s.mills = 0;
+        // STOPWATCH RIPPED FROM SITE
+        var Stopwatch = (function() {
+            var s;
+            return {
+                settings: {
+                    stop: 1,
+                    sw: document.querySelectorAll(".stopwatch")[0],
+                    results: document.querySelectorAll(".results")[0],
+                    mills: 0,
+                    secs: 0,
+                    mins: 0,
+                    i: 1,
+                    times: ["00:00:00"],
+                    clearButton: "<a href=\"#\" class=\"button\" onClick=\"Stopwatch.clear();\">Clear</a>"
+                },
+                init: function() {
+                    s = this.settings;
+                    setInterval(this.timer, 1);
+                },
+                clear: function() {
+                    s.i = 1,
+                        s.times = ["00:00:00"],
+                        s.results.innerHTML = s.clearButton;
+                },
+                lap: function() {
+                    if (s.i === 1) {
+                        s.results.innerHTML = s.clearButton;
                     }
-                    if (s.secs === 60) {
-                        s.mins++;
-                        s.secs = 0;
+                    s.times.push(("0" + s.mins).slice(-2) + ":" + ("0" + s.secs).slice(-2) + ":" + ("0" + s.mills).slice(-2));
+                    var diffTime = ("0" + Math.floor(s.times[s.i].split(":")[0] - s.times[s.i - 1].split(":")[0])).slice(-2) + ":" + ("0" + Math.floor(s.times[s.i].split(":")[1] - s.times[s.i - 1].split(":")[1])).slice(-2) + ":" + ("0" + (s.times[s.i].split(":")[2] - s.times[s.i - 1].split(":")[2])).slice(-2);
+                    s.results.innerHTML = s.results.innerHTML + "<tr class='lap-times'><td>" + s.times[s.i] + "</td><td>" + diffTime + "</td></tr>";
+                    s.i++;
+                },
+                restart: function() {
+                    s.mills = 0,
+                        s.secs = 0,
+                        s.mins = 0;
+                    this.start();
+                },
+                start: function() {
+                    s.stop = 0;
+                },
+                stop: function() {
+                    s.stop = 1;
+                },
+                timer: function() {
+                    if (s.stop === 0) {
+                        if (s.mills === 100) {
+                            s.secs++;
+                            s.mills = 0;
+                        }
+                        if (s.secs === 60) {
+                            s.mins++;
+                            s.secs = 0;
+                        }
+                        s.sw.innerHTML = ("0" + s.mins).slice(-2) + ":" + ("0" + s.secs).slice(-2) + ":" + ("0" + s.mills).slice(-2);
+                        s.mills++;
                     }
-                    s.sw.innerHTML = ("0" + s.mins).slice(-2) + ":" + ("0" + s.secs).slice(-2) + ":" + ("0" + s.mills).slice(-2);
-                    s.mills++;
                 }
+            };
+        })();
+        Stopwatch.init();
+
+        // END STOPWATCH RIPPED CODE
+
+        // STOPWATCH RIPPED FROM
+
+        var CCOUNT = 1200;
+
+        var t, count;
+
+        function getMinutes(seconds) {
+            var minutes = Math.round((seconds - 30) / 60),
+                remainingSeconds = seconds % 60;
+
+            return minutes + ":" + remainingSeconds;
+        }
+
+
+        function cddisplay() {
+            // displays time in span
+            document.getElementById('timespan').innerHTML = getMinutes(count);
+        };
+
+        function countdown() {
+            // starts countdown
+            cddisplay();
+            if (count == 0) {
+                // time is up
+                saveActivity();
+            }
+            else {
+                count--;
+                t = setTimeout("countdown()", 1000);
             }
         };
-    })();
-    Stopwatch.init();
 
-    // END STOPWATCH RIPPED CODE
+        function cdpause() {
+            // pauses countdown
+            clearTimeout(t);
+        };
 
-    // STOPWATCH RIPPED FROM
+        function cdreset() {
+            // resets countdown
+            cdpause();
+            count = CCOUNT;
+            cddisplay();
+        };
 
-    var CCOUNT = 1200;
+        console.log("This is Activity Timer Screen", "test");
+        console.log("get data func", window.commands.grabData);
+        var postData = JSON.parse(window.commands.grabData(window.location.search).replace("?", ""));
+        
+        var timers = document.querySelectorAll("#timespan, .timer-controls");
+        var stopwatch = document.querySelectorAll("#stopwatch, .stopwatch-controls");
+        var isComplete = false;
 
-    var t, count;
+        window.commands.timers = {
+            timespan: timers,
+            stopwatch: stopwatch
+        };
+        
+        var d = JSON.parse(window.commands.grabData(window.location.search));
+        console.log("GOING TO RUN UNHIDE TIMER", d);
+        
+        (function unHideTimer(d) {
 
-    function getMinutes(seconds) {
-        var minutes = Math.round((seconds - 30) / 60),
-            remainingSeconds = seconds % 60;
+            console.log(["TIMERS AND CONTROLS", {timers: timers, stopwatch: stopwatch}] );
 
-        return minutes + ":" + remainingSeconds;
-    }
+            if (d.data.trackBy == 0) {
+                console.log("Activity Type is " + d.data.trackBy);
+
+                stopwatch[0].classList.remove("hidden");
+                stopwatch[1].classList.remove("hidden");
+
+            }
+            else if (d.data.trackBy == 1) {
+                console.log("Activity Type is " + d.data.trackBy);
+
+                timers[0].classList.remove("hidden");
+                timers[1].classList.remove("hidden");
+
+            }
+            else if (d.data.trackBy == 2) {
+                console.log("Activity Type is " + d.data.trackBy);
+
+                timers[0].classList.remove("hidden");
+                timers[1].classList.remove("hidden");
+            }
+
+        })();
+
+        function saveActivity() {
+            var stopwatch = document.getElementById('stopwatch');
+            var timespan = document.getElementById('timespan');
+            var lapTimes = document.getElementsByClassName('lap-times');
+            var data, url, d;
+            var laps = [];
+
+            isComplete = true;
+            document.getElementById('saveActivity').classList.remove('hidden');
+
+            if (lapTimes.length >= 1 && isComplete == true) {
+                console.log("There are Laps to be tracked");
+                Array.prototype.forEach.call(lapTimes, function(e) {
+                    // console.log(e.children);
+                    laps.push([e.children[0].innerHTML, e.children[1].innerHTML]);
+                });
+                data = {
+                    userName: postData.data.userName,
+                    item: postData.data.item,
+                    time: stopwatch.innerHTML,
+                    laps: laps
+                };
+            }
+            else if (lapTimes.length <= 0) {
+                console.log("No Laptimes, Must be countdown function");
+                data = {
+                    userName: postData.data.userName,
+                    item: postData.data.item
+                };
+            }
+            else {
+                console.log("No lap information");
+            }
+            // console.log("Finished Tracking", laps);
 
 
-    function cddisplay() {
-        // displays time in span
-        document.getElementById('timespan').innerHTML = getMinutes(count);
-    };
+            var DB = Parse.Object.extend("TimeTracker");
+            var s = new DB();
 
-    function countdown() {
-        // starts countdown
-        cddisplay();
-        if (count == 0) {
-            // time is up
-            saveActivity();
-        } else {
-            count--;
-            t = setTimeout("countdown()", 1000);
+            s.save(data, {
+                success: function(res) {
+                    console.log(["Saved Data with response", res]);
+                },
+                error: function(res, err) {
+                    console.warn(["Error Occured", err], ["Response", res]);
+                }
+            });
+
+            if (postData.data.trackBy == 1 || postData.data.trackBy == 2) {
+                url = "/trackerPage.html";
+                d = {
+                    message: "You've Completed " + postData.data.item + " Activity!"
+                };
+            }
+            else {
+                url = "/emotionRatings.html";
+                d = {
+                    message: ""
+                };
+            }
+
+            return encodeAndSend(url, d);
         }
-    };
 
-    function cdpause() {
-        // pauses countdown
-        clearTimeout(t);
-    };
 
-    function cdreset() {
-        // resets countdown
-        cdpause();
-        count = CCOUNT;
-        cddisplay();
-    };
+        window.commands.saveActivity = saveActivity;
     </script>
 </body>
 
