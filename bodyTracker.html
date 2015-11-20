@@ -142,6 +142,7 @@
                 validate(form, 2) ? s.save(measurements, {
                   success: function(res){
                       console.log("Successfully Saved Data");
+                      window.commands.sendData('/index.html');
                   },
                   error: function(err, res) {
                       console.log(["There was an error", err], ["Response", res]);

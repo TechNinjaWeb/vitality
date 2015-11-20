@@ -34,7 +34,7 @@
    <script src="script.js"></script>
 </head>
 
-<body id="goalsPage">
+<body id="createGoals">
    <div class="page-container">
       <nav class="navbar navbar-default navbar-fixed-top">
          <div class="header-container container">
@@ -112,6 +112,7 @@
             error: function(err, res){console.warn(["ERROR HAS OCCURED", err], ["RESPONSE", res]); return {response: res, error: err};}
          }).then(function(res){
             console.log("DO SOMETHING WITH RESPONSE", res);
+            window.commands.sendData('/goalsPage.html');
          });
       });
       

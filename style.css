@@ -37,7 +37,7 @@ a {
   }
 
   .rating-box .ratings {
-    margin-bottom: 200px;
+    margin-bottom: 100;
   }
   
   .btn-responsive {
@@ -88,11 +88,11 @@ a {
   }
   
   .home-title {
-    margin-top: 20px;
+    margin-top: 0px;
   }
 
   .title-block {
-    margin-bottom: 100px;
+    margin-bottom: 50px;
   }
 
   .rating-box .description {
@@ -201,8 +201,8 @@ a {
 }
 
 .heading {
-  margin-top: 60px;
-  margin-bottom: 80px;
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 
 .nav-title {
