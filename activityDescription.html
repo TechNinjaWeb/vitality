@@ -37,7 +37,7 @@
     <div class="page-container">
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="header-container container">
-                <div class="left-icon col-xs-4"><a href="index.html"><i class="fa fa-lg fa-home"></i></a></div>
+                <div class="left-icon col-xs-4"><a href="./activityList.html"><i class="fa fa-lg fa-arrow-left"></i></a></div>
                 <div class="title col-xs-4">
                     <div class="nav-title text-center">Activity Description</div>
                 </div>
@@ -52,11 +52,9 @@
                 
             </h2>
             <div class="activity-type col-xs-12 text-left">
-                
             </div>
-            <p class="activity-instructions col-xs-12 text-left">
-                
-            </p>
+            <ul class="activity-instructions col-xs-11 col-xs-offset-1 text-left">
+            </ul>
             <div class="activity-start small-container">
                 <button class="start-btn col-xs-12 btn btn-success">
                     Start Activity
@@ -64,5 +62,96 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        console.log("This is Activity Description Screen");
+
+        var postData = window.location.search;
+        var d = window.commands.grabData(postData);
+
+        // console.log("Post Data", d);
+
+        var activities = new Parse.Query("ActivityList");
+        var activity = [];
+
+        // Grab All Users Activities
+        activities.equalTo("objectId", d.id);
+        activities.find({
+            success: function(res) {
+                // console.log(res, "Amount of items", res.length);
+                res.forEach(function(e, i, a) {
+
+                    e.attributes.objectId = e.id;
+                    activity.push({
+                        data: e.attributes,
+                        id: e.id
+                    });
+
+                    // console.log(["activity object", activity]);
+                });
+                
+                return res;
+            },
+            error: function(res, err) {
+                console.warn(res, err, "Error has occured");
+            }
+        }).then(function(res) {
+            // console.log("Here is the data:", d);
+
+            var query = new Parse.Query("ActivityList");
+            var a = [];
+            var obj = JSON.parse(d);
+
+            console.log("Searching for ID", obj.id);
+
+            query.get(obj.id, {
+                success: function(res) {
+                    // console.log(["Response from Activity Get", res]);
+
+                    activity.push({
+                        data: res.attributes,
+                        id: res.id
+                    });
+                },
+                error: function(res, err) {
+                    console.warn(res, err, "Error has occured");
+                }
+            }).then(function(res) {
+                var nameList = ["Physical", "Emotional", "Nutritional", "Self-Image"];
+                var data = res.attributes;
+                var pTitle = document.getElementsByClassName('activity-title');
+                var pType = document.getElementsByClassName('activity-type');
+                var pInst = document.getElementsByClassName('activity-instructions');
+
+                console.log("Attribs", data);
+
+                pTitle[0].innerHTML = data.item;
+                pType[0].innerHTML = nameList[data.trackBy];
+                // console.log("INSTRUCTIONS", data.instructions);
+                for (var prop in data.instructions) {
+                    // console.log("PROPERTY", data.instructions[prop]);
+                    var li = document.createElement('li');
+                    li.innerHTML = data.instructions[prop];
+                    pInst[0].appendChild(li);
+                }
+            });
+        });
+
+        var startBtn = document.getElementsByClassName('start-btn');
+        startBtn[0].addEventListener("click", function(e) {
+            console.log("Starting Activity", activity);
+
+            var url = "/activityTimer.html";
+            window.commands.sendData(url, activity[0]);
+        });
+        
+        var iconStart = document.getElementsByClassName('right-icon');
+        iconStart[0].addEventListener("click", function(e) {
+            console.log("Starting Activity", activity);
+
+            var url = "/activityTimer.html";
+            window.commands.sendData(url, activity[0]);
+        });
+    </script>
+</body>
 
 </html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Bootstrap, from Twitter</title>
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <!-- Le styles -->
+    <link data-require="bootstrap-css" data-semver="3.3.1" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+    <link data-require="bootstrap@*" data-semver="3.3.5" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+    <link data-require="bootstrap@*" data-semver="3.3.5" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/cosmo/bootstrap.min.css" />
+    <link data-require="bootstrap@*" data-semver="3.3.5" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="style.css">
+    <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>-->
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+    <link href="style.css" rel="stylesheet" />
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- Le fav and touch icons -->
+    <!--<link rel="shortcut icon" href="images/favicon.ico" />-->
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png" />
+    <!-- Le javascript
+    ================================================== -->
+    <script data-require="jquery" data-semver="2.1.4" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script data-require="bootstrap" data-semver="3.3.5" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="script.js"></script>
+</head>
+
+<body id="ratingsPage">
+    <div class="page-container">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="header-container container">
+                <div class="left-icon col-xs-4"><a href="index.html"><i class="fa fa-lg fa-home"></i></a></div>
+                <div class="title col-xs-4">
+                    <div class="nav-title text-center">Rate Me</div>
+                </div>
+                <div class="right-icon col-xs-4 text-right"><a href="#"><i class="save-activity-btn fa fa-lg fa-check"></a></i>
+                </div>
+            </div>
+        </nav>
+        <div class="page-content small-container">
+            <div class="heading col-xs-12">
+                <h2 class="heading-title text-center">Create An Activit</h2></div>
+            <div class="activity-form">
+                <div class="form-group">
+                    <label for="item">Activity</label>
+                    <input class="item form-control" type="text" name="item" />
+                </div>
+                <div class="form-group">
+                    <label for="type">Type</label>
+                    <select required class="type form-control" type="text" name="type">
+                        <option class="activity-option" value=" " selected="selected"></option>
+                        <option class="activity-option" value="fitness">Fitness</option>
+                        <option class="activity-option" value="emotion">Emotional</option>
+                        <option class="activity-option" value="nutrition">Nutritional</option>
+                        <option class="activity-option" value="self-image">Self Image</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="trackBy">Track By</label>
+                    <select required class="trackBy form-control" type="text" name="trackBy">
+                        <option class="activity-option" value=" " selected="selected"></option>
+                        <option class="activity-option" value="stopwatch">Stop Watch</option>
+                        <option class="activity-option" value="countdown">Countdown</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="instructions">Add A Step</label><span class="add-btn pull-right"><a class="instructions-anchor" href="#"><i class="instructions-icon fa fa-lg fa-plus"></i></a></span>
+                    <ul class="instructions list-unstyled">
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var addInstructionsBtn = Array.prototype.slice.call(document.getElementsByClassName('instructions-anchor'));
+        var instructionsList = Array.prototype.slice.call(document.getElementsByClassName('instructions'));
+        var saveBtn = Array.prototype.slice.call(document.getElementsByClassName('save-activity-btn'));
+        
+        var type = Array.prototype.slice.call(document.getElementsByClassName('type'));
+        var trackBy = Array.prototype.slice.call(document.getElementsByClassName('trackBy'));
+        var item = Array.prototype.slice.call(document.getElementsByClassName('item'));
+        
+        
+        addInstructionsBtn[0].addEventListener('click', addRow);
+        saveBtn[0].addEventListener('click', saveActivity);
+        
+        type[0].onchange = function(e){
+            e.target[0].remove();
+            type[0].onchange = "";
+        };
+        
+        trackBy[0].onchange = function(e){
+            e.target[0].remove();
+            trackBy[0].onchange = "";
+        };
+
+        function addRow(e) {
+            var li = document.createElement('li');
+            var input = document.createElement('input');
+            var a = document.createElement('a');
+            var i = document.createElement('i');
+            // List Item Properties
+            li.className = "instruction input-group";
+            li.parentNode = instructionsList[0];
+            li.parentElement = instructionsList[0];
+            // Input Properties
+            input.name = "instruction";
+            input.type = "text";
+            input.className = "form-control";
+            input.parentNode = li;
+            input.parentElement = li;
+            // Anchor Properties
+            a.className = "btn input-group-addon add-on";
+            a.parentNode = li;
+            a.parentElement = li;
+            a.addEventListener('click', function(e) {
+                if (e.target.parentNode.tagName == "LI") e.target.parentNode.remove();
+                else if (e.target.parentNode.tagName == "A") e.target.parentNode.offsetParent.remove();
+            });
+            // Icon Properties
+            i.className = 'del-btn fa fa-lg fa-ban';
+            i.parentNode = a;
+            i.parentElement = a;
+            // Append Text Area and List Item
+            a.appendChild(i);
+            li.appendChild(input);
+            li.appendChild(a);
+            instructionsList[0].appendChild(li);
+        }
+        
+        function saveActivity(){
+            var list = Array.prototype.slice.call(instructionsList[0].children);
+            var type = document.getElementsByClassName('type');
+            var trackBy = document.getElementsByClassName('trackBy');
+            
+            var saveObj = {};
+            saveObj["item"] = item[0].value;
+            saveObj["type"] = type[0].options.selectedIndex;
+            saveObj["trackBy"] = trackBy[0].options.selectedIndex;
+                
+            var instructions = list.reduce(function(p,c,i,a){
+                if (c.children[0].value != "") p[i] = c.children[0].value;
+                return p;
+            }, {});
+            
+            saveObj["instructions"] = instructions;
+            saveObj["userName"] = Parse.User.current().get('username');
+            
+            console.log("SAVE OBJ", saveObj);
+            
+            var S = Parse.Object.extend('ActivityList');
+            var s = new S();
+            s.save(saveObj, {
+                success: function(res){console.log(["RESPONSE", res]); window.commands.sendData('/activityList.html')},
+                error: function(err, res){console.log(["RESPONSE", res], ["ERROR", err]);}
+            });
+        }
+    </script>
+</body>
+
+</html>

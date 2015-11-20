@@ -180,6 +180,13 @@ a {
   visibility: hidden;
 }
 
+.ellipsis {
+  width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .table-body > tr:hover {
   color: black;
 }
@@ -246,6 +253,10 @@ a {
   margin-bottom: 50px;
 }
 
+.activity-instructions {
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
 .search-box {
   margin-bottom: 20px;
 }
@@ -291,4 +302,13 @@ a {
 
 .right-icons span {
     margin-right: 10px;
+}
+
+.add-on {
+    background-color: red;
+    color: white;
+}
+
+.instruction {
+    margin-bottom: 20px;
 }

@@ -72,7 +72,7 @@
                     </li>
                 </ul>
                 <div class="ratings-navigation center-block">
-                    <button class="nav-back btn btn-danger col-xs-6"><i class="fa fa-lg fa-arrow-left"></i></button>
+                    <button onclick="back()" class="nav-back btn btn-danger col-xs-6"><i class="fa fa-lg fa-arrow-left"></i></button>
                     <button onclick="next()" class="nav-next btn btn-success col-xs-6"><i class="fa fa-lg fa-arrow-right"></i></button>
                 </div>
             </div>
@@ -119,6 +119,22 @@
             },
             error: function(err, res){console.log(["ERROR OCCURED", err], ["RESPONSE", res])}
         })
+    }
+    
+    function back(){
+        var data = location.search;
+            data = decodeURIComponent(data);
+            data = data.replace("?", "");
+            data = JSON.parse(data);
+        console.log("data from url", data);
+        var ratings = Array.prototype.slice.call(document.getElementsByClassName('rating'));
+        var rating = ratings.reduce(function(o, rating, i, a){
+            if (rating.children[1].checked) o.fitness = parseInt(rating.children[1].value);
+            return o;
+        }, {});
+        for (var prop in data) rating[prop] = data[prop];
+        // console.log("RATINGS", rating);
+        window.commands.sendData('/nutritionRatings.html', rating);
     }
     </script>
 </body>

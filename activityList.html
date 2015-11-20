@@ -37,11 +37,12 @@
     <div class="page-container">
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="header-container container">
-                <div class="left-icon col-xs-4"><a href="index.html"><i class="fa fa-lg fa-home"></i></a></div>
+                <div class="left-icon col-xs-4"><a href="./activityScreen.html"><i class="fa fa-lg fa-arrow-left"></i></a></div>
                 <div class="title col-xs-4">
                     <div class="nav-title text-center">Activity List</div>
                 </div>
-                <div class="right-icon col-xs-4 text-right"></div>
+                <div class="right-icon col-xs-4 text-right"><a href="./createActivity.html"><i class="fa fa-lg fa-plus"></a></i>
+                </div>
             </div>
         </nav>
         <div class="heading col-xs-12">
@@ -62,5 +63,88 @@
             </table>
         </div>
     </div>
+    <script type="text/javascript">
+        console.log("This is Activity List Screen");
+
+        var activities = window.commands.activities = new Parse.Query("ActivityList");
+        var activityList = [];
+
+        // Grab All Users Activities
+        activities.equalTo("userName", Parse.User.current().get('username'));
+        activities.find({
+            success: function(res) {
+                // console.log(res, "Amount of items", res.length);
+                res.forEach(function(e, i, a) {
+                    // console.log(["Each Item", e], "ID", e.id);
+                    e.attributes.objectId = e.id;
+                    activityList.push({
+                        data: e.attributes,
+                        id: e.id
+                    });
+                });
+            },
+            error: function(res, err) {
+                console.warn(res, err, "Error has occured");
+            }
+        }).then(function(res) {
+            console.log("Here is Activities Avail:", activityList);
+
+            createActivies(activityList);
+        });
+
+
+        function createActivies(al) {
+            // console.log(["Activity List", al], ["Type", typeof al], ["Is Array?", Array.isArray(al)]);
+
+            al.forEach(function(e, i, a) {
+                // console.log("ELEMENT", e);
+                var table = window.commands.table = document.getElementById('activitiesTable');
+                var nameList = ["Physical", "Emotional", "Nutritional", "Self-Image"];
+                var itemName = e.data.item;
+                var itemType = e.data.type;
+                var itemInstructions = e.data.instructions;
+                var objId = e.id;
+
+                var tr = document.createElement('tr');
+                tr.data = e;
+                tr.className = "table-data";
+                tr.addEventListener("click", function(ev) {
+                    console.log(["Clicked with Data", ev], ["TARGET", ev.target.parentNode.data]);
+                    var data = ev.target.parentNode.data;
+                    var url = "/activityDescription.html";
+
+                    window.commands.sendData(url, {id: data.id, data: data.data});
+
+                }, false);
+
+                var act = document.createElement('td');
+                var tp = document.createElement('td');
+                var des = document.createElement('td');
+
+                var actTxt = document.createTextNode(itemName);
+                var tpTxt = document.createTextNode(nameList[itemType]);
+
+                var desTxt = document.createTextNode(Object.keys(itemInstructions).length + " steps: " + itemInstructions[0]);
+                // console.log("TYPE?", itemType, "data", e.data, "NAME OF TYPE", nameList[itemType]);
+                    desTxt.textContent.length = 10;
+                    desTxt.textContent = desTxt.textContent + " ...";
+                act.appendChild(actTxt);
+                tp.appendChild(tpTxt);
+                des.appendChild(desTxt);
+
+                tr.appendChild(act);
+                tr.appendChild(tp);
+                tr.appendChild(des);
+
+                table.tBodies[0].appendChild(tr);
+
+                // console.log(["Table", table], ["tr", tr], ["instructions", e.instructions]);
+                // console.log("This is Table tr To Add", tr);
+
+
+            });
+        }
+    </script>
+</body>
 
 </html>
