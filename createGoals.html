@@ -17,7 +17,6 @@
    <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>-->
    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
 
-   <link href="style.css" rel="stylesheet" />
    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
    <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -31,6 +30,7 @@
     ================================================== -->
    <script data-require="jquery" data-semver="2.1.4" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
    <script data-require="bootstrap" data-semver="3.3.5" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
    <script src="script.js"></script>
 </head>
 
@@ -73,137 +73,375 @@
          </table>
       </div>
    </div>
+
+
+
+   <button id="runModal" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modalPrompt">
+   </button>
+   <div class="modal fade" id="modalPrompt" role="dialog" aria-labelledby="modalTitle" aria-hidden="true" style="color:black;">
+      <div class="modal-dialog">
+         <div class="modal-content">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+               <h4 class="modal-title" id="modalTitle">Title</h4>
+            </div>
+            <div class="modal-body">
+               <div class="modal-body-heading"></div>
+               <input type="number" name="goal-input" class="body-input form-control" />
+               <select name="goal-select" class="activity-select form-control hidden">
+                  <option class="activity-option" value=" " selected="selected"></option>
+               </select>
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="weight-btn hidden btn btn-success pull-left" data-dismiss="modal" onclick="confirmWeight('lose')">Lose</button>
+               <button type="button" class="weight-btn hidden btn btn-warning pull-left" data-dismiss="modal" onclick="confirmWeight('gain')">Gain</button>
+               <button type="button" class="btn btn-primary confirm-button" data-dismiss="modal">Add</button>
+               <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="hideFitnessOptions()">Cancel</button>
+            </div>
+         </div>
+         <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+   </div>
+   <!-- /.modal -->
+
+
+
+
+
    <!--<button class="testBtn btn btn-danger" onclick="window.commands.test()">ADD TEST DATA</button>-->
    <script type="text/javascript">
+      document.getElementsByClassName('page-container')[0].addEventListener('click', function(e){
+         console.log("clicked the body");
+         hideFitnessOptions();
+         hideWeightBtns();
+      })
       var table = document.getElementsByClassName('goal-list');
-          table = table[0];
+      table = table[0];
       var tBody = document.getElementsByClassName('table-body');
 
-      var goalBtns = document.getElementsByClassName('goal-btns');
-      Array.prototype.slice.call(goalBtns).forEach(function(e){
-         e.addEventListener("click", function(ev){
-            // console.log("EVENT", ev.target.classList[0], "LOOK FOR DATA", ev.target);
-            createAndAppendTr(tBody[0], ev.target.classList[0]);
-         });
+      var modal = document.getElementById('runModal');
+      var modalTitle = document.getElementsByClassName('modal-title');
+      var modalBody = document.getElementsByClassName('modal-body-heading');
+      var modalFooter = document.getElementsByClassName('modal-footer');
+      
+      var selectFired = false;
+      var activityConditions = [{
+         condition: "equalTo",
+         col: "userName",
+         val: Parse.User.current().get('username')
+       }];
+      
+      var getActivities = window.commands.queryParse("ActivityList", "find", activityConditions);
+      var activityList = [];
+      var savedInputs = [];
+      
+      getActivities.then(function(res){
+         var data = Array.prototype.slice.call(res).reduce(function(p, c, i, a) {
+            var o = {};
+            o[c.id] = c.attributes;
+            // console.log("RES", c, "OBJECT", o);
+            p.push(o);
+            return p;
+         }, []);
+         activityList.push(data);
+      }).then(function(res){
+         Array.prototype.slice.call(goalBtns).forEach(function(e) {
+            e.addEventListener("click", function(ev) {
+               // console.log("EVENT", ev.target.classList[0], "LOOK FOR DATA", ev.target);
+               // createAndAppendTr(tBody[0], ev.target.classList[0]);
+               console.log(["Modals"], [modal, modalTitle, modalBody, modalFooter]);
+               buildModal([modalTitle, modalBody, modalFooter], ev.target, activityList);
+            });
+         });   
       });
       
+      var selectBox = Array.prototype.slice.call(document.getElementsByClassName('activity-select'));
+      var goalBtns = document.getElementsByClassName('goal-btns');
+      
+      function buildSelect(activities) {
+         selectBox[0].onchange = function(e){
+            e.target[0].remove();
+            selectBox[0].onchange = "";
+         };
+         
+         activities[0].forEach(function(activity){
+            for (var prop in activity) {
+               // console.log("BUILDING ACTIVITY", activity[prop].item, activity[prop]);
+               var item = activity[prop].item;
+               var data = activity[prop];
+               
+               var option = document.createElement('option');
+               option.className = "activity-option";
+               option.value = item;
+               option.data = data;
+               option.innerHTML = item;
+               
+               // console.log("APPEND", selectBox, option, activity[prop]);
+               selectBox[0].appendChild(option);
+            }
+         });
+      }
+
+      function buildModal(modalArea, button, data) {
+         var options = {
+            calories: {
+               title: "Track Your Calorie Intake",
+               questions: ["How many daily calories will you commit to eat each week?"],
+               type: "prompt"
+            },
+            weight: {
+               title: "Track Your Weight",
+               questions: ["Are you looking to gain or lose weight?", "How much weight per week?"],
+               type: "confirm"
+            },
+            emotion: {
+               title: "Track Your Emotional Health",
+               questions: ["From 1 - 5, how good do you want to feel each week?"],
+               type: "prompt"
+            },
+            fitness: {
+               title: "Track Your Fitness Activities",
+               questions: ["What activity do you want to track?", "How many times a week will you do this?"],
+               list: data,
+               type: "prompt"
+            }
+         };
+         var confirmBtn = document.createElement('button');
+         var name = button.classList[0];
+         
+         modalArea.forEach(function(section) {
+            var area = section[0].className.split("-");
+            console.log("MODAL AREA", section, area[1]);
+            var child = document.getElementsByClassName(section[0].classList[0]);
+            if (area[1] == "title") {
+               // document.getElementsByClassName(section[0].classList[0])[0].firstChild[0].innerHTML = options[name][area[1]].title;
+               child[0].innerHTML = options[name]["title"];
+            }
+            if (area[1] == "body") {
+               var el = document.createElement('div');
+               el.className = "questions";
+               
+               child[0].innerHTML = options[name]["questions"][0];
+               if (options[name].type == "confirm" && selectFired == false) {
+                  
+               }
+               
+               if (name == "weight") {;
+                  showWeightBtns();
+                  hideFitnessOptions();
+                  
+               }
+            }
+            if (area[1] == "footer") {
+               
+               if (name == "fitness") {;
+                  showFitnessOptions();
+                  hideWeightBtns();
+                  
+                  buildSelect(activityList);
+                  selectFired = true;
+               }
+               
+            }
+         });
+         console.log("Button Name", name);
+         modal.click();
+      }
+      
+      var confirmBtn = document.getElementsByClassName('confirm-button');
+      confirmBtn[0].addEventListener(function(ev){
+         // createAndAppendTr(tBody[0], ev.target.classList[0]);
+         console.log("EVENT", ev);
+      });
+      
+      function showWeightBtns() {
+         Array.prototype.slice.call(document.getElementsByClassName('weight-btn')).forEach(function(e) {
+             console.log("UNHIDEING WEIGHT", e.classList);
+             e.classList.remove('hidden');
+         });
+         
+         // selectBox[0].classList.remove('hidden');
+         document.getElementsByClassName('confirm-button')[0].classList.add('hidden');
+      }
+      
+      function hideWeightBtns() {
+         Array.prototype.slice.call(document.getElementsByClassName('weight-btn')).forEach(function(e) {
+            e.classList.add("hidden");
+         });
+         
+         // selectBox[0].classList.add('hidden');
+         document.getElementsByClassName('confirm-button')[0].classList.remove('hidden');
+      }
+      
+      function showFitnessOptions() {
+         // Array.prototype.slice.call(document.getElementsByClassName('weight-btn')).forEach(function(e) {
+         //     e.classList.remove('hidden');
+         // });
+         
+         selectBox[0].classList.remove('hidden');
+         document.getElementsByClassName('body-input')[0].classList.add('hidden');
+      }
+      
+      function hideFitnessOptions() {
+         // Array.prototype.slice.call(document.getElementsByClassName('weight-btn')).forEach(function(e) {
+         //    e.classList.add("hidden");
+         // });
+         
+         selectBox[0].classList.add('hidden');
+         document.getElementsByClassName('body-input')[0].classList.remove('hidden');
+      }
+      
+      function addItem(){
+         savedInputs.length = 0;
+         // Get Modal Fields
+         savedInputs.selected = selectBox[0].children[selectBox[0].options.selectedIndex].value,
+         savedInputs.input = document.getElementsByClassName('body-input')[0].value,
+         
+         hideFitnessOptions();
+         
+         document.getElementsByClassName('body-input')[0].value = "";
+         console.log("ITEMS GRABBED", savedInputs);
+         // createAndAppendTr(tBody[0], );
+      }
+      
+      function confirmWeight(val) {
+         savedInputs.weight = val;
+         addItem('weight');
+      }
+
       var saveGoalsBtn = document.getElementsByClassName('save-goals-btn');
       saveGoalsBtn = saveGoalsBtn[0];
-      saveGoalsBtn.addEventListener('click', function(e){
+      saveGoalsBtn.addEventListener('click', function(e) {
          var S = Parse.Object.extend("Goals");
          var s = new S();
          var goals = document.getElementsByClassName('table-style');
 
-         var saveObj = Array.prototype.slice.call(goals).reduce(function(p,c,i,a) {
+         var saveObj = Array.prototype.slice.call(goals).reduce(function(p, c, i, a) {
             var elem = c.childNodes;
             var target = parseInt(elem[3].innerText, 10) || null;
             var type = elem[3].className.split("-");
             var data = c.parentNode.data;
 
             // console.log("TARGET", target, "ELEMS", elem, "TYPE", type[0], "DATA", data);
-            
+
             p[type[0]] = data;
             return p;
          }, {});
          saveObj.userName = Parse.User.current().get('username');
          console.log("Save Object", saveObj);
          s.save(saveObj, {
-            success: function(res){console.log("SAVED OBJ WITH RESPONSE", res); return res;},
-            error: function(err, res){console.warn(["ERROR HAS OCCURED", err], ["RESPONSE", res]); return {response: res, error: err};}
-         }).then(function(res){
+            success: function(res) {
+               console.log("SAVED OBJ WITH RESPONSE", res);
+               return res;
+            },
+            error: function(err, res) {
+               console.warn(["ERROR HAS OCCURED", err], ["RESPONSE", res]);
+               return {
+                  response: res,
+                  error: err
+               };
+            }
+         }).then(function(res) {
             console.log("DO SOMETHING WITH RESPONSE", res);
             window.commands.sendData('/goalsPage.html');
          });
       });
-      
+
       function createAndAppendTr(table, type) {
-         var getString = getTypeAndSendString(type);
+         var getString = getTypeAndSendString(type, savedInputs.selected);
          var tr = document.createElement('tr');
-             tr.data = getString.data;
+         tr.data = getString.data;
          var td = document.createElement('td');
          // console.log("STRING DATA", getString.data);
-             // DETERMINE NUMBER OR VERB TYPE AND BUILD
-             td.innerHTML = getString.string;
-             td.className = "table-style";
+         // DETERMINE NUMBER OR VERB TYPE AND BUILD
+         td.innerHTML = getString.string;
+         td.className = "table-style";
          var i = document.createElement('i');
-             i.className = "fa fa-lg fa-ban";
+         i.className = "fa fa-lg fa-ban";
          var a = document.createElement('a');
-             a.className = "delete-btn";
-             a.addEventListener("click", removeBtn);
+         a.className = "delete-btn";
+         a.addEventListener("click", removeBtn);
          var del = document.createElement('td');
-             del.className = "text-center";
-             
+         del.className = "text-center";
+
          // Add args[2] settings to TD
          var args = Array.prototype.slice.call(arguments);
-             !!args[2] ? Array.prototype.slice.call(args[2]).forEach(function(e){
-                for (var prop in e) {
-                   td[prop] = e[prop];
-                }
-             }) : null;
-             // Add Icon to Anchor
-             a.appendChild(i);
-             // Add Anchor to Delete TD
-             del.appendChild(a);
-             // Add Table Data
-             tr.appendChild(td);
-             tr.appendChild(del);
-             table.appendChild(tr);
-             
+         !!args[2] ? Array.prototype.slice.call(args[2]).forEach(function(e) {
+            for (var prop in e) {
+               td[prop] = e[prop];
+            }
+         }) : null;
+         // Add Icon to Anchor
+         a.appendChild(i);
+         // Add Anchor to Delete TD
+         del.appendChild(a);
+         // Add Table Data
+         tr.appendChild(td);
+         tr.appendChild(del);
+         table.appendChild(tr);
+
          function removeBtn(ev) {
             var tr = ev.target.parentNode.parentNode.parentNode;
             console.log("REMOVING", tr);
             tr.remove();
          }
       }
+
       function getTypeAndSendString(type) {
          // ARGS = TYPE, ARRAY, OBJECT
          // Second argument can be activities list
          var args = Array.prototype.slice.call(arguments);
          // console.log("ARGUMETNS", args);
-         var tempActivities = [{item: "Some Activity", 
-            instructions: "Some Bullet Points", 
+         var tempActivities = [{
+            item: "Some Activity",
+            instructions: "Some Bullet Points",
             type: 1,
             trackBy: 2
-         }, {item: "Some Other Activity", 
-            instructions: "Some More Bullet Points", 
+         }, {
+            item: "Some Other Activity",
+            instructions: "Some More Bullet Points",
             type: 2,
             trackBy: 1
          }];
          var d = args[1] || {
-            calories: ["eat", 2000, "calories"],
-            weight: ["lose", 10, "pounds"],
-            emotion: ["feel", 5, "on the Rate Me scale"],
+            calories: ["eat", savedInputs.input, "calories"],
+            weight: [savedInputs.weight, savedInputs[0].input, "pounds"],
+            emotion: ["feel", savedInputs[0].input, "on my Rate Me scale"],
             fitness: [args[2] || tempActivities, 3]
          };
          // console.log("DATA TO USE", d);
          var tmp;
          var string = "I will ";
          if (type == "calories") {
-            string = string+ "<span class='calories-verb'>"+ d[type][0] +"</span> ";
-            string = string+ "<span class='calories-number'>"+ d[type][1] +" " + d[type][2] +"</span> per week";
+            string = string + "<span class='calories-verb'>" + d[type][0] + "</span> ";
+            string = string + "<span class='calories-number'>" + d[type][1] + " " + d[type][2] + "</span> per day for 1 week";
             // console.log("STRING:", string);
             tmp = [d[type][0], d[type][1], d[type][2]];
          }
          if (type == "weight") {
-            string = string+ "<span class='weight-verb'>"+ d[type][0] +"</span> ";
-            string = string+ "<span class='weight-number'>"+ d[type][1] +" " + d[type][2] +"</span> per week";
+            string = string + "<span class='weight-verb'>" + d[type][0] + "</span> ";
+            string = string + "<span class='weight-number'>" + d[type][1] + " " + d[type][2] + "</span> per week";
             // console.log("STRING:", string);
             tmp = [d[type][0], d[type][1], d[type][2]];
          }
          if (type == "emotion") {
-            string = string+ "<span class='emotion-verb'>"+ d[type][0] +"</span> ";
-            string = string+ "an average of <span class='emotion-number'>"+ d[type][1] +" " + d[type][2] +"</span> per week";
+            string = string + "<span class='emotion-verb'>" + d[type][0] + "</span> ";
+            string = string + "<span class='emotion-number'>like a " + d[type][1] + " " + d[type][2] + "</span> each week";
             // console.log("STRING:", string);
             tmp = [d[type][0], d[type][1], d[type][2]];
          }
          if (type == "fitness") {
-            string = string+ "do ";
-            string = string+ "<span class='fitness-list'>"+ d[type][0][0].item +"</span> <span class='fitness-number'>" + d[type][1] +" times</span> per week";
+            string = string + "do ";
+            string = string + "<span class='fitness-list'>" + d[type][0][0].item + "</span> <span class='fitness-number'>" + d[type][1] + " times</span> per week";
             // console.log("STRING:", string);
             tmp = ['do', d[type][1], d[type][0][0]];
          }
          // console.log("DATA IS ARGS OR TEMP?", args[1]);
-         return {string: string, data: tmp};
+         return {
+            string: string,
+            data: tmp
+         };
       }
       window.commands.getTypeAndSendString = getTypeAndSendString;
       window.commands.createAndAppendTr = createAndAppendTr;

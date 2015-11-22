@@ -320,3 +320,7 @@ a {
 .instruction {
     margin-bottom: 20px;
 }
+
+.body-input {
+  width: 100px;
+}
