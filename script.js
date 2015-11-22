@@ -10,87 +10,44 @@ console.log("USERNAME", userName);
 window.onload = function() {
     var pageTitle = window.commands.pageTitle = document.getElementsByTagName('body');
 
-    if (pageTitle[0].id == "homePage") {
-        console.log("This is Home Screen");
-
-    }
-    else if (pageTitle[0].id == "ratingsPage") {
-        console.log("This is Ratings Page");
-
-    }
-    else if (pageTitle[0].id == "goalsPage") {
-        console.log("This is Goals Page");
-
-    }
-    else if (pageTitle[0].id == "progressScreen") {
-        console.log("This is Progress Screen");
-
-    }
-    else if (pageTitle[0].id == "trackerPage") {
-        console.log("This is Tracker Page");
-
-    }
-    else if (pageTitle[0].id == "activityList") {
-
-    }
-    else if (pageTitle[0].id == "activityDescription") {
-
-    }
-    else if (pageTitle[0].id == "activityTimer") {
-
-    }
-    else if (pageTitle[0].id == "mealDescriptionPage") {
-        console.log("This is Meal Description Page");
-
-    }
-    else if (pageTitle[0].id == "activityScreen") {
-        console.log("This is Activity Screen");
-
-    }
-    else if (pageTitle[0].id == "rewardsScreen") {
-        console.log("This is Rewards Page");
-
-    }
-    else if (pageTitle[0].id == "caloricGoalPage") {
-        console.log("This is Caloric Goals Page");
-
-    }
+    
 };
 
+// PRIMARY APP FUNCTIONS
 function encodeAndSend(url, data) {
-        var h = window.location.pathname.split("/");
-        h.shift(), h.pop(), host = h.join("/");
+    var h = window.location.pathname.split("/");
+    h.shift(), h.pop(), host = h.join("/");
 
-        var s = JSON.stringify(data);
-        var u = url + "?";
-        var encData = encodeURIComponent(s);
+    var s = JSON.stringify(data);
+    var u = url + "?";
+    var encData = encodeURIComponent(s);
 
-        if (!data || data == 'undefined' || data == null)
-            data = {
-                message: "Data is null"
-            };
+    if (!data || data == 'undefined' || data == null)
+        data = {
+            message: "Data is null"
+        };
 
-        if (window.location.href[0] == "f") {
-            u = "file:///" + host + u;
-            console.log(["You're running on local host"], ["pathname", window.location.pathname], ["Sending to u", u]);
+    if (window.location.href[0] == "f") {
+        u = "file:///" + host + u;
+        console.log(["You're running on local host"], ["pathname", window.location.pathname], ["Sending to u", u]);
 
-            return window.location.replace(u + encData);
-        }
-
-        window.location.replace(u + encData);
-
+        return window.location.replace(u + encData);
     }
 
-    function decodeData(data) {
-        var d = data.replace("?", "");
-        var o = decodeURIComponent(d);
+    window.location.replace(u + encData);
 
-        return o;
+}
 
-    }
+function decodeData(data) {
+    var d = data.replace("?", "");
+    var o = decodeURIComponent(d);
 
-    window.commands.sendData = encodeAndSend;
-    window.commands.grabData = decodeData;
+    return o;
+
+}
+
+commands.sendData = encodeAndSend;
+commands.grabData = decodeData;
 
 function queryParse(Class, method, actions) {
     var query = new Parse.Query(Class);
@@ -154,7 +111,7 @@ function queryParse(Class, method, actions) {
     return response;
 }
 
-window.commands.queryParse = queryParse;
+commands.queryParse = queryParse;
 
 function createUser(userDetails) {
     var user = new Parse.User();
@@ -177,7 +134,7 @@ function createUser(userDetails) {
     user.signUp(null, {
         success: function(user) {
             console.log("Redirecting You To Home State");
-            window.commands.sendData('/index.html');
+            windw.commands.sendData('/index.html');
         },
         error: function(user, error) {
             // Show the error message somewhere and let the user try again.
@@ -186,6 +143,8 @@ function createUser(userDetails) {
     });
 
 };
+
+commands.createUser = createUser;
 
 function login(username, password) {
     // Capture the length of the array
@@ -207,6 +166,8 @@ function login(username, password) {
     });
 };
 
+commands.login = login;
+
 function logout(sessionUser) {
     console.log("I heard your request to logout")
 
@@ -220,6 +181,20 @@ function logout(sessionUser) {
         window.commands.sendData('login.html');
     }
 };
-window.commands.createUser = createUser;
-window.commands.login = login;
-window.commands.logout = logout;
+
+commands.logout = logout;
+
+Date.daysBetween = function( date1, date2 ) {
+  //Get 1 day in milliseconds
+  var one_day=1000*60*60*24;
+
+  // Convert both dates to milliseconds
+  var date1_ms = date1.getTime();
+  var date2_ms = date2.getTime();
+
+  // Calculate the difference in milliseconds
+  var difference_ms = date2_ms - date1_ms;
+    
+  // Convert back to days and return
+  return Math.round(difference_ms/one_day); 
+};

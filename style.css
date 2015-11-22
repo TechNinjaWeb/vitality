@@ -100,7 +100,7 @@ a {
   }
 
   .rating-box .ratings {
-    margin-bottom: 200px;
+    margin-bottom: 100px;
   }
 
   .share-btn {
@@ -135,7 +135,7 @@ a {
   }
 
   .rating-box .ratings {
-    margin-bottom: 200px;
+    margin-bottom: 100px;
   }
   
   .btn-responsive {
@@ -162,6 +162,14 @@ a {
   
   .goal-btn {
     margin-right: 14px;
+  }
+  
+  .rating-box .description {
+    margin-bottom: 50px;
+  }
+  
+  .rating-box .ratings {
+    margin-bottom: 50px;
   }
 }
 

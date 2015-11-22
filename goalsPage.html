@@ -53,8 +53,8 @@
       <table class="goal-list table small-container">
         <thead class="table-head">
           <tr>
-            <th>Goal</th>
-            <th class="text-right">% of Goal</th>
+            <th>Goals</th>
+            <th class="text-right">Stats</th>
           </tr>
         </thead>
         <tbody class="table-body">
@@ -63,109 +63,414 @@
     </div>
   </div>
   <script type="text/javascript">
+    // Get the last 1 wk worth of results for each list
+    var MealQuery = new Parse.Query('Meals');
+    var MeasurementsQuery = new Parse.Query('Measurements');
+    var RatingsQuery = new Parse.Query('Ratings');
+    var FitnessQuery = new Parse.Query('TimeTracker');
+    var QueryResults = {
+      ratings: [],
+      meals: [],
+      measurements: [],
+      fitness: []
+    };
+    var Stats = {
+      ratings: [],
+      meals: [],
+      measurements: [],
+      fitness: []
+    };
+
+
+
+    var date = new Date();
+    var today = new Date(date.setHours(0, 0, 0, 0));
+    // Created At Condition
+    // MealQuery.greaterThanOrEqualTo('createdAt', today);
+    // MeasurementsQuery.greaterThanOrEqualTo('createdAt', today);
+    // RatingsQuery.greaterThanOrEqualTo('createdAt', today);
+    // FitnessQuery.greaterThanOrEqualTo('createdAt', today);
+    // User Name Condition
+    MealQuery.equalTo('userName', Parse.User.current().get('username'));
+    MeasurementsQuery.equalTo('userName', Parse.User.current().get('username'));
+    RatingsQuery.equalTo('userName', Parse.User.current().get('username'));
+    FitnessQuery.equalTo('userName', Parse.User.current().get('username'));
+
+    MealQuery.find({
+      success: function(res) {
+        var stats = [];
+        res.forEach(function(e) {
+          stats.push({
+            id: e.id,
+            data: e.attributes
+          });
+        });
+        QueryResults.meals.push(stats);
+        // console.log("CURRENT STATS", QueryResults, "STATS", stats);
+        return res;
+      },
+      error: function(err, res) {
+        console.log("Error", err, "Response", res);
+      }
+    }).then(function(res) {
+      // console.log("Meals inside then", QueryResults.meals[0], Array.isArray(QueryResults.meals[0]));
+      // Build Averages List
+      var Totals = QueryResults.meals[0].reduce(function(o, meal, i, a) {
+        var cals = parseInt(meal["data"]["data"]["Nutrition Facts"]["Calories"]["amount"], 10);
+        // Calculate Total Calories
+        o.total = o.total + cals;
+        // Current Date and Todays Date
+        var cd = parseInt(meal["data"]["createdAt"].toString().slice(8, 10));
+        var td = parseInt(today.toString().slice(8, 10));
+        // Calculate the amount of days this was taken over
+        var numOfDays = td - cd;
+        // Save Average and Number of Days Recorded
+        o.maxDays = numOfDays >= o.maxDays ? numOfDays : o.maxDays;
+        o.average = o.total / o.maxDays;
+        // console.log(["Average", numOfDays, o.maxDays, i], ["O.ARERAGE", numOfDays >= o.maxDays]);
+        return o;
+      }, {
+        total: 0,
+        maxDays: 0,
+        average: 0
+      });
+
+      Stats.meals.push(Totals);
+
+      return res;
+      // console.log("Totals", Totals);
+    });
+
+    MeasurementsQuery.find({
+      success: function(res) {
+        var stats = [];
+        res.forEach(function(e) {
+          stats.push({
+            id: e.id,
+            data: e.attributes
+          });
+        });
+        QueryResults.measurements.push(stats);
+        // console.log("CURRENT STATS", QueryResults, "STATS", stats);
+        return res;
+      },
+      error: function(err, res) {
+        console.log("Error", err, "Response", res);
+      }
+    }).then(function(res) {
+      // Grab weight from last week and compare to most recnent
+      var weightDiff = QueryResults.measurements[0].reduce(function(o, measurement, i, a) {
+        // Verify that weight is a valid measurement
+        var validWeight;
+        var createdAt = measurement.data.createdAt;
+        // determine if weight is oldest or newest
+        o.oldestDate = new Date(o.oldestDate).getTime() <= new Date(createdAt).getTime() ? o.oldestDate : createdAt;
+        // Get Valid Weight  
+        if (measurement.data.weight != "") validWeight = measurement.data.weight;
+        // Determine Start Weight
+        if (o.oldestDate.getTime() >= createdAt.getTime()) o.startWeight = {
+          weight: validWeight,
+          date: createdAt
+        };
+        // Determine End Weight
+        if (createdAt.getTime() >= o.oldestDate.getTime()) o.endWeight = {
+          weight: validWeight,
+          date: createdAt
+        };
+        // subtract newest weight from oldest weight
+        o.weightDiff = o.endWeight.weight - o.startWeight.weight;
+        // Get Average loss/gain per day
+        o.daysInDiff = Date.daysBetween(o.startWeight.date, o.endWeight.date);
+        o.averagePerDay = o.weightDiff / o.daysInDiff;
+        // Recursive Return
+        return o;
+      }, {
+        startWeight: 0,
+        endWeight: 0
+      });
+
+      Stats.measurements.push(weightDiff);
+      // console.log("Weight Diff", weightDiff);
+
+      return res;
+    });
+
+    RatingsQuery.find({
+      success: function(res) {
+        var stats = [];
+        res.forEach(function(e) {
+          stats.push({
+            id: e.id,
+            data: e.attributes
+          });
+        });
+        QueryResults.ratings.push(stats);
+        // console.log("CURRENT STATS", QueryResults, "STATS", stats);
+        return res;
+      },
+      error: function(err, res) {
+        console.log("Error", err, "Response", res);
+      }
+    }).then(function(res) {
+      // console.log("QUERY.RATINGS", QueryResults.ratings);
+      var averageRatings = QueryResults.ratings[0].reduce(function(o, rating, i, a) {
+        // For each entry, determine the average
+        // Divide by the number of entries
+        // Divide by the difference in days
+        // console.log("RATING", rating);
+        for (var prop in rating["data"]) {
+          if (!isNaN(rating["data"][prop]) && prop != "createdAt" && prop != "updatedAt")
+            o["totals"][prop] = !!o["totals"][prop] ? rating["data"][prop] + o["totals"][prop] : rating["data"][prop];
+        }
+        for (var p in o.totals)
+          if (['averages', 'totals'].indexOf(p) < 0) o["averages"][p] = o["totals"][p] / (i);
+
+        return o;
+      }, {
+        averages: {},
+        totals: {}
+      });
+      Stats.ratings.push(averageRatings);
+      // console.log("AVERAGE RATINGS", averageRatings);
+      return res;
+    });
+    
+    FitnessQuery.find({
+      success: function(res) {
+        var stats = [];
+        res.forEach(function(e) {
+          stats.push({
+            id: e.id,
+            data: e.attributes
+          });
+        });
+        QueryResults.fitness.push(stats);
+        // console.log("CURRENT STATS", QueryResults, "STATS", stats);
+        return res;
+      },
+      error: function(err, res) {
+        console.log("Error", err, "Response", res);
+      }
+    }).then(function(res) {
+      // console.log("QUERY.RATINGS", QueryResults.ratings);
+      var activityCount = QueryResults.fitness[0].reduce(function(o, activity, i, a) {
+        // Count Activities Completed
+        var a = activity.data.item;
+        // console.log("Activity", a);
+        o[a] = isNaN(o[a]) ? 1 : o[a] +1;
+        // console.log("Activity Count", o);
+        return o;
+      }, {});
+      Stats.fitness.push(activityCount);
+      // console.log("AVERAGE RATINGS", activityCount);
+      return res;
+    }).then(function(res){
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    });
+
+
+
     var table = document.getElementsByClassName('table-body');
-        table = table[0];
-    var conditions = [{
+    table = table[0];
+
+    // BEGIN GOAL PAGE TEMPLATING
+    var goalConditions = [{
       condition: "equalTo",
       col: "userName",
-      val: window.commands.userName,
-      limit: 1
+      val: Parse.User.current().get('username')
     }];
-    var goals = window.commands.queryParse('Goals', 'find', conditions);
-        goals.then(function(res){
-          // console.log("RESPONSE FROM FIRST CHAIN", res);
-          var data = Array.prototype.slice.call(res).reduce(function(p,c,i,a){
-            // var d = {res: c, data: c.attributes};
-            var o = {};
-            o[c.id] = c.attributes;
-            // console.log("RES", c, "OBJECT", o);
-            p.push(o);
-            return p;
-          }, []);
+
+    // console.log("Stats", Stats);
+
+    var goals = window.commands.queryParse('Goals', 'find', goalConditions);
+    goals.then(function(res) {
+      // console.log("RESPONSE FROM FIRST CHAIN", res);
+      var data = Array.prototype.slice.call(res).reduce(function(p, c, i, a) {
+        var o = {};
+        o[c.id] = c.attributes;
+        // console.log("RES", c, "OBJECT", o);
+        p.push(o);
+        return p;
+      }, []);
+      // console.log("GOALS?", table, data, "DATA?", data.length >0);
+      if (data.length <= 0) {
+        console.log("COND MET");
+        var tr = document.createElement('tr');
+        tr.className = "text-center";
+        var td = document.createElement('td');
+        // Please Create A Goal Row
+        td.innerHTML = "You Haven't Set Any Goals Yet!";
+        td.className = "table-style";
+        td.style.fontSize = "20px";
+        td.style.paddingLeft = "16%";
+        tr.appendChild(td);
+        table.appendChild(tr);
+      }
+      // buildTable(table, data);
+      
+      var count = window.count = {
+        fitness: 0,
+        emotion: 0,
+        calories: 0,
+        weight: 0
+      };
+      var Valid = data.reduce(function(o, valid, i, a){
+        var keys = Object.keys(count);
+        // Count Keys and Get 1 Valid Object for each
+        for (var key in valid) {
+          for (var prop in valid[key]){
+            var validItem = ['createdAt', 'updatedAt', 'userName'].indexOf(prop) >= 0 ? "Invalid Item : " + prop : valid[key][prop];
+            if (keys.indexOf(prop) >= 0 && typeof validItem == 'object') count[prop]++;
+            // Build Table Data Only 1 time
+            if (count[prop] <= 1 && typeof validItem == 'object') o.items[prop] = validItem;
+            else "Item was invalid " + prop;
+          }
+          return o;
+        }
+      }, {items: { }});
+      
+      // console.warn("VALID", Array(Valid), data);
+      buildTable(table, Array(Valid));
+
+      function buildTable(table, data) {
+        data.forEach(function(el) {
+          // console.log("ELEMENT TO BUILD FOR", el, 'DATA', data);
+          for (var prop in el) {
+            // console.log("WHAT IS PROP?", prop);
+            for (var p in el[prop]) {
+              if (p == 'calories' || p == 'emotion' || p == 'fitness' || p == 'weight') {
+                // console.log("THIS IS ", p, "EL[p]", el[prop][p]);
+                // Append Collected Stats
+                createAndAppendTr(table, p, el[prop][p]);
+              }
+            }
+          }
+        });
+      }
+
+      function createAndAppendTr(table, type) {
+        var args = Array.prototype.slice.call(arguments);
+        console.log("CREATE AND APPEND FOR TYPE", type);
+        var getString = getTypeAndSendString(type, args[2]);
+        var tr = document.createElement('tr');
+        var td = document.createElement('td');
+        // DETERMINE NUMBER OR VERB TYPE AND BUILD
+        td.innerHTML = getString.string;
+        td.data = getString.data;
+        td.className = "table-style";
+        var goalCompletion = document.createElement('td');
+        goalCompletion.className = "text-right table-style";
+        // Delay for Async Templating
+        setTimeout(function(){
+          goalCompletion.innerHTML = calcCompletion(type, args[2]);
+        },100);
+
+        // Add args[2] settings to TD
+        !!args[2] ? Array.prototype.slice.call(args[2]).forEach(function(e) {
+          for (var prop in e) {
+            td[prop] = e[prop];
+          }
+        }) : null;
+
+        // Add Table Data
+        tr.appendChild(td);
+        tr.appendChild(goalCompletion);
+        table.appendChild(tr);
+
+      }
+      
+      function calcCompletion(data) {
+          var args = Array.prototype.slice.call(arguments);
+          var type = data;
+          var string;
+          var goal = args[1][1];
+          // console.log("ARGUMENTS", args);
+          // console.log("CALCULATING COMPLETION - " + type, goal, args, Stats);
+          if (type == "calories") {
+            var mealAve = Stats.meals["0"]["average"];
+            // console.log("Goal Is", goal, "Average Is", mealAve, (goal / mealAve) * 100)
+            var percentage = parseFloat((goal / mealAve) * 100);
+            string = percentage;
+            // console.log("STRING:", string);
+            return parseInt(string) + "%";
+          }
+          if (type == "weight") {
+            var weightAve = Stats.measurements["0"];
+            var data = args[1];
+            // console.log("Data & Weight Ave:", data, weightAve);
+            var loss;
+            if (!weightAve.daysInDiff) weightAve.daysInDiff = 0;
+            if (!weightAve.weightDiff) weightAve.weightDiff = 0;
+            return string = data[0].replace("se", "ss") + "ed " + weightAve.weightDiff.toString().replace("-", "") + " in "+ weightAve.daysInDiff + " Days";
+          }
+          if (type == "emotion") {
+            var emoRating = Stats.ratings["0"];
+            var score = 0;
+            for (var prop in emoRating.averages) {
+              score = score + emoRating.averages[prop];
+            }
+            var ave = score / 4;
+            // console.log("EMO RATING:", emoRating, score, ave);
+            return string = "Ave: " + ave;
+          }
+          if (type == "fitness") {
+            var fitStats = Stats.fitness["0"];
+            var item = args[1][2].item;
+            // console.log(item, fitStats[item]);
+            if (!fitStats[item]) fitStats[item] = 0;
+            return string = fitStats[item] + " times";
+          }
           
-          return buildTable(table, data);;
+        }
+
+      function getTypeAndSendString(type) {
+        // ARGS = TYPE, ARRAY, OBJECT
+        // Second argument can be activities list
+        var args = Array.prototype.slice.call(arguments);
+        var d = args[1];
+
+        // console.log(["GET STRING ARGS", args],
+        // ["TYPE", type],
+        // ["DATA TYPE", d]);
+        var string = "I will ";
+        if (type == "calories") {
+          string = string + "<span class='calories-verb'>" + d[0] + "</span> ";
+          string = string + "<span class='calories-number'>" + d[1] + " " + d[2] + "</span> per week";
+          // console.log("STRING:", string);
+        }
+        if (type == "weight") {
+          string = string + "<span class='weight-verb'>" + d[0] + "</span> ";
+          string = string + "<span class='weight-number'>" + d[1] + " " + d[2] + "</span> per week";
+          // console.log("STRING:", string);
+        }
+        if (type == "emotion") {
+          string = string + "<span class='emotion-verb'>" + d[0] + "</span> ";
+          string = string + "an average of <span class='emotion-number'>" + d[1] + " " + d[2] + "</span> per week";
+          // console.log("STRING:", string);
+        }
+        if (type == "fitness") {
+          // string = string + "<span class='fitness-verb'>" + d[0] + "</span> ";
+          string = string + "<span class='fitness-list'>" + d[2].item + "</span> <span class='fitness-number'>" + d[1] + " times</span> per week";
+          // console.log("STRING:", string, d);
+        }
+        return {
+          string: string,
+          data: d
+        };
+      }
     });
 
     // console.log("GOALS", goals);
-    
-    function buildTable(table, data) {
-      data.forEach(function(el){
-        // console.log("ELEMENT TO BUILD FOR", el, 'DATA', data);
-        for (var prop in el) {
-          // console.log("WHAT IS PROP?", prop);
-          for (var p in el[prop]) {
-            if (p == 'calories' || p == 'emotion' || p == 'fitness' || p == 'weight' ) {
-              // console.log("THIS IS ", p, "EL[p]", el[prop][p]);
-              createAndAppendTr(table, p, el[prop][p]);
-            }
-          }
-        }
-      });
-    }
-    
-    function createAndAppendTr(table, type) {
-       var args = Array.prototype.slice.call(arguments);
-      // console.log("CREATEAPPEND TYPE", type);
-       var getString = getTypeAndSendString(type, args[2]);
-       var tr = document.createElement('tr');
-       var td = document.createElement('td');
-           // DETERMINE NUMBER OR VERB TYPE AND BUILD
-           td.innerHTML = getString.string;
-           td.data = getString.data;
-           td.className = "table-style";
-       var goalCompletion = document.createElement('td');
-           goalCompletion.className = "text-right table-style";
-           goalCompletion.innerHTML = calcCompletion();
-           
-       // Add args[2] settings to TD
-       !!args[2] ? Array.prototype.slice.call(args[2]).forEach(function(e){
-          for (var prop in e) {
-             td[prop] = e[prop];
-          }
-       }) : null;
-
-       // Add Table Data
-       tr.appendChild(td);
-       tr.appendChild(goalCompletion);
-       table.appendChild(tr);
-           
-       function calcCompletion(data) {
-          // console.log("CALCULATING COMPLETION");
-          return "VALUE IS TBA";
-       }
-    }
-    function getTypeAndSendString(type) {
-       // ARGS = TYPE, ARRAY, OBJECT
-       // Second argument can be activities list
-       var args = Array.prototype.slice.call(arguments);
-       var d = args[1];
-       
-      // console.log(["GET STRING ARGS", args],
-      // ["TYPE", type],
-      // ["DATA TYPE", d]);
-       var string = "I will ";
-       if (type == "calories") {
-          string = string+ "<span class='calories-verb'>"+ d[0] +"</span> ";
-          string = string+ "<span class='calories-number'>"+ d[1] +" " + d[2] +"</span> per week";
-          // console.log("STRING:", string);
-       }
-       if (type == "weight") {
-          string = string+ "<span class='weight-verb'>"+ d[0] +"</span> ";
-          string = string+ "<span class='weight-number'>"+ d[1] +" " + d[2] +"</span> per week";
-          // console.log("STRING:", string);
-       }
-       if (type == "emotion") {
-          string = string+ "<span class='emotion-verb'>"+ d[0] +"</span> ";
-          string = string+ "an average of <span class='emotion-number'>"+ d[1] +" " + d[2] +"</span> per week";
-          // console.log("STRING:", string);
-       }
-       if (type == "fitness") {
-          string = string+ "<span class='fitness-verb'>"+ d[0] +"</span> ";
-          string = string+ "<span class='fitness-list'>"+ d[1].item +"</span> <span class='fitness-number'>" + d[2] +" times</span> per week";
-          // console.log("STRING:", string, d);
-       }
-       return {string: string, data: d};
-    }
   </script>
 </body>
 

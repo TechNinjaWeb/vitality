@@ -41,14 +41,14 @@
                 <div class="title col-xs-4">
                     <div class="nav-title text-center">Rate Me</div>
                 </div>
-                <div class="right-icon col-xs-4 text-right"><a href="activityScreen.html"><h6 class="btn-description">Skip Rating</h6></a></div>
+                <div class="right-icon col-xs-4 text-right"><a href="./activityScreen.html"><h6 class="btn-description">Skip Rating</h6></a></div>
             </div>
         </nav>
         <div class="page-content small-container">
             <div class="heading col-xs-12">
                 <h2 class="heading-title text-center">How healthy were your meals?</h2></div>
             <div class="rating-box col-xs-12">
-                <div class="description">Rate Your Nutrition From 1 to 5</div>
+                <div class="description text-center">Rate Your Nutrition From 1 to 5</div>
                 <ul class="ratings col-xs-12 text-center list-unstyled list-inline">
                     <li class="rating">
                         <i class="fa fa-lg fa-smile-o"></i>
@@ -121,12 +121,12 @@
         console.log("data from url", data);
         var ratings = Array.prototype.slice.call(document.getElementsByClassName('rating'));
         var rating = ratings.reduce(function(o, rating, i, a){
-            if (rating.children[1].checked) o.fitness = parseInt(rating.children[1].value);
+            if (rating.children[1].checked) o.fitness = parseInt(rating.children[1].value, 10);
             return o;
         }, {});
         for (var prop in data) rating[prop] = data[prop];
         // console.log("RATINGS", rating);
-        window.commands.sendData('/energy.html', rating);
+        window.commands.sendData('/fitnessRatings.html', rating);
     }
     </script>
 </body>

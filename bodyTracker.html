@@ -122,6 +122,7 @@
                     p[c.id] = c.value;
                     return p;
                 }, {});
+                measurements.userName = Parse.User.current().get('username');
                 
                 function validate(f, val) {
                     var count = 0;

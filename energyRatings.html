@@ -48,7 +48,7 @@
             <div class="heading col-xs-12">
                 <h2 class="heading-title text-center">How energized are you?</h2></div>
             <div class="rating-box col-xs-12">
-                <div class="description">Rate Your Energy Level From 1 to 5</div>
+                <div class="description text-center">Rate Your Energy Level From 1 to 5</div>
                 <ul class="ratings col-xs-12 text-center list-unstyled list-inline">
                     <li class="rating">
                         <i class="fa fa-lg fa-smile-o"></i>
@@ -110,6 +110,7 @@
         }, {});
         for (var prop in data) rating[prop] = data[prop];
         // console.log("RATINGS", rating);
+        rating.userName = Parse.User.current().get('username');
         var S = Parse.Object.extend("Ratings");
         var s = new S();
         s.save(rating, {

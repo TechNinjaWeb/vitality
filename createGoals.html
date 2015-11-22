@@ -105,7 +105,7 @@
             p[type[0]] = data;
             return p;
          }, {});
-         saveObj.userName = window.commands.userName;
+         saveObj.userName = Parse.User.current().get('username');
          console.log("Save Object", saveObj);
          s.save(saveObj, {
             success: function(res){console.log("SAVED OBJ WITH RESPONSE", res); return res;},
@@ -200,7 +200,7 @@
             string = string+ "do ";
             string = string+ "<span class='fitness-list'>"+ d[type][0][0].item +"</span> <span class='fitness-number'>" + d[type][1] +" times</span> per week";
             // console.log("STRING:", string);
-            tmp = ['do', d[type][0][0], d[type][1]];
+            tmp = ['do', d[type][1], d[type][0][0]];
          }
          // console.log("DATA IS ARGS OR TEMP?", args[1]);
          return {string: string, data: tmp};
