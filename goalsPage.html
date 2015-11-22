@@ -81,8 +81,6 @@
       fitness: []
     };
 
-
-
     var date = new Date();
     var today = new Date(date.setHours(0, 0, 0, 0));
     // Created At Condition
@@ -234,7 +232,7 @@
       // console.log("AVERAGE RATINGS", averageRatings);
       return res;
     });
-    
+
     FitnessQuery.find({
       success: function(res) {
         var stats = [];
@@ -257,28 +255,14 @@
         // Count Activities Completed
         var a = activity.data.item;
         // console.log("Activity", a);
-        o[a] = isNaN(o[a]) ? 1 : o[a] +1;
+        o[a] = isNaN(o[a]) ? 1 : o[a] + 1;
         // console.log("Activity Count", o);
         return o;
       }, {});
       Stats.fitness.push(activityCount);
       // console.log("AVERAGE RATINGS", activityCount);
       return res;
-    }).then(function(res){
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
     });
-
-
 
     var table = document.getElementsByClassName('table-body');
     table = table[0];
@@ -316,19 +300,18 @@
         tr.appendChild(td);
         table.appendChild(tr);
       }
-      // buildTable(table, data);
-      
+
       var count = window.count = {
         fitness: 0,
         emotion: 0,
         calories: 0,
         weight: 0
       };
-      var Valid = data.reduce(function(o, valid, i, a){
+      var Valid = data.reduce(function(o, valid, i, a) {
         var keys = Object.keys(count);
         // Count Keys and Get 1 Valid Object for each
         for (var key in valid) {
-          for (var prop in valid[key]){
+          for (var prop in valid[key]) {
             var validItem = ['createdAt', 'updatedAt', 'userName'].indexOf(prop) >= 0 ? "Invalid Item : " + prop : valid[key][prop];
             if (keys.indexOf(prop) >= 0 && typeof validItem == 'object') count[prop]++;
             // Build Table Data Only 1 time
@@ -337,8 +320,10 @@
           }
           return o;
         }
-      }, {items: { }});
-      
+      }, {
+        items: {}
+      });
+
       // console.warn("VALID", Array(Valid), data);
       buildTable(table, Array(Valid));
 
@@ -360,7 +345,7 @@
 
       function createAndAppendTr(table, type) {
         var args = Array.prototype.slice.call(arguments);
-        console.log("CREATE AND APPEND FOR TYPE", type);
+        // console.log("CREATE AND APPEND FOR TYPE", type);
         var getString = getTypeAndSendString(type, args[2]);
         var tr = document.createElement('tr');
         var td = document.createElement('td');
@@ -371,9 +356,9 @@
         var goalCompletion = document.createElement('td');
         goalCompletion.className = "text-right table-style";
         // Delay for Async Templating
-        setTimeout(function(){
+        setTimeout(function() {
           goalCompletion.innerHTML = calcCompletion(type, args[2]);
-        },100);
+        }, 100);
 
         // Add args[2] settings to TD
         !!args[2] ? Array.prototype.slice.call(args[2]).forEach(function(e) {
@@ -388,50 +373,50 @@
         table.appendChild(tr);
 
       }
-      
+
       function calcCompletion(data) {
-          var args = Array.prototype.slice.call(arguments);
-          var type = data;
-          var string;
-          var goal = args[1][1];
-          // console.log("ARGUMENTS", args);
-          // console.log("CALCULATING COMPLETION - " + type, goal, args, Stats);
-          if (type == "calories") {
-            var mealAve = Stats.meals["0"]["average"];
-            // console.log("Goal Is", goal, "Average Is", mealAve, (goal / mealAve) * 100)
-            var percentage = parseFloat((goal / mealAve) * 100);
-            string = percentage;
-            // console.log("STRING:", string);
-            return parseInt(string) + "%";
-          }
-          if (type == "weight") {
-            var weightAve = Stats.measurements["0"];
-            var data = args[1];
-            // console.log("Data & Weight Ave:", data, weightAve);
-            var loss;
-            if (!weightAve.daysInDiff) weightAve.daysInDiff = 0;
-            if (!weightAve.weightDiff) weightAve.weightDiff = 0;
-            return string = data[0].replace("se", "ss") + "ed " + weightAve.weightDiff.toString().replace("-", "") + " in "+ weightAve.daysInDiff + " Days";
-          }
-          if (type == "emotion") {
-            var emoRating = Stats.ratings["0"];
-            var score = 0;
-            for (var prop in emoRating.averages) {
-              score = score + emoRating.averages[prop];
-            }
-            var ave = score / 4;
-            // console.log("EMO RATING:", emoRating, score, ave);
-            return string = "Ave: " + ave;
-          }
-          if (type == "fitness") {
-            var fitStats = Stats.fitness["0"];
-            var item = args[1][2].item;
-            // console.log(item, fitStats[item]);
-            if (!fitStats[item]) fitStats[item] = 0;
-            return string = fitStats[item] + " times";
-          }
-          
+        var args = Array.prototype.slice.call(arguments);
+        var type = data;
+        var string;
+        var goal = args[1][1];
+        // console.log("ARGUMENTS", args);
+        // console.log("CALCULATING COMPLETION - " + type, goal, args, Stats);
+        if (type == "calories") {
+          var mealAve = Stats.meals["0"]["average"];
+          // console.log("Goal Is", goal, "Average Is", mealAve, (goal / mealAve) * 100)
+          var percentage = parseFloat((goal / mealAve) * 100);
+          string = percentage;
+          // console.log("STRING:", string);
+          return parseInt(string, 10) + "%";
         }
+        if (type == "weight") {
+          var weightAve = Stats.measurements["0"];
+          // console.log("Data & Weight Ave:", data, weightAve);
+          if (!weightAve.daysInDiff) weightAve.daysInDiff = 0;
+          if (!weightAve.weightDiff) weightAve.weightDiff = 0;
+          // args[1][2] is the verb eg: lose, do, eat
+          var verb = weightAve.weightDiff < 0 ? args[1][0].replace("se", "ss") : args[1][0];
+          return string = weightAve.weightDiff + "Lbs" + " in " + weightAve.daysInDiff + " Days";
+        }
+        if (type == "emotion") {
+          var emoRating = Stats.ratings["0"];
+          var score = 0;
+          for (var prop in emoRating.averages) {
+            score = score + emoRating.averages[prop];
+          }
+          var ave = score / 4;
+          // console.log("EMO RATING:", emoRating, score, ave);
+          return string = "Ave: " + ave;
+        }
+        if (type == "fitness") {
+          var fitStats = Stats.fitness["0"];
+          var item = args[1][2].item;
+          // console.log(item, fitStats[item]);
+          if (!fitStats[item]) fitStats[item] = 0;
+          return string = fitStats[item] + " times";
+        }
+
+      }
 
       function getTypeAndSendString(type) {
         // ARGS = TYPE, ARRAY, OBJECT
