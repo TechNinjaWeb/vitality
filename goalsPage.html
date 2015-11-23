@@ -53,6 +53,7 @@
       <table class="goal-list table small-container">
         <thead class="table-head">
           <tr>
+            <th>Delete</th>
             <th>Goals</th>
             <th class="text-right">Stats</th>
           </tr>
@@ -286,8 +287,31 @@
         p.push(o);
         return p;
       }, []);
-      // console.log("GOALS?", table, data, "DATA?", data.length >0);
-      if (data.length <= 0) {
+      console.log("GOALS?", table, data, "DATA?", data.length >0);
+      var blank = data.every(function(result){
+        var b = 0;
+        console.log("RESULT?", result);
+        for(var prop in result) {
+          for (var p in result[prop]) {
+            if (result[prop][p].length <= 0) {
+              console.log("ITS LENGTH", result[prop][p].length, result[prop][p], ['createdAt', 'userName', 'updatedAt', 'objectId'].indexOf(p));
+              b ++;
+              console.log("PROP INCREMENTED", result[prop][p], p);
+            } else if (['createdAt', 'userName', 'updatedAt', 'objectId'].indexOf(p) < 0){
+              b --;
+              console.log("DECREMENT?", result[prop][p], p);
+            } else {
+              console.log("DO NOT COUNT THIS PROP", result[prop][p], p);
+            }
+          }
+        }
+        console.log("COUNT", b);
+        return b >= 1 == true;
+      });
+      console.log("IS DATA BLANK?", blank, blank.length);
+      if (blank == true || blank.length <= 1 && blank == true) blankDataReference();
+      
+      function blankDataReference(){
         console.log("COND MET");
         var tr = document.createElement('tr');
         tr.className = "text-center";
@@ -297,6 +321,7 @@
         td.className = "table-style";
         td.style.fontSize = "20px";
         td.style.paddingLeft = "16%";
+
         tr.appendChild(td);
         table.appendChild(tr);
       }
@@ -315,16 +340,26 @@
             var validItem = ['createdAt', 'updatedAt', 'userName'].indexOf(prop) >= 0 ? "Invalid Item : " + prop : valid[key][prop];
             if (keys.indexOf(prop) >= 0 && typeof validItem == 'object') count[prop]++;
             // Build Table Data Only 1 time
-            if (count[prop] <= 1 && typeof validItem == 'object') o.items[prop] = validItem;
+            // console.log("COUNT? AND PROP?", count, prop, count[prop]);
+            if (prop != 'fitness' && count[prop] <= 1 && typeof validItem == 'object') {
+              o.items[prop] = validItem;
+              o.items[prop].id = key;
+            }
+            else if (prop == 'fitness' && count[prop] <= 10 && typeof validItem == 'object') {
+              o.items[prop].push(validItem);
+              o.items[prop].id = key;
+            }
             else "Item was invalid " + prop;
           }
           return o;
         }
       }, {
-        items: {}
+        items: {
+          fitness: []
+        }
       });
 
-      // console.warn("VALID", Array(Valid), data);
+      // console.warn("VALID", Array(Valid), Valid);
       buildTable(table, Array(Valid));
 
       function buildTable(table, data) {
@@ -336,7 +371,9 @@
               if (p == 'calories' || p == 'emotion' || p == 'fitness' || p == 'weight') {
                 // console.log("THIS IS ", p, "EL[p]", el[prop][p]);
                 // Append Collected Stats
-                createAndAppendTr(table, p, el[prop][p]);
+                // console.warn("LOOKING FOR KEY", el[prop][p], el[prop][p].id, "PROP", p, "LENGTH", el[prop][p].length > 0);
+                if (el[prop][p].length > 0) createAndAppendTr(table, p, el[prop][p]);
+                else console.log("SKIPPING UNDEFINED", prop);
               }
             }
           }
@@ -345,32 +382,165 @@
 
       function createAndAppendTr(table, type) {
         var args = Array.prototype.slice.call(arguments);
-        // console.log("CREATE AND APPEND FOR TYPE", type);
-        var getString = getTypeAndSendString(type, args[2]);
-        var tr = document.createElement('tr');
-        var td = document.createElement('td');
-        // DETERMINE NUMBER OR VERB TYPE AND BUILD
-        td.innerHTML = getString.string;
-        td.data = getString.data;
-        td.className = "table-style";
-        var goalCompletion = document.createElement('td');
-        goalCompletion.className = "text-right table-style";
-        // Delay for Async Templating
-        setTimeout(function() {
-          goalCompletion.innerHTML = calcCompletion(type, args[2]);
-        }, 100);
+        // console.log("ARGS", "LOOKING FOR OBJECT TO CONDITION", Array.isArray(args[2][0]), args);
+        if (!Array.isArray(args[2][0])) {
+          // console.log("NOT FITNESS ARG", args);
+          var getString = getTypeAndSendString(type, args[2]);
+          var tr = document.createElement('tr');
+          var td = document.createElement('td');
+          tr.data = getString.data;
+          tr.parseData = {
+            id: getString.data.id,
+            type: type
+          };
+          // console.warn("GET STRING PARSEDATA NON FITNESS", tr.parseData, args[2].id, type, args["2"]);
+          // DETERMINE NUMBER OR VERB TYPE AND BUILD
+          td.innerHTML = getString.string;
+          td.className = "table-style";
+          var goalCompletion = document.createElement('td');
+          goalCompletion.className = "text-right table-style";
+          // Delay for Async Templating
+          setTimeout(function() {
+            goalCompletion.innerHTML = calcCompletion(type, args[2]);
+          }, 100);
 
-        // Add args[2] settings to TD
-        !!args[2] ? Array.prototype.slice.call(args[2]).forEach(function(e) {
-          for (var prop in e) {
-            td[prop] = e[prop];
-          }
-        }) : null;
+          // Add args[2] settings to TD
+          !!args[2] ? Array.prototype.slice.call(args[2]).forEach(function(e) {
+            for (var prop in e) {
+              td[prop] = e[prop];
+            }
+          }) : null;
 
-        // Add Table Data
-        tr.appendChild(td);
-        tr.appendChild(goalCompletion);
-        table.appendChild(tr);
+          // Create Delete Btn
+          var i = document.createElement('i');
+          i.className = "fa fa-lg fa-ban";
+          var a = document.createElement('a');
+          a.className = "delete-btn";
+          a.addEventListener("click", removeBtn);
+          var del = document.createElement('td');
+          del.className = "text-center";
+
+          // Add Icon to Anchor
+          a.appendChild(i);
+          // Add Anchor to Delete TD
+          del.appendChild(a);
+          // Add Table Data
+          tr.appendChild(del);
+          tr.appendChild(td);
+          tr.appendChild(goalCompletion);
+          table.appendChild(tr);
+
+        }
+        else {
+          console.log("Object is probably Fitness, Greater than 1 Result", args[2]);
+          args[2].forEach(function(fitGoals) {
+            fitGoals.forEach(function(goals) {
+              console.log("DATA TO BUILD FITGOALs", goals);
+              var getString = getTypeAndSendString(type, goals);
+              var tr = document.createElement('tr');
+              var td = document.createElement('td');
+              tr.data = getString.data;
+              tr.parseData = {
+                id: args[2].id,
+                type: type
+              };
+              // DETERMINE NUMBER OR VERB TYPE AND BUILD
+              td.innerHTML = getString.string;
+              td.className = "table-style";
+              var goalCompletion = document.createElement('td');
+              goalCompletion.className = "text-right table-style";
+              // Delay for Async Templating
+              setTimeout(function() {
+                goalCompletion.innerHTML = calcCompletion(type, goals);
+              }, 100);
+
+              // Add fitGoals settings to TD
+              !!goals ? Array.prototype.slice.call(goals).forEach(function(e) {
+                for (var prop in e) {
+                  td[prop] = e[prop];
+                }
+              }) : null;
+
+              // Create Delete Btn
+              var i = document.createElement('i');
+              i.className = "fa fa-lg fa-ban";
+              var a = document.createElement('a');
+              a.className = "delete-btn";
+              a.addEventListener("click", removeBtn);
+              var del = document.createElement('td');
+              del.className = "text-center";
+
+              // Add Icon to Anchor
+              a.appendChild(i);
+              // Add Anchor to Delete TD
+              del.appendChild(a);
+              // Add Table Data
+              tr.appendChild(del);
+              tr.appendChild(td);
+              tr.appendChild(goalCompletion);
+              table.appendChild(tr);
+            })
+          })
+        }
+
+        function removeBtn(ev) {
+          var tr = ev.target.parentNode.parentNode.parentNode;
+          console.log("REMOVING", tr);
+          var del = new Parse.Query('Goals');
+          del.equalTo('userName', Parse.User.current().get('username'));
+          del.equalTo('objectId', tr.parseData.id);
+          del.find({
+            success: function(res) {
+              // Remove Index from Save Data
+              res.forEach(function(result) {
+                var type = tr.parseData.type;
+                var cell = result.attributes[type];
+                var purge = tr.data;
+                
+                if (type != 'fitness') { 
+                  console.log("PURGE 1", purge, cell);
+                  cell.length = 0;
+                  cell = "";
+                  console.log("CELL IS NOW -", cell);
+                }
+                else { 
+                  // console.log("PURGE FOR EACH", purge);
+                  cell.forEach(function(val, i){
+                    // console.log("COMPARE", [val, "with", purge], ["old val", cell[i]]);
+                    if (val[2].item == purge[2].item) { console.log("EQUAL", cell[i], i + " Index"); }
+                    // else console.log("IN EQUAL");
+                    console.log("DOES IT REACH HERE?");
+                    console.log("WHAT LENGTH IS CELL?", cell.length);
+                    if (cell.length <= 0) { console.log("CELL IS BLANK", cell); cell[i] = cell.splice(i); }
+                    // console.log("NEW VAL", cell[i]);
+                  });
+                }
+                console.log("result to purge", result.attributes[type]);
+                result.save({
+              		success: function(res) {
+              			console.log("Successfully deleted", res);
+              			console.log("Res Attribs", res.attributes);
+              		// 	console.log("Res Attribs", res[0].attributes);
+              			for (var prop in res.attributes) {
+              			  if (Array.isArray(res.attributes[prop]) && res.attributes[prop].length >=0) {
+              			    console.log("THIS IS A BLANK CELL", prop, res.attributes[prop]);
+              			    
+              			  }
+              			}
+              		},
+              		error: function(res,err) {
+              			console.warn(res,err);
+              		}
+              	});
+              });
+            },
+            error: function(err, res) {
+              console.log(["GOT ERROR", err], ["RESPONSE", res]);
+            }
+          });
+          tr.remove();
+
+        }
 
       }
 
@@ -381,7 +551,7 @@
         var goal = args[1][1];
         // console.log("ARGUMENTS", args);
         // console.log("CALCULATING COMPLETION - " + type, goal, args, Stats);
-        if (type == "calories") {
+        if (type == "calories" && args[1].length > 0) {
           var mealAve = Stats.meals["0"]["average"];
           // console.log("Goal Is", goal, "Average Is", mealAve, (goal / mealAve) * 100)
           var percentage = parseFloat((goal / mealAve) * 100);
@@ -389,7 +559,7 @@
           // console.log("STRING:", string);
           return parseInt(string, 10) + "%";
         }
-        if (type == "weight") {
+        if (type == "weight" && args[1].length > 0) {
           var weightAve = Stats.measurements["0"];
           // console.log("Data & Weight Ave:", data, weightAve);
           if (!weightAve.daysInDiff) weightAve.daysInDiff = 0;
@@ -398,7 +568,7 @@
           var verb = weightAve.weightDiff < 0 ? args[1][0].replace("se", "ss") : args[1][0];
           return string = weightAve.weightDiff + "Lbs" + " in " + weightAve.daysInDiff + " Days";
         }
-        if (type == "emotion") {
+        if (type == "emotion" && args[1].length > 0) {
           var emoRating = Stats.ratings["0"];
           var score = 0;
           for (var prop in emoRating.averages) {
@@ -408,7 +578,7 @@
           // console.log("EMO RATING:", emoRating, score, ave);
           return string = "Ave: " + ave;
         }
-        if (type == "fitness") {
+        if (type == "fitness" && args[1].length > 0) {
           var fitStats = Stats.fitness["0"];
           var item = args[1][2].item;
           // console.log(item, fitStats[item]);
@@ -443,6 +613,7 @@
           string = string + "an average of <span class='emotion-number'>" + d[1] + " " + d[2] + "</span> per week";
           // console.log("STRING:", string);
         }
+        console.log("JUST BEFORE FITNESS", type, d);
         if (type == "fitness") {
           // string = string + "<span class='fitness-verb'>" + d[0] + "</span> ";
           string = string + "<span class='fitness-list'>" + d[2].item + "</span> <span class='fitness-number'>" + d[1] + " times</span> per week";

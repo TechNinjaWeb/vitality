@@ -30,6 +30,7 @@
     ================================================== -->
    <script data-require="jquery" data-semver="2.1.4" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
    <script data-require="bootstrap" data-semver="3.3.5" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+   <!--<script data-require="bootbox" data-semver="4.4.0" src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>-->
 
    <script src="script.js"></script>
 </head>
@@ -76,9 +77,10 @@
 
 
 
-   <button id="runModal" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modalPrompt">
+   <button id="runModal" class="btn btn-primary btn-lg hidden" data-toggle="modal" data-target="#modalPrompt">
    </button>
-   <div class="modal fade" id="modalPrompt" role="dialog" aria-labelledby="modalTitle" aria-hidden="true" style="color:black;">
+   <div class="modal fade" id="modalPrompt" role="dialog" 
+         aria-labelledby="modalTitle" aria-hidden="true" style="color:black;" data-backdrop="static" data-keyboard="false">
       <div class="modal-dialog">
          <div class="modal-content">
             <div class="modal-header">
@@ -87,7 +89,7 @@
             </div>
             <div class="modal-body">
                <div class="modal-body-heading"></div>
-               <input type="number" name="goal-input" class="body-input form-control" />
+               <input type="number" min="1" max="" name="goal-input" class="body-input form-control" />
                <select name="goal-select" class="activity-select form-control hidden">
                   <option class="activity-option" value=" " selected="selected"></option>
                </select>
@@ -96,7 +98,7 @@
                <button type="button" class="weight-btn hidden btn btn-success pull-left" data-dismiss="modal" onclick="confirmWeight('lose')">Lose</button>
                <button type="button" class="weight-btn hidden btn btn-warning pull-left" data-dismiss="modal" onclick="confirmWeight('gain')">Gain</button>
                <button type="button" class="btn btn-primary confirm-button" data-dismiss="modal">Add</button>
-               <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="hideFitnessOptions()">Cancel</button>
+               <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="hideFitnessOptions(), hideWeightBtns()">Cancel</button>
             </div>
          </div>
          <!-- /.modal-content -->
@@ -105,17 +107,50 @@
    </div>
    <!-- /.modal -->
 
-
-
-
+<div class="bb-alert alert alert-info" style="display:none;">
+   <span>Invalid Notification</span>
+</div>
+<script type="text/javascript">
+      /**
+       * This tiny script just helps us demonstrate
+       * what the various example callbacks are doing
+       */
+      var AlertSystem = (function() {
+          "use strict";
+      
+          var elem,
+              hideHandler,
+              that = {};
+      
+          that.init = function(options) {
+              elem = $(options.selector);
+          };
+      
+          that.show = function(text, alertType) {
+              clearTimeout(hideHandler);
+              
+              if (!!alertType) { 
+                 elem.removeClass(elem.attr("class").split(' ')[2]);
+                 elem.addClass(alertType);
+              }
+              
+              elem.find("span").html(text);
+              console.log("ELEM -- FIND CLASS", $(elem));
+              elem.delay(200).fadeIn().delay(4000).fadeOut();
+          };
+      
+          return that;
+      }());
+   </script> 
 
    <!--<button class="testBtn btn btn-danger" onclick="window.commands.test()">ADD TEST DATA</button>-->
    <script type="text/javascript">
-      document.getElementsByClassName('page-container')[0].addEventListener('click', function(e){
-         console.log("clicked the body");
-         hideFitnessOptions();
-         hideWeightBtns();
-      })
+      (function(){
+         AlertSystem.init({
+             "selector": ".bb-alert"
+         });
+      }());
+      
       var table = document.getElementsByClassName('goal-list');
       table = table[0];
       var tBody = document.getElementsByClassName('table-body');
@@ -149,8 +184,8 @@
          Array.prototype.slice.call(goalBtns).forEach(function(e) {
             e.addEventListener("click", function(ev) {
                // console.log("EVENT", ev.target.classList[0], "LOOK FOR DATA", ev.target);
-               // createAndAppendTr(tBody[0], ev.target.classList[0]);
-               console.log(["Modals"], [modal, modalTitle, modalBody, modalFooter]);
+               // console.log(["Modals"], [modal, modalTitle, modalBody, modalFooter]);
+               document.getElementsByClassName('body-input')[0].value = '';
                buildModal([modalTitle, modalBody, modalFooter], ev.target, activityList);
             });
          });   
@@ -207,13 +242,13 @@
                type: "prompt"
             }
          };
-         var confirmBtn = document.createElement('button');
          var name = button.classList[0];
          
          modalArea.forEach(function(section) {
             var area = section[0].className.split("-");
-            console.log("MODAL AREA", section, area[1]);
+            // console.log("MODAL AREA", section, area[1]);
             var child = document.getElementsByClassName(section[0].classList[0]);
+            var input = document.getElementsByClassName('body-input');
             if (area[1] == "title") {
                // document.getElementsByClassName(section[0].classList[0])[0].firstChild[0].innerHTML = options[name][area[1]].title;
                child[0].innerHTML = options[name]["title"];
@@ -223,91 +258,112 @@
                el.className = "questions";
                
                child[0].innerHTML = options[name]["questions"][0];
-               if (options[name].type == "confirm" && selectFired == false) {
-                  
-               }
                
-               if (name == "weight") {;
+               if (name == "weight") {
                   showWeightBtns();
                   hideFitnessOptions();
-                  
+                  input[0].setAttribute('max', 100);
+               }
+               
+               if (name == "calories") {
+                  input[0].setAttribute('max', 8000);
+               }
+               
+               if (name == "emotion") {
+                  input[0].setAttribute('max', 5);
+               }
+               
+               if (name == "fitness") {
+                  !selectFired ? buildSelect(activityList) : null;
+                  selectFired = true;
+                  input[0].removeAttribute('max');
+                  input[0].removeAttribute('min');
                }
             }
             if (area[1] == "footer") {
                
-               if (name == "fitness") {;
+               if (name == "fitness") {
                   showFitnessOptions();
                   hideWeightBtns();
-                  
-                  buildSelect(activityList);
-                  selectFired = true;
                }
                
             }
          });
-         console.log("Button Name", name);
+         // console.log("Button Name", name);
+         modalBody[0].setAttribute('caller', name);
          modal.click();
       }
       
       var confirmBtn = document.getElementsByClassName('confirm-button');
-      confirmBtn[0].addEventListener(function(ev){
-         // createAndAppendTr(tBody[0], ev.target.classList[0]);
-         console.log("EVENT", ev);
+      confirmBtn[0].addEventListener('click', function(ev){
+         // console.log("EVENT", ev, arguments);
+         addItem(modalBody[0].getAttribute('caller'));
       });
       
       function showWeightBtns() {
+         // console.log("SHOWING WEIGHT BTNS");
          Array.prototype.slice.call(document.getElementsByClassName('weight-btn')).forEach(function(e) {
-             console.log("UNHIDEING WEIGHT", e.classList);
+            //  console.log("UNHIDEING WEIGHT", e.classList);
              e.classList.remove('hidden');
          });
          
-         // selectBox[0].classList.remove('hidden');
+
          document.getElementsByClassName('confirm-button')[0].classList.add('hidden');
       }
       
       function hideWeightBtns() {
+         // console.log("HIDDING WEIGHT BTNS");
          Array.prototype.slice.call(document.getElementsByClassName('weight-btn')).forEach(function(e) {
             e.classList.add("hidden");
          });
          
-         // selectBox[0].classList.add('hidden');
          document.getElementsByClassName('confirm-button')[0].classList.remove('hidden');
       }
       
       function showFitnessOptions() {
-         // Array.prototype.slice.call(document.getElementsByClassName('weight-btn')).forEach(function(e) {
-         //     e.classList.remove('hidden');
-         // });
+         // console.log("SHOWING FIT BTNS");
          
          selectBox[0].classList.remove('hidden');
          document.getElementsByClassName('body-input')[0].classList.add('hidden');
       }
       
       function hideFitnessOptions() {
-         // Array.prototype.slice.call(document.getElementsByClassName('weight-btn')).forEach(function(e) {
-         //    e.classList.add("hidden");
-         // });
+         // console.log("HIDDING FIT BTNS");
          
          selectBox[0].classList.add('hidden');
          document.getElementsByClassName('body-input')[0].classList.remove('hidden');
       }
       
       function addItem(){
+         // console.log("ITEMS GRABBED", savedInputs, args[0]);
+         var args = Array.prototype.slice.call(arguments);
+         // Set Input Value Field Reference
+         var inputVal = document.getElementsByClassName('body-input')[0].value;
+         // Set Max Value Reference
+         var max = document.getElementsByClassName('body-input')[0].attributes.max;
+         // Clear Saved Inputs
          savedInputs.length = 0;
          // Get Modal Fields
-         savedInputs.selected = selectBox[0].children[selectBox[0].options.selectedIndex].value,
-         savedInputs.input = document.getElementsByClassName('body-input')[0].value,
-         
+         savedInputs.selected = selectBox[0].children[selectBox[0].options.selectedIndex].value;
+         savedInputs.input = inputVal;
+         // console.log("Input Val", inputVal, "saved Input", savedInputs);
+         // console.log("Body Input Max Vals?", inputVal,  max, args);
+         // Determine if Input Val is Less than Max
+         if (!!max && parseInt(inputVal, 10) <= max.value) createAndAppendTr(tBody[0], args[0]);
+         else if (args[0] == 'fitness') createAndAppendTr(tBody[0], args[0]);
+         else AlertSystem.show('You Need To Enter A Number Less Than ' + max.value.toString(), 'alert-danger');
+         // Clear Input Field
+         inputVal = "";
+         // hideFitness Options
          hideFitnessOptions();
-         
-         document.getElementsByClassName('body-input')[0].value = "";
-         console.log("ITEMS GRABBED", savedInputs);
-         // createAndAppendTr(tBody[0], );
+
       }
       
       function confirmWeight(val) {
          savedInputs.weight = val;
-         addItem('weight');
+         hideWeightBtns();
+         
+         confirmBtn[0].click();
       }
 
       var saveGoalsBtn = document.getElementsByClassName('save-goals-btn');
@@ -324,10 +380,11 @@
             var data = c.parentNode.data;
 
             // console.log("TARGET", target, "ELEMS", elem, "TYPE", type[0], "DATA", data);
-
-            p[type[0]] = data;
+            // console.log("TESTING FITNESS", p[type[0]], p['fitness']);
+            if (type[0] != 'fitness') p[type[0]] = data;
+            else p['fitness'].push(data);
             return p;
-         }, {});
+         }, {fitness: []});
          saveObj.userName = Parse.User.current().get('username');
          console.log("Save Object", saveObj);
          s.save(saveObj, {
@@ -349,6 +406,7 @@
       });
 
       function createAndAppendTr(table, type) {
+         // console.log("CREATING TABLE DATA", arguments);
          var getString = getTypeAndSendString(type, savedInputs.selected);
          var tr = document.createElement('tr');
          tr.data = getString.data;
@@ -393,24 +451,16 @@
          // Second argument can be activities list
          var args = Array.prototype.slice.call(arguments);
          // console.log("ARGUMETNS", args);
-         var tempActivities = [{
-            item: "Some Activity",
-            instructions: "Some Bullet Points",
-            type: 1,
-            trackBy: 2
-         }, {
-            item: "Some Other Activity",
-            instructions: "Some More Bullet Points",
-            type: 2,
-            trackBy: 1
+         var activity = [{
+            item: args[1] || "Failed To Retrieve Activity"
          }];
-         var d = args[1] || {
-            calories: ["eat", savedInputs.input, "calories"],
-            weight: [savedInputs.weight, savedInputs[0].input, "pounds"],
-            emotion: ["feel", savedInputs[0].input, "on my Rate Me scale"],
-            fitness: [args[2] || tempActivities, 3]
+         var d = {
+            calories: ["eat", parseInt(savedInputs.input, 10), "calories"],
+            weight: [savedInputs.weight, parseInt(savedInputs.input, 10), "pounds"],
+            emotion: ["feel", parseInt(savedInputs.input, 10), "on my Rate Me scale"],
+            fitness: [activity, 3]
          };
-         // console.log("DATA TO USE", d);
+         // console.log("DATA TO USE", args);
          var tmp;
          var string = "I will ";
          if (type == "calories") {
@@ -432,7 +482,6 @@
             tmp = [d[type][0], d[type][1], d[type][2]];
          }
          if (type == "fitness") {
-            string = string + "do ";
             string = string + "<span class='fitness-list'>" + d[type][0][0].item + "</span> <span class='fitness-number'>" + d[type][1] + " times</span> per week";
             // console.log("STRING:", string);
             tmp = ['do', d[type][1], d[type][0][0]];
