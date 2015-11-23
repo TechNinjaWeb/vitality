@@ -73,15 +73,15 @@
                 </div>
                 <div class="rating col-xs-12">
                     <div class="energy-rating col-xs-6 text-left">
-                        <h3>Energy</h3></div>
-                    <div class="energy-icon col-xs-6 text-right">
+                        <h3>Self Image</h3></div>
+                    <div class="self-icon col-xs-6 text-right">
                         <div class="rating-value"></div>
                     </div>
                 </div>
                 <div class="rating col-xs-12">
                     <div class="total-rating col-xs-6 text-left">
-                        <h3>Self Image</h3></div>
-                    <div class="self-icon col-xs-6 text-right">
+                        <h3>Total Average</h3></div>
+                    <div class="average-icon col-xs-6 text-right">
                         <div class="rating-value"></div>
                     </div>
                 </div>
@@ -105,7 +105,7 @@
             var averages = rating.reduce(function(average, rating, i, a){
                 // console.warn("Rating", rating.attributes, "Average", average);
                 var attrib = rating.attributes;
-                var types = ['emotional', 'energy', 'fitness', 'nutrition'];
+                var types = ['emotional', 'self', 'fitness', 'nutrition'];
                 // Find Average and Save to object property
                 for (var prop in attrib) {
                     if (types.indexOf(prop) >= 0){
@@ -136,7 +136,7 @@
                 console.log("TYpe", type, "Node", node, "Classes", classes, "Class string", className);
                 node.textContent = ratings[type];
                 
-                if(type == 'self') {
+                if(type == 'average') {
                     var totals = 0;
                     for (var prop in ratings) {
                         // Total All Values

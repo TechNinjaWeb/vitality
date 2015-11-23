@@ -33,7 +33,7 @@
     <script src="script.js"></script>
 </head>
 
-<body id="ratingsPage" class="energy-rating">
+<body id="ratingsPage" class="self-rating">
     <div class="page-container">
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="header-container container">
@@ -46,9 +46,9 @@
         </nav>
         <div class="page-content small-container">
             <div class="heading col-xs-12">
-                <h2 class="heading-title text-center">How energized are you?</h2></div>
+                <h2 class="heading-title text-center">How do you feel about your self image?</h2></div>
             <div class="rating-box col-xs-12">
-                <div class="description text-center">Rate Your Energy Level From 1 to 5</div>
+                <div class="description text-center">Rate Your Self Image From 1 to 5</div>
                 <ul class="ratings col-xs-12 text-center list-unstyled list-inline">
                     <li class="rating">
                         <i class="fa fa-lg fa-smile-o"></i>
@@ -105,7 +105,7 @@
         console.log("data from url", data);
         var ratings = Array.prototype.slice.call(document.getElementsByClassName('rating'));
         var rating = ratings.reduce(function(o, rating, i, a){
-            if (rating.children[1].checked) o.energy = parseInt(rating.children[1].value);
+            if (rating.children[1].checked) o.self = parseInt(rating.children[1].value);
             return o;
         }, {});
         for (var prop in data) rating[prop] = data[prop];

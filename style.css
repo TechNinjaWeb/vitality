@@ -216,7 +216,7 @@ a {
   color: black;
 }
 
-.home-btns a, .goal-btns a, .tracker-btns a {
+.home-btns a, .goal-btns a, .goal-btns button, .tracker-btns a {
   margin-bottom: 20px;
 }
 
