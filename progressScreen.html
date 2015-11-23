@@ -51,32 +51,103 @@
         <div class="content small-container">
             <div class="vitality-ratings">
                 <div class="rating col-xs-12">
-                    <div class="pyisical-rating col-xs-6 text-left">
+                    <div class="fitness-rating col-xs-6 text-left">
                         <h3>Fitness</h3></div>
-                    <div class="physical-icon col-xs-6 text-right"><i class="fa fa-lg fa-smile-o"></i></div>
+                    <div class="fitness-icon col-xs-6 text-right">
+                        <div class="rating-value"></div>
+                    </div>
                 </div>
                 <div class="rating col-xs-12">
-                    <div class="nutritional-rating col-xs-6 text-left">
+                    <div class="nutrition-rating col-xs-6 text-left">
                         <h3>Nutrition</h3></div>
-                    <div class="nutritional-icon col-xs-6 text-right"><i class="fa fa-lg fa-smile-o"></i></div>
+                    <div class="nutrition-icon col-xs-6 text-right">
+                        <div class="rating-value"></div>
+                    </div>
                 </div>
                 <div class="rating col-xs-12">
                     <div class="emotional-rating col-xs-6 text-left">
                         <h3>Emotion</h3></div>
-                    <div class="emotional-icon col-xs-6 text-right"><i class="fa fa-lg fa-smile-o"></i></div>
+                    <div class="emotional-icon col-xs-6 text-right">
+                        <div class="rating-value"></div>
+                    </div>
                 </div>
                 <div class="rating col-xs-12">
-                    <div class="engagement-rating col-xs-6 text-left">
+                    <div class="energy-rating col-xs-6 text-left">
                         <h3>Energy</h3></div>
-                    <div class="engagement-icon col-xs-6 text-right"><i class="fa fa-lg fa-smile-o"></i></div>
+                    <div class="energy-icon col-xs-6 text-right">
+                        <div class="rating-value"></div>
+                    </div>
                 </div>
                 <div class="rating col-xs-12">
                     <div class="total-rating col-xs-6 text-left">
                         <h3>Self Image</h3></div>
-                    <div class="self-icon col-xs-6 text-right"><i class="fa fa-lg fa-smile-o"></i></div>
+                    <div class="self-icon col-xs-6 text-right">
+                        <div class="rating-value"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    
+    <script type="text/javascript">
+        var icons = document.querySelectorAll(".rating > div[class*='-icon");
+        console.log("ICONS", icons);
+        // Make Query and Get Ratings
+        var Ratings = new Parse.Query('Ratings');
+        Ratings.equalTo('userName', Parse.User.current().get('username'));
+        Ratings.descending('createdAt');
+        var getRatings = Ratings.find();
+        
+        var ratings;
+        getRatings.then(function(rating){
+            // console.log("GOT RATING", rating);
+            // Average Individual Ratings
+            var averages = rating.reduce(function(average, rating, i, a){
+                // console.warn("Rating", rating.attributes, "Average", average);
+                var attrib = rating.attributes;
+                var types = ['emotional', 'energy', 'fitness', 'nutrition'];
+                // Find Average and Save to object property
+                for (var prop in attrib) {
+                    if (types.indexOf(prop) >= 0){
+                        // console.log("Type is A Valid Prop", types.indexOf(prop) >= 0, prop);
+                        // console.log("Adding Val", prop, attrib[prop]);
+                        average[prop] = !isNaN(average[prop])
+                            ? attrib[prop] += average[prop]
+                            : attrib[prop];
+                        // console.log("DOING MATH", "iteration #", i
+                        //     , "Length Is", a.length
+                        //     ,"Equality?",  i == a.length - 1
+                        //     , average[prop], (i+1), average[prop] / (i+1));
+                        if (i == a.length - 1) {
+                            average[prop] = parseFloat((average[prop] / (i+1)).toFixed(2));
+                        }
+                    }
+                }
+                return average; 
+            }, {});
+            ratings = averages;
+            console.log("Averages Totals", ratings);
+            Array.prototype.slice.call(icons).forEach(function(icon){
+                var type = icon.classList[0].split("-")[0];
+                var node = icon.children[0];
+                var classes = node.classList;
+                var className = node.className;
+                className = '';
+                console.log("TYpe", type, "Node", node, "Classes", classes, "Class string", className);
+                node.textContent = ratings[type];
+                
+                if(type == 'self') {
+                    var totals = 0;
+                    for (var prop in ratings) {
+                        // Total All Values
+                        totals += ratings[prop];
+                    }
+                    node.textContent = (totals / 4).toFixed(2);
+                }
+            
+            });
+        });
+    </script>    
+</body>
 
 </html>

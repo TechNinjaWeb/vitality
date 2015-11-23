@@ -341,3 +341,8 @@ a {
 .body-input {
   width: 100px;
 }
+
+.rating > div[class*='-icon'] {
+    margin-top: 18px;
+    font-size: 25px;
+}
