@@ -507,11 +507,11 @@
                   // console.log("PURGE FOR EACH", purge);
                   cell.forEach(function(val, i){
                     // console.log("COMPARE", [val, "with", purge], ["old val", cell[i]]);
-                    if (val[2].item == purge[2].item) { console.log("EQUAL", cell[i], i + " Index"); }
+                    if (val[2].item == purge[2].item) { console.log("EQUAL", cell[i], i + " Index"); cell.splice(i); }
                     // else console.log("IN EQUAL");
                     console.log("DOES IT REACH HERE?");
                     console.log("WHAT LENGTH IS CELL?", cell.length);
-                    if (cell.length <= 0) { console.log("CELL IS BLANK", cell); cell[i] = cell.splice(i); }
+                    if (cell.length <= 0) { console.log("CELL IS BLANK", cell); cell = '(undefined)'; }
                     // console.log("NEW VAL", cell[i]);
                   });
                 }
