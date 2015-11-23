@@ -290,7 +290,7 @@
       // console.log("GOALS?", table, data, "DATA?", data.length >0, data);
       var blank = data.every(function(result){
         var b = 0;
-        console.log("RESULT?", result);
+        // console.log("RESULT?", result);
         for(var prop in result) {
           for (var p in result[prop]) {
             if (result[prop][p].length <= 0) {
@@ -308,7 +308,7 @@
         // console.log("COUNT", b);
         return b >= 1 == true;
       });
-      console.log("IS DATA BLANK?", blank, blank.length);
+      // console.log("IS DATA BLANK?", blank, blank.length);
       if (blank == true || blank.length <= 1 && blank == true) blankDataReference();
       
       function blankDataReference(){
@@ -336,6 +336,7 @@
         var keys = Object.keys(count);
         var id = Object.keys(valid);
         // console.log("KEYS?", keys, "ID", id);
+        
         // Count Keys and Get 1 Valid Object for each
         for (var key in valid) {
           for (var prop in valid[key]) {
@@ -347,10 +348,12 @@
               o.items[prop] = validItem;
               o.items[prop].id = key;
             }
-            else if (prop == 'fitness' && count[prop] <= 10 && typeof validItem == 'object') {
-              // console.log("CHECK FOR PROPER ID", validItem, id);
+            else if (prop == 'fitness' && count[prop] <= 10 && typeof validItem == 'object' && validItem.length > 0) {
+              // console.log(["CHECK FOR PROPER ID", validItem], [id, valid[key]], prop);
+              validItem.id = id[0];
               o.items[prop].push(validItem);
-              o.items[prop].id = key;
+              // console.log("OBJECT QITH VALID ID", o.items[prop]);
+              // o.items[prop].id = id[0];
             }
             else "Item was invalid " + prop;
           }
@@ -363,7 +366,7 @@
       });
 
       // console.warn("VALID", Array(Valid), Valid);
-
+      // debugger;
       buildTable(table, Array(Valid));
 
       function buildTable(table, data) {
@@ -435,19 +438,20 @@
 
         }
         else {
-          console.log("Object is probably Fitness, Greater than 1 Result", args[2]);
+          // console.log("Object is probably Fitness, Greater than 1 Result", args[2]);
           args[2].forEach(function(fitGoals) {
             fitGoals.forEach(function(goals) {
-              console.log("DATA TO BUILD FITGOALs", goals);
+              // console.log("DATA TO BUILD FITGOALs", goals);
               var getString = getTypeAndSendString(type, goals);
               var tr = document.createElement('tr');
               var td = document.createElement('td');
               tr.data = getString.data;
               tr.parseData = {
-                id: args[2].id,
+                id: fitGoals.id,
                 type: type
               };
-              console.warn("Looking for proper ID", args);
+              // console.warn("Looking for proper ID", fitGoals, fitGoals.id);
+              // debugger;
               // DETERMINE NUMBER OR VERB TYPE AND BUILD
               td.innerHTML = getString.string;
               td.className = "table-style";
@@ -501,7 +505,7 @@
               var purging = tr.data;
               var dataSlot = data[type];
               console.log("Found Item With Type: " + type, [id, data, purging], ["To Be Purged", dataSlot]);
-              debugger;
+
               if (type == 'fitness') {
                 console.log("TYPE IS FITNESS", data);
                 dataSlot.forEach(function(goal, i){
@@ -521,10 +525,10 @@
               			console.log("Successfully deleted", response);
               			console.log("response Attribs", response.attributes);
               			for (var prop in response) {
-              			  if (['createdAt', 'userName', 'updatedAt', 'objectId'].indexOf(prop) <0) {
+              			 // if (['createdAt', 'userName', 'updatedAt', 'objectId'].indexOf(prop) <0) {
               			    console.log("Find Empty Prop and Delete Parse Data if all Empty");
               			    console.warn(response[prop].length, response[prop]);
-              			  }
+              			 // }
               			}
               		},
               		error: function(rresponsees,err) {
@@ -611,7 +615,7 @@
           string = string + "an average of <span class='emotion-number'>" + d[1] + " " + d[2] + "</span> per week";
           // console.log("STRING:", string);
         }
-        console.log("JUST BEFORE FITNESS", type, d);
+        // console.log("JUST BEFORE FITNESS", type, d);
         if (type == "fitness") {
           // string = string + "<span class='fitness-verb'>" + d[0] + "</span> ";
           string = string + "<span class='fitness-list'>" + d[2].item + "</span> <span class='fitness-number'>" + d[1] + " times</span> per week";
