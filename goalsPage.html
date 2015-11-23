@@ -287,25 +287,25 @@
         p.push(o);
         return p;
       }, []);
-      console.log("GOALS?", table, data, "DATA?", data.length >0);
+      // console.log("GOALS?", table, data, "DATA?", data.length >0, data);
       var blank = data.every(function(result){
         var b = 0;
         console.log("RESULT?", result);
         for(var prop in result) {
           for (var p in result[prop]) {
             if (result[prop][p].length <= 0) {
-              console.log("ITS LENGTH", result[prop][p].length, result[prop][p], ['createdAt', 'userName', 'updatedAt', 'objectId'].indexOf(p));
+              // console.log("ITS LENGTH", result[prop][p].length, result[prop][p], ['createdAt', 'userName', 'updatedAt', 'objectId'].indexOf(p));
               b ++;
-              console.log("PROP INCREMENTED", result[prop][p], p);
+              // console.log("PROP INCREMENTED", result[prop][p], p);
             } else if (['createdAt', 'userName', 'updatedAt', 'objectId'].indexOf(p) < 0){
               b --;
-              console.log("DECREMENT?", result[prop][p], p);
+              // console.log("DECREMENT?", result[prop][p], p);
             } else {
-              console.log("DO NOT COUNT THIS PROP", result[prop][p], p);
+              // console.log("DO NOT COUNT THIS PROP", result[prop][p], p);
             }
           }
         }
-        console.log("COUNT", b);
+        // console.log("COUNT", b);
         return b >= 1 == true;
       });
       console.log("IS DATA BLANK?", blank, blank.length);
@@ -334,6 +334,8 @@
       };
       var Valid = data.reduce(function(o, valid, i, a) {
         var keys = Object.keys(count);
+        var id = Object.keys(valid);
+        // console.log("KEYS?", keys, "ID", id);
         // Count Keys and Get 1 Valid Object for each
         for (var key in valid) {
           for (var prop in valid[key]) {
@@ -346,6 +348,7 @@
               o.items[prop].id = key;
             }
             else if (prop == 'fitness' && count[prop] <= 10 && typeof validItem == 'object') {
+              // console.log("CHECK FOR PROPER ID", validItem, id);
               o.items[prop].push(validItem);
               o.items[prop].id = key;
             }
@@ -360,6 +363,7 @@
       });
 
       // console.warn("VALID", Array(Valid), Valid);
+
       buildTable(table, Array(Valid));
 
       function buildTable(table, data) {
@@ -383,8 +387,8 @@
       function createAndAppendTr(table, type) {
         var args = Array.prototype.slice.call(arguments);
         // console.log("ARGS", "LOOKING FOR OBJECT TO CONDITION", Array.isArray(args[2][0]), args);
-        if (!Array.isArray(args[2][0])) {
-          // console.log("NOT FITNESS ARG", args);
+        if (Array.isArray(args[2][0]) == false) {
+          // console.log("NOT FITNESS ARG", args, "IS ARRAY?", Array.isArray(args[2][0]));
           var getString = getTypeAndSendString(type, args[2]);
           var tr = document.createElement('tr');
           var td = document.createElement('td');
@@ -393,7 +397,6 @@
             id: getString.data.id,
             type: type
           };
-          // console.warn("GET STRING PARSEDATA NON FITNESS", tr.parseData, args[2].id, type, args["2"]);
           // DETERMINE NUMBER OR VERB TYPE AND BUILD
           td.innerHTML = getString.string;
           td.className = "table-style";
@@ -444,6 +447,7 @@
                 id: args[2].id,
                 type: type
               };
+              console.warn("Looking for proper ID", args);
               // DETERMINE NUMBER OR VERB TYPE AND BUILD
               td.innerHTML = getString.string;
               td.className = "table-style";
@@ -488,58 +492,52 @@
           console.log("REMOVING", tr);
           var del = new Parse.Query('Goals');
           del.equalTo('userName', Parse.User.current().get('username'));
-          del.equalTo('objectId', tr.parseData.id);
-          del.find({
+          del.get(tr.parseData.id, {
             success: function(res) {
               // Remove Index from Save Data
-              res.forEach(function(result) {
-                var type = tr.parseData.type;
-                var cell = result.attributes[type];
-                var purge = tr.data;
-                
-                if (type != 'fitness') { 
-                  console.log("PURGE 1", purge, cell);
-                  cell.length = 0;
-                  cell = "";
-                  console.log("CELL IS NOW -", cell);
-                }
-                else { 
-                  // console.log("PURGE FOR EACH", purge);
-                  cell.forEach(function(val, i){
-                    // console.log("COMPARE", [val, "with", purge], ["old val", cell[i]]);
-                    if (val[2].item == purge[2].item) { console.log("EQUAL", cell[i], i + " Index"); cell.splice(i); }
-                    // else console.log("IN EQUAL");
-                    console.log("DOES IT REACH HERE?");
-                    console.log("WHAT LENGTH IS CELL?", cell.length);
-                    if (cell.length <= 0) { console.log("CELL IS BLANK", cell); cell = '(undefined)'; }
-                    // console.log("NEW VAL", cell[i]);
-                  });
-                }
-                console.log("result to purge", result.attributes[type]);
-                result.save({
-              		success: function(res) {
-              			console.log("Successfully deleted", res);
-              			console.log("Res Attribs", res.attributes);
-              		// 	console.log("Res Attribs", res[0].attributes);
-              			for (var prop in res.attributes) {
-              			  if (Array.isArray(res.attributes[prop]) && res.attributes[prop].length >=0) {
-              			    console.log("THIS IS A BLANK CELL", prop, res.attributes[prop]);
-              			    
+              var id = res.id;
+              var data = res.attributes;
+              var type = tr.parseData.type;
+              var purging = tr.data;
+              var dataSlot = data[type];
+              console.log("Found Item With Type: " + type, [id, data, purging], ["To Be Purged", dataSlot]);
+              debugger;
+              if (type == 'fitness') {
+                console.log("TYPE IS FITNESS", data);
+                dataSlot.forEach(function(goal, i){
+                  console.log("EQUAL?", [goal, purging], [goal[2].item == purging[2].item]);
+                  if (goal[2].item == purging[2].item) {
+                    dataSlot.splice(i);
+                  }
+                });
+              } else {
+                console.log("Delete Type ", type, dataSlot);
+                dataSlot.length = 0;
+              }
+              console.log("New Data", dataSlot);
+              
+                res.save({
+              		success: function(response) {
+              			console.log("Successfully deleted", response);
+              			console.log("response Attribs", response.attributes);
+              			for (var prop in response) {
+              			  if (['createdAt', 'userName', 'updatedAt', 'objectId'].indexOf(prop) <0) {
+              			    console.log("Find Empty Prop and Delete Parse Data if all Empty");
+              			    console.warn(response[prop].length, response[prop]);
               			  }
               			}
               		},
-              		error: function(res,err) {
+              		error: function(rresponsees,err) {
               			console.warn(res,err);
               		}
               	});
-              });
+
             },
             error: function(err, res) {
               console.log(["GOT ERROR", err], ["RESPONSE", res]);
             }
           });
           tr.remove();
-
         }
 
       }
