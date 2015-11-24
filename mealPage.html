@@ -116,6 +116,11 @@
         window.commands.searchNutritionSiteFor(term).then(function(res){
           // console.log("Heres a rempose",res);
           var resultsList = document.getElementById('resultsList');
+          // Empty Table
+          while(resultsList.hasChildNodes() == true){
+            resultsList.removeChild(resultsList.firstChild);
+          }
+          
           res.forEach(function(e, i){
             var tr = document.createElement('tr');
                 tr.classList.add('text-left');
