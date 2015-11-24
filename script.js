@@ -9,10 +9,45 @@ console.log("USERNAME", userName);
 
 window.onload = function() {
     var pageTitle = window.commands.pageTitle = document.getElementsByTagName('body');
-
     
 };
 
+/**
+ * This tiny script just helps us demonstrate
+ * what the various example callbacks are doing
+ */
+var AlertSystem = window.AlertSystem = (function() {
+    "use strict";
+
+    var elem,
+        hideHandler,
+        that = {};
+
+    that.init = function(options) {
+        elem = $(options.selector);
+    };
+
+    that.show = function(text, alertType) {
+        clearTimeout(hideHandler);
+
+        if (!!alertType) {
+            elem.removeClass(elem.attr("class").split(' ')[2]);
+            elem.addClass(alertType);
+        }
+
+        elem.find("span").html(text);
+        console.log("ELEM -- FIND CLASS", $(elem));
+        elem.delay(200).fadeIn().delay(4000).fadeOut();
+    };
+
+    return that;
+}());
+
+(function() {
+    window.AlertSystem.init({
+        "selector": ".alert-system"
+    });
+}());
 // PRIMARY APP FUNCTIONS
 function encodeAndSend(url, data) {
     var h = window.location.pathname.split("/");

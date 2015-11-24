@@ -26,7 +26,7 @@ function searchNutritionSiteFor(item) {
             if (xhr.readyState == 4) {
                 // console.log("Arguments", args);
                 // console.log("ARGUMENTS", arguments, "ARGS", args);
-                results = !args[1] ? getResultsList() : getNutritionData();
+                var results = !args[1] ? getResultsList() : getNutritionData();
 
                 function getNutritionData() {
                     // GRAB NUTRITION DATA
@@ -79,7 +79,7 @@ function searchNutritionSiteFor(item) {
                     var table = Array.prototype.slice.call(site.querySelectorAll('tr.results'));
                         table.shift(), table.pop();
                     var pagination = site.querySelectorAll('th.left.results');
-                    var maxPages = pagination[0].children[pagination[0].children.length -1].innerHTML;
+                    var maxPages = pagination[0].children[pagination[0].children.length -1];
 
                     var results = [];
 
@@ -88,9 +88,16 @@ function searchNutritionSiteFor(item) {
                         results.push({
                             name: e.children[0].innerText,
                             href: "http://www.nutritionvalue.org/" + e.children[0].children[0].pathname,
-                            maxPages: maxPages
+                            maxPages: maxPages.innerHTML
                         });
                     });
+                    
+                    // console.log("RESULTS?", Array.isArray(results), "What are they?", results);
+                    Array.isArray(results) == true 
+                        ? results.length <= 0 
+                            ? AlertSystem.show('No Results Found', 'alert-danger')
+                            : null
+                        : null;
                     return resolve(results);
                 }
                 return results;
@@ -103,6 +110,8 @@ function searchNutritionSiteFor(item) {
     });
 
 }
+
+window.commands.searchNutritionSiteFor = searchNutritionSiteFor;
 
 // Array.prototype.slice.call(commands.data).reduce(function(p,c,i,a){var temp = ken(c); console.log("type", typeof temp, "KEY", temp.key, !temp.key); !!temp.key ? p[temp.key] = temp : null; return p;}, {});
 // Array.prototype.slice.call(commands.data).forEach(function(e){ken(e)});

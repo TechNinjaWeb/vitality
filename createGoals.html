@@ -49,7 +49,7 @@
       <div class="heading col-xs-12">
          <h2 class="heading-title text-center">Create A New Goal</h2>
       </div>
-      <div class="page-content container">
+      <div class="page-container container">
          <div class="goal-btns col-xs-12 text-center">
             <div class="calories goal-btn btn btn-responsive btn-primary">Caloric</div>
             <div class="weight goal-btn btn btn-responsive btn-success">Weight</div>
@@ -107,7 +107,7 @@
    </div>
    <!-- /.modal -->
 
-<div class="bb-alert alert alert-info" style="display:none;">
+<div class="alert-system alert alert-info" style="display:none;">
    <span>Invalid Notification</span>
 </div>
 <script type="text/javascript">
@@ -141,17 +141,18 @@
       
           return that;
       }());
+      
+       (function(){
+         AlertSystem.init({
+             "selector": ".alert-system"
+         });
+      }());
+      
    </script> 
 
    <!--<button class="testBtn btn btn-danger" onclick="window.commands.test()">ADD TEST DATA</button>-->
    <script type="text/javascript">
-      (function(){
-         AlertSystem.init({
-             "selector": ".bb-alert"
-         });
-      }());
-      
-      var table = document.getElementsByClassName('goal-list');
+     var table = document.getElementsByClassName('goal-list');
       table = table[0];
       var tBody = document.getElementsByClassName('table-body');
 

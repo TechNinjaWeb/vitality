@@ -48,6 +48,7 @@
         <div class="page-content container">
             <div class="heading col-xs-12">
                 <h2 class="heading-title text-center">Nutrition Information</h2>
+                <h4 class="item-title text-center word-wrap"></h4>
             </div>
             <table id="nutritionFacts" class="nutrition-facts table small-container"></table>
             <div id="addMealBtn" class="add-meal-btns small-container">
@@ -62,11 +63,13 @@
             console.warn("HEADING", heading[0].style);
 
         var d = location.search, d = d.replace("?", ""), 
-        d = decodeURIComponent(d), 
-        d = JSON.parse(d);
-        data = d.data;
+            d = decodeURIComponent(d), 
+            d = JSON.parse(d);
+        var data = d.data;
 
         // console.log("GOT DATA FROM URL", data);
+        var itemTitle = document.getElementsByClassName('item-title');
+            itemTitle[0].innerText = d.name;
         var addMealBtn = document.getElementsByClassName('add-meal-btns');
         var nutritionTable = document.getElementById('nutritionFacts');
             // nutritionTable.style.marginTop = "100px";

@@ -54,15 +54,56 @@
             <input id="searchTerm" class="search-input form-control" type="text" placeholder="Search For A Meal or Food Item" value="" />
             <span class="input-group-btn"><button class="search-btn btn btn-primary">Search</button></span>
         </div>
-        <div id="resultsList" class="links"></div>
-    <!-- <div class="goal-btns small-container">
-      <a href="#" class="goal-btn-1 col-xs-12 btn btn-primary">Caloric Goal</a>
-      <a href="#" class="goal-btn-2 col-xs-12 btn btn-success">Weight Goal</a>
-      <a href="#" class="goal-btn-3 col-xs-12 btn btn-danger">Emotional Goal</a>
-      <a href="#" class="goal-btn-4 col-xs-12 btn btn-info">Fitness Goal</a>
-    </div> -->
+        <table class="results-table table table-hover col-xs-12" summary="Results Of Your Nutrition Search">
+          <tHead class=""><tr><td>Results</td></tr></tHead>
+          <tBody id="resultsList" class="links list-unstyled"></tBody>
+          <tFoot class=""><tr><td><h5 class="link-credit">Results Are From Site: <a href="#">Yadda.com</a></h5></td></tr></tFoot>
+        </table>
       </div>
   </div>
+  
+  <div class="alert-system alert alert-info" style="display:none;">
+    <span>Invalid Notification</span>
+  </div>
+  <script type="text/javascript">
+      /**
+       * This tiny script just helps us demonstrate
+       * what the various example callbacks are doing
+       */
+      var AlertSystem = (function() {
+        "use strict";
+    
+        var elem,
+            hideHandler,
+            that = {};
+    
+        that.init = function(options) {
+            elem = $(options.selector);
+        };
+    
+        that.show = function(text, alertType) {
+            clearTimeout(hideHandler);
+            
+            if (!!alertType) { 
+               elem.removeClass(elem.attr("class").split(' ')[2]);
+               elem.addClass(alertType);
+            }
+            
+            elem.find("span").html(text);
+            console.log("ELEM -- FIND CLASS", $(elem));
+            elem.delay(200).fadeIn().delay(4000).fadeOut();
+        };
+    
+        return that;
+    }());
+    
+     (function(){
+       AlertSystem.init({
+           "selector": ".alert-system"
+       });
+    }());
+    
+ </script>
   <script>
     // var searchTerm = document.getElementById('searchTerm');
     var searchBtn = document.getElementsByClassName('search-btn');
@@ -72,27 +113,33 @@
         var url = "/mealDescriptionPage.html";
         var term = e.target.parentNode.parentNode.children[0].value;
         // console.log("Search Term Value:", term);
-        searchNutritionSiteFor(term).then(function(res){
+        window.commands.searchNutritionSiteFor(term).then(function(res){
           // console.log("Heres a rempose",res);
           var resultsList = document.getElementById('resultsList');
           res.forEach(function(e, i){
+            var tr = document.createElement('tr');
+                tr.classList.add('text-left');
+            var td = document.createElement('td');
+                td.className = "result";
             var link = document.createElement('a');
                 link.href = "#";
                 link.innerHTML = e.name;
-                link.className = "result col-xs-12 item-"+i;
+                link.className = "result-link col-xs-12 item-"+i;
                 link.value = resultsList;
                 link.data = e;
                 link.addEventListener("click", function(ev){
                   // console.log("E", e, "URL", url);
-                  var d = searchNutritionSiteFor(link.data.href, true).then(function(res){
+                  window.commands.searchNutritionSiteFor(link.data.href, true).then(function(res){
                     // Sending you to your page
                     // console.log("SEND TO URL WITH DATA", res, url);
                     // alert("RES NAME " + e.name);
                     window.commands.sendData(url, {data: res, name: e.name});
                   });
                 });
-
-            resultsList.appendChild(link);
+            
+            td.appendChild(link);
+            tr.appendChild(td);
+            resultsList.appendChild(tr);
 
           });
         });

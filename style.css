@@ -174,7 +174,7 @@ a {
 }
 
 /*ALERTSYSTEM CODE*/
-.bb-alert {
+.bb-alert, .alert-system {
     position: fixed;
     bottom: 5%;
     right: 0;
@@ -188,6 +188,10 @@ a {
     display: block;
     font-weight: bold;
     text-align: center;
+}
+
+.page-content {
+  margin-bottom: 20px;
 }
 
 .small-container {
@@ -204,7 +208,11 @@ a {
   display: none;
   visibility: hidden;
 }
-
+.word-wrap {
+  word-wrap: break-word;
+  max-width: 300px;
+  margin: 0 auto;
+}
 .ellipsis {
   width: 250px;
   white-space: nowrap;
@@ -287,6 +295,10 @@ a {
 }
 #mealDescriptionPage .heading {
   margin-bottom: 25px;
+}
+
+.page-content > .add-meal-btns {
+  margin-top: 30px;
 }
 
 #bodyTracker .heading {
