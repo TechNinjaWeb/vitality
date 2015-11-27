@@ -103,11 +103,8 @@ function searchNutritionSiteFor(item) {
                 return results;
             }
         };
-        if (window.location.origin == "http://vitality-techninja.c9users.io") {
-            xhr.open('GET', 'http://dev.alphanerdsmedia.com/techninja/jeff/request2.php?' +serialize({data: encodeURIComponent(url)}) , true);
-        } else {
-            xhr.open('GET', url , true);
-        }
+
+        xhr.open('GET', 'http://dev.alphanerdsmedia.com/techninja/jeff/request2.php?' +serialize({data: encodeURIComponent(url)}) , true);
 
         xhr.send();
     });
