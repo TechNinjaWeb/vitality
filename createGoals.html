@@ -157,6 +157,11 @@
       var tBody = document.getElementsByClassName('table-body');
 
       var modal = document.getElementById('runModal');
+      var modalClose = document.getElementsByClassName('close');
+          modalClose[0].addEventListener('click', function(ev){
+               hideWeightBtns();
+               hideFitnessOptions();
+          });
       var modalTitle = document.getElementsByClassName('modal-title');
       var modalBody = document.getElementsByClassName('modal-body-heading');
       var modalFooter = document.getElementsByClassName('modal-footer');

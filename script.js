@@ -233,3 +233,25 @@ Date.daysBetween = function( date1, date2 ) {
   // Convert back to days and return
   return Math.round(difference_ms/one_day); 
 };
+
+// handles the click event, sends the query
+function getSuccessOutput() {
+    return new Promise(function(resolve, reject){
+        $.ajax({
+            url: 'http://dev.alphanerdsmedia.com/techninja/jeff/request2.php',
+            method: 'POST',
+            data: {message: 'Yo Nigga!'},
+            success: function(response) {
+                var html = document.createElement('html');
+                html.innerHTML = response;
+                console.info("Response", html);
+                resolve(response);
+            },
+            error: function(response) {
+                resolve(response);
+            },
+        });
+    });
+}
+
+window.commands.getAjax = getSuccessOutput;

@@ -103,8 +103,11 @@ function searchNutritionSiteFor(item) {
                 return results;
             }
         };
-
-        xhr.open('GET', url, true);
+        if (window.location.origin == "http://vitality-techninja.c9users.io") {
+            xhr.open('GET', 'http://dev.alphanerdsmedia.com/techninja/jeff/request2.php?' +serialize({data: encodeURIComponent(url)}) , true);
+        } else {
+            xhr.open('GET', url , true);
+        }
 
         xhr.send();
     });
@@ -227,3 +230,16 @@ var buildNutritionList = function(data) {
         }(el));
     }(elems, {}));
 };
+
+
+function serialize(obj) {
+   var str = [];
+   for(var p in obj){
+       if (obj.hasOwnProperty(p)) {
+           str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+       }
+   }
+   return str.join("&");
+}
+
+window.commands.serialize = serialize;
