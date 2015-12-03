@@ -1,0 +1,38 @@
+<div class="page-content small-container">
+    <div class="heading col-xs-12">
+        <h2 class="heading-title text-center">Profile and Settings</h2></div>
+    <hr>
+    <div class="profile-info">
+        <div class="form-group col-xs-6">
+            <label for="username">User Name</label>
+            <!--<input type="text" class="form-control" id="userName" placeholder="Jane Doe"></div>-->
+            <div data-ng-bind="user.username"class="username"></div>
+        </div>
+        <div class="form-group col-xs-6">
+            <label for="email">Email</label>
+            <!--<input type="email" class="form-control" id="email" placeholder="jane.doe@example.com">-->
+            <div data-ng-bind="user.email"class="email"></div>
+        </div>
+        <div class="form-group col-xs-6">
+            <label for="firstName">First Name</label>
+            <!--<input type="text" class="form-control" id="firstName" placeholder="Jane Doe"></div>-->
+            <div data-ng-bind="user.firstName"class="firstName"></div>
+        </div>
+        <div class="form-group col-xs-6">
+            <label for="lastName">Last Name</label>
+            <!--<input type="text" class="form-control" id="lastName" placeholder="Jane Doe"></div>-->
+            <div data-ng-bind="user.lastName"class="lastName"></div>
+        </div>
+        <div class="form-group col-xs-6">
+            <label for="userAge">Age</label>
+            <!--<input type="text" class="form-control" id="userAge" placeholder="Jane Doe"></div>-->
+            <div data-ng-bind="user.userAge"class="userAge"> <span class="ageMeasure">yrs old</span></div>
+        </div>
+        <div class="form-group col-xs-6">
+            <label for="userHeight">Height</label>
+            <!--<input type="text" class="form-control" id="userHeight" placeholder="Jane Doe"></div>-->
+            <div data-ng-bind="user.userHeight"class="userHeight"> <span class="heightMeasure">cm</span></div>
+        </div>
+    </div>
+    <a data-ui-sref="profile.progress" class="col-xs-12 btn btn-primary progress-btn">View Progress</a>
+</div>

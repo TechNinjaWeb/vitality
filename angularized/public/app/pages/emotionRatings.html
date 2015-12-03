@@ -1,0 +1,14 @@
+<div class="heading col-xs-12">
+    <h2 class="heading-title text-center">How well do you feel?</h2></div>
+<div class="rating-box col-xs-12">
+    <div class="description text-center">Rate Your Mood From 1 to 5</div>
+    <ul class="ratings col-xs-12 text-center list-unstyled list-inline">
+        <li data-ng-repeat="i in [1,2,3,4,5] track by $index" class="rating">
+            <i class="fa fa-lg fa-smile-o" data-ng-click="checked($event, $index + 1)"></i>
+            <input data-ng-model="checkbox" type="checkbox" class="chk hidden" id="img2" name="img2" value="{{ $index + 1 }}" />
+        </li>
+    </ul>
+    <div class="ratings-navigation center-block">
+        <button data-ng-click="next(pageId)" class="nav-next btn btn-success col-xs-6 col-xs-offset-6"><i class="fa fa-lg fa-arrow-right"></i></button>
+    </div>
+</div>

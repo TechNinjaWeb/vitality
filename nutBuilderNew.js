@@ -104,7 +104,7 @@ function searchNutritionSiteFor(item) {
             }
         };
 
-        xhr.open('GET', 'http://dev.alphanerdsmedia.com/techninja/jeff/request2.php?' +serialize({data: encodeURIComponent(url)}) , true);
+        xhr.open('GET', 'http://dev.alphanerdsmedia.com/techninja/jeff/request2.php?' + serialize({data: encodeURIComponent(url)}) , true);
 
         xhr.send();
     });

@@ -1,0 +1,25 @@
+{
+  "name": "vitality-app",
+  "homepage": "npm init",
+  "authors": [
+    "Tech Ninja"
+  ],
+  "description": "Health For Life Vitality Tracker App",
+  "main": "index.html",
+  "moduleType": [],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.8",
+    "angular-ui-router": "~0.2.15",
+    "angular-animate": "~1.4.8",
+    "animate.css": "animate-css#~3.4.0"
+  }
+}

@@ -1,0 +1,65 @@
+<div class="page-content small-container">
+    <div class="heading col-xs-12">
+        <h2 class="heading-title text-center">Track Your Measurements</h2></div>
+    <form name="measurementsForm" class="measurement-form">
+        <div class="measurement-box">
+            <div class="form-group col-xs-6">
+                <label for="heartRate" style="color:red;">Heart Rate (BPM)</label>
+                <input data-ng-model="measurements.heartRate" type="number" class="form-control" id="heartRate" placeholder="Heart Rate" required="true">
+            </div>
+            <div class="form-group col-xs-6">
+                <label for="weight" style="color:red;">Weight (Lbs)</label>
+                <input data-ng-model="measurements.weight" type="number" class="form-control" id="weight" placeholder="Weight" required="true">
+            </div>
+            <div class="form-group col-xs-6">
+                <label for="neck">Neck (in)</label>
+                <input data-ng-model="measurements.neck" type="number" class="form-control" id="neck" placeholder="Neck Size">
+            </div>
+            <div class="form-group col-xs-6">
+                <label for="shoulders">Shoulders (in)</label>
+                <input data-ng-model="measurements.shoulders" type="number" class="form-control" id="shoulders" placeholder="Shoulders">
+            </div>
+            <div class="form-group col-xs-6">
+                <label for="chest">Chest (in)</label>
+                <input data-ng-model="measurements.chest" type="number" class="form-control" id="chest" placeholder="Chest">
+            </div>
+            <div class="form-group col-xs-6">
+                <label for="waist">Waist (in)</label>
+                <input data-ng-model="measurements.waist" type="number" class="form-control" id="waist" placeholder="Waist">
+            </div>
+            <div class="form-group col-xs-6">
+                <label for="leftThigh">L. Thigh (in)</label>
+                <input data-ng-model="measurements.leftThigh" type="number" class="form-control" id="leftThigh" placeholder="Left Thigh">
+            </div>
+            <div class="form-group col-xs-6">
+                <label for="rightThigh">R. Thigh (in)</label>
+                <input data-ng-model="measurements.rightThigh" type="number" class="form-control" id="rightThigh" placeholder="Right Thigh">
+            </div>
+            <div class="form-group col-xs-6">
+                <label for="leftCalf">L. Calf (in)</label>
+                <input data-ng-model="measurements.leftCalf" type="number" class="form-control" id="leftCalf" placeholder="Left Calf">
+            </div>
+            <div class="form-group col-xs-6">
+                <label for="rightCalf">R. Calf (in)</label>
+                <input data-ng-model="measurements.rightCalf" type="number" class="form-control" id="rightCalf" placeholder="Right Calf">
+            </div>
+            <div class="form-group col-xs-6">
+                <label for="leftBicep">L. Bicep (in)</label>
+                <input data-ng-model="measurements.leftBicep" type="number" class="form-control" id="leftBicep" placeholder="Left Bicep">
+            </div>
+            <div class="form-group col-xs-6">
+                <label for="leftForearm">L. Forearm (in)</label>
+                <input data-ng-model="measurements.leftForearm" type="number" class="form-control" id="leftForearm" placeholder="Left Forearm">
+            </div>
+            <div class="form-group col-xs-6">
+                <label for="rightForearm">R. Forearm (in)</label>
+                <input data-ng-model="measurements.rightForearm" type="number" class="form-control" id="rightForearm" placeholder="Right Forearm">
+            </div>
+            <div class="form-group col-xs-6">
+                <label for="glutes">Glutes (in)</label>
+                <input data-ng-model="measurements.glutes" type="number" class="form-control" id="glutes" placeholder="Glutes">
+            </div>
+        </div>
+        <button type="submit" class="save-btn btn btn-primary pull-right" data-ng-click="save($event, measurementsForm.$valid)"> Save </button>
+    </form>
+</div>

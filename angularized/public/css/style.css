@@ -1,0 +1,381 @@
+/* Put your css in here */
+body, html {
+  width: 100%;
+  height: 100%;
+  min-width: 320px;
+}
+body {
+  padding-top: 10px;
+  padding-right: 10px;
+  padding-left: 10px;
+  color: white;
+  background: #000;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+/* ANGULAR ANIMATIONS*/
+.animation.ng-enter {
+  /*transition:0.4s linear all;*/
+  animation: fadeIn 0.6s;
+  opacity: 0;
+}
+.animation.ng-enter.ng-enter-active {
+  opacity: 1;
+}
+.animation.ng-leave {
+  /*transition:0s linear all;*/
+  animation: 0s; 
+  opacity:1;
+}
+.ng-leave.ng-leave-active {
+  opacity:0;
+}
+
+/*ORIENTATION PORTRAIT*/
+
+@media (max-width: 768px)  and (orientation: portrait) { /* TARGET PHONE ONLY */
+  /* Remove any padding from the body */
+  .right-icon, .left-icon {
+    margin-top: 14px;
+  }
+  
+  .home-title {
+    margin-top: 100px;
+  }
+
+  .title-block {
+    margin-bottom: 120px;
+  }
+
+  .rating-box .description {
+    margin-bottom: 50px;
+  }
+
+  .rating-box .ratings {
+    margin-bottom: 100;
+  }
+  
+  .btn-responsive {
+    margin: 10px 6px;
+    padding:2px 10px;
+    font-size:80%;
+    line-height: 2;
+    border-radius:3px;
+  }
+  /*.measurement-box > .form-group.col-xs-6:last-child {*/
+  /*    margin-top: 20px;*/
+  /*}*/
+}
+
+@media (min-width: 768px) and (max-width: 992px)  and (orientation: portrait) { /* EVERYTHING IN BETWEEN */
+  /* Remove any padding from the body */
+  .right-icon, .left-icon {
+    margin-top: 15px;
+  }
+  
+  .home-title {
+    margin-top: 10px;
+  }
+
+  .title-block {
+    margin-bottom: 150px;
+  }
+
+  .rating-box .description {
+    margin-bottom: 50px;
+  }
+
+  .rating-box .ratings {
+    margin-bottom: 200px;
+  }
+  
+  .btn-responsive {
+    margin: 10px 4px;
+    padding:4px 9px;
+    font-size:90%;
+    line-height: 2;
+  }
+}
+
+/*ORITENTATION LANDSCAPE*/
+
+@media (max-width: 768px)  and (orientation: landscape) { /* TARGET PHONE ONLY */
+  /* Remove any padding from the body */
+  .right-icon, .left-icon {
+    margin-top: 20px;
+  }
+  
+  .home-title {
+    margin-top: 0px;
+  }
+
+  .title-block {
+    margin-bottom: 50px;
+  }
+
+  .rating-box .description {
+    margin-bottom: 50px;
+  }
+
+  .rating-box .ratings {
+    margin-bottom: 100px;
+  }
+
+  .share-btn {
+   margin-top: -5px; 
+  }
+  
+  .btn-responsive {
+    margin: 10px 4px;
+    padding:2px 4px;
+    font-size:90%;
+    line-height: 2;
+    border-radius:3px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 992px)  and (orientation: landscape) { /* EVERYTHING IN BETWEEN */
+  /* Remove any padding from the body */
+  .right-icon, .left-icon {
+    margin-top: 15px;
+  }
+  
+  .home-title {
+    margin-top: 150px;
+  }
+
+  .title-block {
+    margin-bottom: 100px;
+  }
+
+  .rating-box .description {
+    margin-bottom: 50px;
+  }
+
+  .rating-box .ratings {
+    margin-bottom: 100px;
+  }
+  
+  .btn-responsive {
+    margin: 10px 4px;
+    padding:4px 9px;
+    font-size:90%;
+    line-height: 2;
+  }
+}
+
+@media (min-width: 992px) { /* DESKTOP ONLY */
+  /* Remove any padding from the body */
+  .right-icon, .left-icon {
+    margin-top: 15px;
+  }
+  
+  .home-title {
+    margin-top: 100px;
+  }
+
+  .title-block {
+    margin-bottom: 150px;
+  }
+  
+  .goal-btn {
+    margin-right: 14px;
+  }
+  
+  .rating-box .description {
+    margin-bottom: 50px;
+  }
+  
+  .rating-box .ratings {
+    margin-bottom: 50px;
+  }
+}
+
+/*ALERTSYSTEM CODE*/
+.bb-alert, .alert-system {
+    position: fixed;
+    bottom: 5%;
+    right: 0;
+    margin-bottom: 0;
+    font-size: 1.2em;
+    padding: 1em 1.3em;
+    z-index: 2000;
+}
+
+.alert--finch {
+    display: block;
+    font-weight: bold;
+    text-align: center;
+}
+
+.page-content {
+  margin-bottom: 20px;
+}
+
+.small-container {
+  margin: 0 auto;
+  max-width: 500px;
+  /*min-width: 320px;*/
+}
+
+.title {
+  margin-top: 10px;
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
+}
+.word-wrap {
+  word-wrap: break-word;
+  max-width: 300px;
+  margin: 0 auto;
+}
+.ellipsis {
+  width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.table-body > tr:hover {
+  color: black;
+}
+
+.home-btns a, .goal-btns a, .goal-btns button, .tracker-btns a {
+  margin-bottom: 20px;
+}
+
+.btn-description {
+  margin: 0 auto;
+  padding: 0;
+}
+
+.heading {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.nav-title {
+  font-size: 20px;
+}
+
+.progress-btn {
+  margin-top: 100px;
+}
+
+.rating i {
+  margin-top: 30px;
+}
+
+/*  RIPPED FROM SITE
+    http://codepen.io/_Billy_Brown/pen/dbJeh -- Stopwatch
+      and
+    http://codepen.io/chrisgrabinski/pen/lnrwi -- Timer
+*/
+
+.stopwatch {
+  font-size: 25px;
+  /*height: 100%;*/
+  /*line-height: 100vh;*/
+  text-align: center;
+  text-shadow: 0 0 0.2em lime;
+}
+
+.results {
+  border-color: lime;
+  margin: 0 auto;
+  /*position: fixed;*/
+  /*right: 0;*/
+  /*bottom: 0;*/
+  /*left: 0;*/
+  width: 10em;
+}
+
+.controls {
+  margin-top: 15px;
+}
+
+/*  END OF STOPWATCH
+*/
+
+#saveActivity {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.activity-instructions {
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+.search-box {
+  margin-bottom: 20px;
+}
+#mealDescriptionPage .heading {
+  margin-bottom: 25px;
+}
+
+.page-content > .add-meal-btns {
+  margin-top: 30px;
+}
+
+#bodyTracker .heading {
+  margin-bottom: 40px;
+}
+
+.save-btn  {
+    margin-right: 30px;
+}
+
+.goal-btns {
+    margin-bottom: 30px;
+}
+
+.table-style {
+  color: white;
+}
+.table-foot td {
+  font-size: 12px;
+}
+
+.login-btn-container, .create-account-btn-container, .profile-save-btn-container {
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.login-anchor, .create-account-anchor {
+  margin-top: 4px;
+}
+.login-btn, .create-account-btn {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.right-icons {
+    margin-top: 15px;
+}
+
+.right-icons span {
+    margin-right: 10px;
+}
+
+.add-on {
+    background-color: red;
+    color: white;
+}
+
+.instruction {
+    margin-bottom: 20px;
+}
+
+.body-input {
+  width: 100px;
+}
+
+.rating > div[class*='-icon'] {
+    margin-top: 18px;
+    font-size: 25px;
+}

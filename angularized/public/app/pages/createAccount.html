@@ -1,0 +1,39 @@
+<div class="page-container small-container">
+    <div class="heading col-xs-12">
+        <h2 class="heading-title text-center">Create Your Profile</h2></div>
+    <hr>
+    <div class="profile-info">
+        <div class="form-group col-xs-12">
+            <label for="userName">User Name</label>
+            <input data-ng-model="userName" type="text" class="username form-control"></input>
+        </div>
+        <div class="clear-fix"></div>
+        <div class="form-group col-xs-6">
+            <label for="email">Email</label>
+            <input data-ng-model="email" type="email" class="email form-control"></input>
+        </div>
+        <div class="form-group col-xs-6">
+            <label for="password">Password</label>
+            <input data-ng-model="password" type="password" class="password form-control"></input>
+        </div>
+        <div class="form-group col-xs-6">
+            <label for="firstName">First Name</label>
+            <input data-ng-model="firstName" type="text" class="firstName form-control"></input>
+        </div>
+        <div class="form-group col-xs-6">
+            <label for="lastName">Last Name</label>
+            <input data-ng-model="lastName" type="text" class="lastName form-control"></input>
+        </div>
+        <div class="form-group col-xs-6">
+            <label for="userAge">Age</label>
+            <input data-ng-model="userAge" type="text" class="userAge form-control"> <span class="ageMeasure"></span></input>
+        </div>
+        <div class="form-group col-xs-6">
+            <label for="userHeight">Height</label>
+            <input data-ng-model="userHeight" type="text" class="userHeight form-control"> <span class="heightMeasure"></span></input>
+        </div>
+    </div>
+    <div class="create-account-btn-container">
+        <button class="text-center btn btn-success create-account-btn" data-ng-click="createAccount()">Create Account</button>
+    </div>
+</div>

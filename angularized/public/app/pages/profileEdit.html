@@ -1,0 +1,45 @@
+<div class="page-content small-container">
+            <div class="heading col-xs-12">
+                <h2 class="heading-title text-center">Edit Your Profile Options</h2></div>
+            <hr>
+            <div class="profile-info">
+                <div class="form-group col-xs-6">
+                    <label for="username">User Name</label>
+                    <!--<input type="text" class="form-control" id="username" placeholder="Jane Doe"></div>-->
+                    <div class="username">{{ user.username }}</div>
+                </div>
+                <div class="form-group col-xs-6">
+                    <label for="userEmail">Email</label>
+                    <!--<input type="email" class="form-control" id="userEmail" placeholder="jane.doe@example.com">-->
+                    <input data-ng-model="email" placeholder="{{ user.email }}" class="userEmail form-control"></input>
+                </div>
+                <div class="form-group col-xs-6">
+                    <label for="firstName">First Name</label>
+                    <!--<input type="text" class="form-control" id="firstName" placeholder="Jane Doe"></div>-->
+                    <input data-ng-model="firstName" placeholder="{{ user.firstName }}" class="firstName form-control"></input>
+                </div>
+                <div class="form-group col-xs-6">
+                    <label for="lastName">Last Name</label>
+                    <!--<input type="text" class="form-control" id="lastName" placeholder="Jane Doe"></div>-->
+                    <input data-ng-model="lastName" placeholder="{{ user.lastName }}" class="lastName form-control"></input>
+                </div>
+                <div class="form-group col-xs-6">
+                    <label for="userAge">Age</label>
+                    <!--<input type="text" class="form-control" id="userAge" placeholder="Jane Doe"></div>-->
+                    <input data-ng-model="userAge" placeholder="{{ user.userAge }}" class="userAge form-control"> <span class="ageMeasure"></span></input>
+                </div>
+                <div class="form-group col-xs-6">
+                    <label for="userHeight">Height</label>
+                    <!--<input type="text" class="form-control" id="userHeight" placeholder="Jane Doe"></div>-->
+                    <input data-ng-model="userHeight" placeholder="{{ user.userHeight }}" class="userHeight form-control">  <span class="heightMeasure"></span></input>
+                </div>
+            </div>
+            <div class="profile-save-btn-container">
+                <button data-ng-click="saveDetails({username: username, 
+                        email: email, firstName: firstName, 
+                        lastName: lastName, userAge: userAge, userHeight: userHeight });" 
+                        class="col-xs-12 btn btn-primary profile-save-btn">
+                    Save
+                </button>
+            </div>
+        </div>

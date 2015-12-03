@@ -1,0 +1,19 @@
+<div class="heading col-xs-12">
+    <h2 class="heading-title text-center">View Goals</h2>
+</div>
+<table class="goal-list table small-container">
+    <thead class="table-head">
+        <tr>
+            <th>Delete</th>
+            <th>Goals</th>
+            <th class="text-right">Stats</th>
+        </tr>
+    </thead>
+    <tbody class="table-body">
+        <tr data-ng-repeat="goal in goalList">
+            <td class="text-center"><a class="delete-btn" data-ng-click="remove($index)"><i class="fa fa-lg fa-ban"></i></a></td>
+            <td class="table-style">{{ goal.action }} <span class="fitness-list">{{ goal.activity }}</span> <span class="fitness-number">3 times</span> per week</td>
+            <td class="text-right table-style">{{ goal.count }} times</td>
+        </tr>
+    </tbody>
+</table>

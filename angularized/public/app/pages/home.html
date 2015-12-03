@@ -1,0 +1,24 @@
+<div class="page-container container">
+    <div class="profile-link pull-right" data-ng-hide="!user.username"><a data-ui-sref="profile.user"><i class="fa fa-lg fa-user"></i></a></div>
+    <div class="title-block text-center">
+        <h1 class="home-title">Vitality For Life</h1>
+        <h5 class="slogan">Become Your Ideal Self</h5>
+    </div>
+    <div class="home-btns small-container" data-ng-hide="!user.username">
+        <a data-ui-sref="rateme.emotional" class="home-btn-1 col-xs-12 btn btn-primary">Rate My Day</a>
+        <a data-ui-sref="goals.list" class="home-btn-2 col-xs-12 btn btn-success">Set A Goal</a>
+        <a data-ui-sref="home.tracker" class="home-btn-3 col-xs-12 btn btn-danger">Track My Progress</a>
+    </div>
+    <div id="loginBox" class="login-container text-center small-container" data-ng-hide="user.username">
+        <a data-ui-sref="home.login" class="login-btn btn btn-success">
+                    LOGIN
+                </a>
+        <a data-ui-sref="home.account" class="create-account-btn btn btn-primary">
+                    CREATE ACCOUNT
+                </a>
+    </div>
+    <div class="clear-fix"></div>
+    <div class="to-be-deleted col-xs-12 small-container">
+        <a href="rewardsScreen.html"><h6>Rewards Page</h6></a>
+    </div>
+</div>

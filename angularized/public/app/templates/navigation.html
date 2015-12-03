@@ -1,0 +1,17 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="header-container container">
+        <div class="left-icon col-xs-4"><a data-ui-sref="{{ nav.left.sref }}" data-ng-bind-html="nav.left.icon"></a></div>
+        <div class="title col-xs-4">
+            <div class="nav-title text-center">{{ nav.title }}</div>
+        </div>
+        <div data-ng-show="nav.right.sref" class="right-icon col-xs-4 text-right">
+            <a data-ng-href="{{ nav.right.sref }}" data-ng-bind-html="nav.right.icon"></a>
+            </i>
+        </div>
+        <div data-ng-show="nav.right.href" class="right-icon col-xs-4 text-right">
+            <span class="right-icon"><a data-ng-href="{{ nav.right.href }}"><i class="fa fa-lg fa-pencil-square-o"></i></a></span>
+            <span class="right-icon"><a data-ng-click="logout()"><i class="fa fa-lg fa-sign-out"></i></a></span>
+            </i>
+        </div>
+    </div>
+</nav>
