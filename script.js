@@ -1,9 +1,9 @@
 // Add your javascript here
-Parse.initialize("1TzcjXBFcvaFF3UURc6eKSvRspfVz1Yo7sY3pg8b", "MPljLULeWDIMk3i3GHSrXmS40PqiAc8UpNhPpYK3");
+window.Parse.initialize("1TzcjXBFcvaFF3UURc6eKSvRspfVz1Yo7sY3pg8b", "MPljLULeWDIMk3i3GHSrXmS40PqiAc8UpNhPpYK3");
 
 var commands = window.commands = {};
 var userName;
-if (Parse.User.current()) userName = Parse.User.current().get('username');
+if (window.Parse.User.current()) userName = window.Parse.User.current().get('username');
 else userName = window.commands.userName = "Ray";
 console.log("USERNAME", userName);
 
@@ -169,7 +169,7 @@ function createUser(userDetails) {
     user.signUp(null, {
         success: function(user) {
             console.log("Redirecting You To Home State");
-            windw.commands.sendData('/index.html');
+            window.commands.sendData('/index.html');
         },
         error: function(user, error) {
             // Show the error message somewhere and let the user try again.

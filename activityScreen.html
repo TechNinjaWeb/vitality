@@ -43,7 +43,7 @@
             <div class="nav-title text-center">Activities</div>
           </div>
           <div class="right-icon col-xs-4 text-right"><a href="./createActivity.html"><i class="fa fa-lg fa-plus"></a></i>
-        </div>
+          </div>
       </nav>
       <div class="heading col-xs-12">
         <h2 class="heading-title text-center">Select An Activity To Work On</h2>
@@ -54,92 +54,101 @@
           <a href="activityList.html" class="activity-list-btn col-xs-12 btn btn-success">Choose My Own</a>
         </div>
       </div>
-    </div>
-    <script type="text/javascript">
-      var randomnumber = window.commands.random = function(minimum, maximum){
-        return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
-      };
-      var Ratings = new Parse.Query('Ratings');
-      Ratings.equalTo('userName', Parse.User.current().get('username'));
-      Ratings.descending('createdAt');
-      var getRatings = Ratings.find();
-      
-      var ratings;
-      getRatings.then(function(rating){
-        // console.log("GOT RATING", rating);
-        // Average Individual Ratings
-        var averages = rating.reduce(function(average, rating, i, a){
-          // console.warn("Rating", rating.attributes, "Average", average);
-          var attrib = rating.attributes;
-          var types = ['emotional', 'self', 'fitness', 'nutrition'];
-          // Find Average and Save to object property
-          for (var prop in attrib) {
-              if (types.indexOf(prop) >= 0){
-                  // console.log("Type is A Valid Prop", types.indexOf(prop) >= 0, prop);
-                  // console.log("Adding Val", prop, attrib[prop]);
-                  average[prop] = !isNaN(average[prop])
-                      ? attrib[prop] += average[prop]
-                      : attrib[prop];
-                  // console.log("DOING MATH", "iteration #", i
-                  //     , "Length Is", a.length
-                  //     ,"Equality?",  i == a.length - 1
-                  //     , average[prop], (i+1), average[prop] / (i+1));
-                  if (i == a.length - 1) {
-                      average[prop] = parseFloat((average[prop] / (i+1)).toFixed(2));
-                  }
+      </div>
+      <script type="text/javascript">
+        var randomnumber = window.commands.random = function(minimum, maximum) {
+          return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
+        };
+        var Ratings = new window.Parse.Query('Ratings');
+        Ratings.equalTo('userName', window.Parse.User.current().get('username'));
+        Ratings.descending('createdAt');
+        var getRatings = Ratings.find();
+
+        var ratings;
+        getRatings.then(function(rating) {
+          // console.log("GOT RATING", rating);
+          // Average Individual Ratings
+          var averages = rating.reduce(function(average, rating, i, a) {
+            // console.warn("Rating", rating.attributes, "Average", average);
+            var attrib = rating.attributes;
+            var types = ['emotional', 'self', 'fitness', 'nutrition'];
+            // Find Average and Save to object property
+            for (var prop in attrib) {
+              if (types.indexOf(prop) >= 0) {
+                // console.log("Type is A Valid Prop", types.indexOf(prop) >= 0, prop);
+                // console.log("Adding Val", prop, attrib[prop]);
+                average[prop] = !isNaN(average[prop]) ? attrib[prop] += average[prop] : attrib[prop];
+                // console.log("DOING MATH", "iteration #", i
+                //     , "Length Is", a.length
+                //     ,"Equality?",  i == a.length - 1
+                //     , average[prop], (i+1), average[prop] / (i+1));
+                if (i == a.length - 1) {
+                  average[prop] = parseFloat((average[prop] / (i + 1)).toFixed(2));
+                }
               }
-          }
-          return average; 
-        }, {});
-        ratings = averages;
-        console.log("Averages Totals", ratings);
-      });
-      
-      var smartBtn = document.getElementsByClassName('smart-select-btn');
-      smartBtn[0].addEventListener('click', function(ev){
-        var Activities = new Parse.Query('ActivityList');
-        Activities.equalTo('userName', Parse.User.current().get('username'));
-        var activities = Activities.find().then(function(activityList){
-          var choice = returnLowest(ratings);
-          // console.log("LOWEST CHOICE", choice);
-          // Get Activities and find matching lowest type
-          var types = ['fitness', 'emotion', 'nutrition', 'self']
-          var matchingActivities = activityList.reduce(function(o, act, i, a){
-            var id = act.id;
-            var result = act.attributes;
-            // console.log("Index Of?", types.indexOf(choice.type));
-            result.type == types.indexOf(choice.type) ? o.push({data: result, id: id }) : console.log("Not Valid Type", result.type, result);
-            return o;
-          }, []);
+            }
+            return average;
+          }, {});
+          ratings = averages;
+          // console.log("Averages Totals", ratings);
+        });
+
+        var smartBtn = document.getElementsByClassName('smart-select-btn');
+        smartBtn[0].addEventListener('click', function(ev) {
+          var Activities = new window.Parse.Query('ActivityList');
+          Activities.equalTo('userName', window.Parse.User.current().get('username'));
+          var activities = Activities.find();
           
-          // console.log("Matching activitis", matchingActivities);
-          
-          var smartChoice = randomnumber((matchingActivities.length - matchingActivities.length), (matchingActivities.length - 1));
-          // console.log("Smart Activity", matchingActivities[smartChoice], smartChoice);
-          
-          window.commands.sendData('/activityDescription.html', matchingActivities[smartChoice]);
-          
-          function returnLowest(object) {
-            var types = Object.keys(object);
-            return types.reduce(function(o, key, i, a){
-              
-              var value = ratings[key];
-              // console.log("Key", key, "Value", value, o.lowest, "less than?", o.lowest < value);
-              if (o.lowest == 0) {
-                o.lowest = value;
-                // console.warn("Setting 0 value", o.lowest == value);
-              } else if (o.lowest > value) {
-                o.lowest = value;
-                o.type = key;
-              } else 
-                console.log("Value Greater than Lowest", o.lowest, value, key);
-              // console.log("Key", o.type);
+          activities.then(function(activityList) {
+            var choice = returnLowest(ratings);
+            // console.log("LOWEST CHOICE", choice);
+            // Get Activities and find matching lowest type
+            var types = ['fitness', 'emotional', 'nutrition', 'self'];
+            var matchingActivities = window.commands.matchingActivities = activityList.reduce(function(o, act, i, a) {
+              var id = act.id;
+              var result = act.attributes;
+              // console.log("Index Of?", types.indexOf(choice.type));
+              result.type == types.indexOf(choice.type) ? o.push({
+                data: result,
+                id: id
+              }) : console.log("Not Valid Type", result.type, result);
               return o;
-            }, {lowest: 0, type: ""});
-          }
-        })
-      });
-    </script>
+            }, []);
+
+            // console.log("Matching activitis", matchingActivities);
+
+            var smartChoice = randomnumber((matchingActivities.length - matchingActivities.length), (matchingActivities.length - 1));
+            // console.log(["Smart Activity", matchingActivities[smartChoice]], ["choice number", smartChoice], ["choice list", matchingActivities]);
+
+            window.commands.sendData('/activityDescription.html', matchingActivities[smartChoice]);
+
+            function returnLowest(object) {
+              var types = Object.keys(object);
+              return types.reduce(function(o, key, i, a) {
+
+                var value = ratings[key];
+                console.log("Key", key, "Value", value, o.lowest, "less than?", o.lowest < value);
+                if (o.lowest == 0) {
+                  o.lowest = value;
+                  o.type = key;
+                  // console.warn("Setting 0 value", o.lowest == value, 'Key', o.type);
+                }
+                else if (o.lowest > value) {
+                  o.lowest = value;
+                  o.type = key;
+                }
+                else
+                  console.log("Value Greater than Lowest", o.lowest, value, key);
+                // console.log("Key", o.type);
+                return o;
+              }, {
+                lowest: 0,
+                type: ""
+              });
+            }
+          });
+        });
+      </script>
   </body>
 
   </html>
