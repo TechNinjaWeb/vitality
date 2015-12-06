@@ -7,7 +7,7 @@ window.angular.module('vitalityApp').controller('RatemeController', ['$scope', '
 	$scope.nav.left.sref = 'home.index';
 	$scope.nav.left.icon = $sce.trustAsHtml('<i class="fa fa-lg fa-home"></i>');
 	$scope.nav.right.href = '';
-	$scope.nav.right.sref = '#/activity/list';
+	$scope.nav.right.sref = '#/activity';
 	$scope.nav.right.icon = $sce.trustAsHtml('<span>Skip Rating</span>');
 	
 	$scope.checked = checked;

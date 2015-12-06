@@ -1,0 +1,122 @@
+<div class="page-content small-container">
+    <div class="heading col-xs-12">
+        <h2 class="heading-title text-center">Create An Activitity</h2></div>
+    <div class="activity-form">
+        <div class="form-group">
+            <label for="item">Activity</label>
+            <input data-ng-model="form.item" class="item form-control" type="text" name="item" />
+        </div>
+        <div class="form-group">
+            <label for="type">Type</label>
+            <select data-ng-model="form.type" required class="type form-control" type="text" name="type">
+                <option class="activity-option" value=" " selected="selected"></option>
+                <option class="activity-option" value="fitness">Fitness</option>
+                <option class="activity-option" value="emotion">Emotional</option>
+                <option class="activity-option" value="nutrition">Nutritional</option>
+                <option class="activity-option" value="self-image">Self Image</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="trackBy">Track By</label>
+            <select data-ng-model="form.trackBy" required class="trackBy form-control" type="text" name="trackBy">
+                <option class="activity-option" value=" " selected="selected"></option>
+                <option class="activity-option" value="stopwatch">Stop Watch</option>
+                <option class="activity-option" value="countdown">Countdown</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="instructions">Add A Step</label><span class="add-btn pull-right"><a class="instructions-anchor" data-ng-click="addStep()"><i class="instructions-icon fa fa-lg fa-plus"></i></a></span>
+            <ul class="instructions list-unstyled">
+                <li data-ng-repeat="item in list" class="instruction input-group">
+                    <input type="text" name="instruction-{{$index}}" class="form-control" />
+                    <a class="btn input-group-addon add-on"><i class="del-btn fa fa-lg fa-ban" data-ng-click="removeStep($index)"></i></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    // var addInstructionsBtn = Array.prototype.slice.call(document.getElementsByClassName('instructions-anchor'));
+    //     var instructionsList = Array.prototype.slice.call(document.getElementsByClassName('instructions'));
+    //     var saveBtn = Array.prototype.slice.call(document.getElementsByClassName('save-activity-btn'));
+        
+    //     var type = Array.prototype.slice.call(document.getElementsByClassName('type'));
+    //     var trackBy = Array.prototype.slice.call(document.getElementsByClassName('trackBy'));
+    //     var item = Array.prototype.slice.call(document.getElementsByClassName('item'));
+        
+        
+    //     addInstructionsBtn[0].addEventListener('click', addRow);
+    //     saveBtn[0].addEventListener('click', saveActivity);
+        
+    //     type[0].onchange = function(e){
+    //         e.target[0].remove();
+    //         type[0].onchange = "";
+    //     };
+        
+    //     trackBy[0].onchange = function(e){
+    //         e.target[0].remove();
+    //         trackBy[0].onchange = "";
+    //     };
+
+    //     function addRow(e) {
+    //         var li = document.createElement('li');
+    //         var input = document.createElement('input');
+    //         var a = document.createElement('a');
+    //         var i = document.createElement('i');
+    //         // List Item Properties
+    //         li.className = "instruction input-group";
+    //         li.parentNode = instructionsList[0];
+    //         li.parentElement = instructionsList[0];
+    //         // Input Properties
+    //         input.name = "instruction";
+    //         input.type = "text";
+    //         input.className = "form-control";
+    //         input.parentNode = li;
+    //         input.parentElement = li;
+    //         // Anchor Properties
+    //         a.className = "btn input-group-addon add-on";
+    //         a.parentNode = li;
+    //         a.parentElement = li;
+    //         a.addEventListener('click', function(e) {
+    //             if (e.target.parentNode.tagName == "LI") e.target.parentNode.remove();
+    //             else if (e.target.parentNode.tagName == "A") e.target.parentNode.offsetParent.remove();
+    //         });
+    //         // Icon Properties
+    //         i.className = 'del-btn fa fa-lg fa-ban';
+    //         i.parentNode = a;
+    //         i.parentElement = a;
+    //         // Append Text Area and List Item
+    //         a.appendChild(i);
+    //         li.appendChild(input);
+    //         li.appendChild(a);
+    //         instructionsList[0].appendChild(li);
+    //     }
+        
+    //     function saveActivity(){
+    //         var list = Array.prototype.slice.call(instructionsList[0].children);
+    //         var type = document.getElementsByClassName('type');
+    //         var trackBy = document.getElementsByClassName('trackBy');
+            
+    //         var saveObj = {};
+    //         saveObj["item"] = item[0].value;
+    //         saveObj["type"] = type[0].options.selectedIndex;
+    //         saveObj["trackBy"] = trackBy[0].options.selectedIndex;
+                
+    //         var instructions = list.reduce(function(p,c,i,a){
+    //             if (c.children[0].value != "") p[i] = c.children[0].value;
+    //             return p;
+    //         }, {});
+            
+    //         saveObj["instructions"] = instructions;
+    //         saveObj["userName"] = Parse.User.current().get('username');
+            
+    //         console.log("SAVE OBJ", saveObj);
+            
+    //         var S = Parse.Object.extend('ActivityList');
+    //         var s = new S();
+    //         s.save(saveObj, {
+    //             success: function(res){console.log(["RESPONSE", res]); window.commands.sendData('/activityList.html')},
+    //             error: function(err, res){console.log(["RESPONSE", res], ["ERROR", err]);}
+    //         });
+    //     }
+</script>

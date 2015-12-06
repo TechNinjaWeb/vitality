@@ -20,6 +20,8 @@
     "angular": "~1.4.8",
     "angular-ui-router": "~0.2.15",
     "angular-animate": "~1.4.8",
-    "animate.css": "animate-css#~3.4.0"
+    "animate.css": "animate-css#~3.4.0",
+    "js-data-angular": "~3.1.0",
+    "js-data": "~2.8.2"
   }
 }

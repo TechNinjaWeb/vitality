@@ -38,7 +38,7 @@
     <div id="page-container">
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="header-container container">
-                <div class="left-icon col-xs-4"><a href="mealPage.html"><i class="fa fa-lg fa-arrow-left"></i></a></div>
+                <div class="left-icon col-xs-4"><a class="back-btn"><i class="fa fa-lg fa-arrow-left"></i></a></div>
                 <div class="title col-xs-4">
                     <div class="nav-title text-center">Nutrition Facts</div>
                 </div>
@@ -58,14 +58,18 @@
     </div>
     <script type="text/javascript">
         var url = "/mealPage.html";
+        var backBtn = document.getElementsByClassName('back-btn');
+        // Define the Data from URL
+        var d = JSON.parse(window.commands.grabData(window.location.search));
+        var data = d.data;
+        console.log("Term", d);
+        backBtn[0].addEventListener('click', function(ev){
+            console.log("Clicking", d.term);
+            window.commands.sendData(url, {term: d.term});
+        });
         var heading = document.getElementsByClassName('heading');
             heading[0].style.marginBottom = "25px !important";
             console.warn("HEADING", heading[0].style);
-
-        var d = location.search, d = d.replace("?", ""), 
-            d = decodeURIComponent(d), 
-            d = JSON.parse(d);
-        var data = d.data;
 
         // console.log("GOT DATA FROM URL", data);
         var itemTitle = document.getElementsByClassName('item-title');
@@ -114,10 +118,10 @@
            e.addEventListener("click", function(ev){
                 // Save data to parse
                 // TRACK MEAL
-                var Meals = Parse.Object.extend("Meals");
+                var Meals = window.Parse.Object.extend("Meals");
                 var s = new Meals();
                 console.log("NAME", d.name, "data", d);
-                d.userName = userName;
+                d.userName = window.userName;
                 
                 s.save(d, {
                     success: function(res) {
@@ -128,7 +132,7 @@
                         console.warn(res,err);
                         // ADD ERROR HANDLING
                     }
-                })
+                });
            }); 
         });
          

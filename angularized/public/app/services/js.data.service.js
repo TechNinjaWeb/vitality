@@ -1,34 +1,17 @@
-window.angular.module('vitalityApp').service('JSData', ['$rootScope', function($rootScope){
-    // Define Return Object
-    var store = {};
-	// Create DB Table List
-	store.list = {};
-	store.list = {
-        ActivityList: $rootScope.JSData.defineResource('ActivityList'),
-        Goals: $rootScope.JSData.defineResource('Goals'),
-        Meals: $rootScope.JSData.defineResource('Meals'),
-        Measurements: $rootScope.JSData.defineResource('Measurements'),
-        Ratings: $rootScope.JSData.defineResource('Ratings'),
-        RewardsList: $rootScope.JSData.defineResource('RewardsList'),
-        TimeTracker: $rootScope.JSData.defineResource('TimeTracker'),
-        TestClass: $rootScope.JSData.defineResource('TestClass')
-    };
-
-    store.getFromList = function(listName, query) {
-            // console.warn("Got Request To Get List", listName, query, store);
-            return store.list[listName][query.type](query.conditions).then(function(res){
-                // console.log("Response From GetList", res);
-                return res;
-            });
+window.angular.module('vitalityApp').service('JSData', [function(){
+   var DB = {};
+   DB.store = new window.JSData.DS();
+   DB.store.registerAdapter('localforage', new window.DSLocalForageAdapter(), { default: true });
+   DB.list = {
+        ActivityList: DB.store.defineResource('ActivityList'),
+        Goals: DB.store.defineResource('Goals'),
+        Meals: DB.store.defineResource('Meals'),
+        Measurements: DB.store.defineResource('Measurements'),
+        Ratings: DB.store.defineResource('Ratings'),
+        RewardsList: DB.store.defineResource('RewardsList'),
+        TimeTracker: DB.store.defineResource('TimeTracker'),
+        TestClass: DB.store.defineResource('TestClass')
     };
     
-    store.save = function(listName, query) {
-            // console.warn("Got Request To Get List", listName, query, store);
-            return store.list[listName][query.type](query.conditions).then(function(res){
-                // console.log("Response From GetList", res);
-                return res;
-            });
-    };
-    
-    return store;
+    return DB;
 }]);

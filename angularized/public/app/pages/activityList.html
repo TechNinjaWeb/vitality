@@ -1,0 +1,22 @@
+<div class="heading col-xs-12">
+    <h2 class="heading-title text-center">Choose An Activity</h2>
+</div>
+<div class="page-container container">
+    <table id="activitiesTable" summary="A List of Your Activities" class="table table-bordered table-hover">
+        <caption class="text-left">Select An Activity To View Instructions</caption>
+        <thead>
+            <tr class="table-row">
+                <th>Activity</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody class="table-body">
+            <tr data-ng-repeat="activity in activityList" class="table-data">
+                <td>Prepare a healthy lunch</td>
+                <td>Nutritional</td>
+                <td>3 steps: Ham Sandwich ...</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

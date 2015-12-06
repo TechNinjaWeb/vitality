@@ -2,154 +2,231 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <title>Bootstrap, from Twitter</title>
-    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <meta name="referrer" content="origin" />
-    <!-- Le styles -->
-    <link data-require="bootstrap-css" data-semver="3.3.1" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
-    <link data-require="bootstrap@*" data-semver="3.3.5" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
-    <link data-require="bootstrap@*" data-semver="3.3.5" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/cosmo/bootstrap.min.css" />
-    <link data-require="bootstrap@*" data-semver="3.3.5" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="style.css">
-    <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>-->
-    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
-    <link href="style.css" rel="stylesheet" />
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
+  <meta charset="utf-8" />
+  <title>Bootstrap, from Twitter</title>
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+  <meta name="referrer" content="origin" />
+  <!-- Le styles -->
+  <link data-require="bootstrap-css" data-semver="3.3.1" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+  <link data-require="bootstrap@*" data-semver="3.3.5" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+  <link data-require="bootstrap@*" data-semver="3.3.5" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/cosmo/bootstrap.min.css" />
+  <link data-require="bootstrap@*" data-semver="3.3.5" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="style.css">
+  <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>-->
+  <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+  <link href="style.css" rel="stylesheet" />
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <!-- Le fav and touch icons -->
-    <!--<link rel="shortcut icon" href="images/favicon.ico" />-->
-    <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
-    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png" />
-    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png" />
-    <!-- Le javascript
+  <!-- Le fav and touch icons -->
+  <!--<link rel="shortcut icon" href="images/favicon.ico" />-->
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png" />
+  <!-- Le javascript
     ================================================== -->
-    <script data-require="jquery" data-semver="2.1.4" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script data-require="bootstrap" data-semver="3.3.5" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <script src="script.js"></script>
-    <script src="nutBuilderNew.js"></script>
+  <script data-require="jquery" data-semver="2.1.4" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <script data-require="bootstrap" data-semver="3.3.5" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script src="script.js"></script>
+  <script src="nutBuilderNew.js"></script>
 </head>
 
 <body id="mealPage">
   <div class="page-container">
-      <nav class="navbar navbar-default navbar-fixed-top">
-          <div class="header-container container">
-              <div class="left-icon col-xs-4"><a href="./trackerPage.html"><i class="fa fa-lg fa-arrow-left"></i></a></div>
-              <div class="title col-xs-4">
-                  <div class="nav-title text-center">Find a Meal</div>
-              </div>
-              <div class="right-icon col-xs-4 text-right"><a href="./mealList.html"><i class="fa fa-lg fa-list"></i></a></div>
-          </div>
-      </nav>
-      <div class="heading col-xs-12">
-          <h2 class="heading-title text-center">Choose A Type Of Goal To Begin</h2>
-      </div>
-      <div class="page-content small-container">
-        <div class="search-box input-group col-xs-12 col-sm-8 pull-right">
-            <input id="searchTerm" class="search-input form-control" type="text" placeholder="Search For A Meal or Food Item" value="" />
-            <span class="input-group-btn"><button class="search-btn btn btn-primary">Search</button></span>
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="header-container container">
+        <div class="left-icon col-xs-4"><a href="./trackerPage.html"><i class="fa fa-lg fa-arrow-left"></i></a></div>
+        <div class="title col-xs-4">
+          <div class="nav-title text-center">Find a Meal</div>
         </div>
-        <table class="results-table table table-hover col-xs-12" summary="Results Of Your Nutrition Search">
-          <tHead class=""><tr><td>Results</td></tr></tHead>
-          <tBody id="resultsList" class="links list-unstyled"></tBody>
-          <tFoot class=""><tr><td><h5 class="link-credit">Results Are From Site: <a href="#">Yadda.com</a></h5></td></tr></tFoot>
-        </table>
+        <div class="right-icon col-xs-4 text-right"><a href="./mealList.html"><i class="fa fa-lg fa-list"></i></a></div>
       </div>
+    </nav>
+    <div class="heading col-xs-12">
+      <h2 class="heading-title text-center">Choose A Type Of Goal To Begin</h2>
+    </div>
+    <div class="page-content small-container">
+      <div class="search-box input-group col-xs-12 col-sm-8 pull-right">
+        <input id="searchTerm" class="search-input form-control" type="text" placeholder="Search For A Meal or Food Item" value="" />
+        <span class="input-group-btn"><button class="search-btn btn btn-primary">Search</button></span>
+      </div>
+      <table class="results-table table table-hover" summary="Results Of Your Nutrition Search">
+        <tHead class="">
+          <tr>
+            <td>Results</td>
+          </tr>
+        </tHead>
+        <tBody id="resultsList" class="links list-unstyled"></tBody>
+        <tFoot class="">
+          <tr>
+            <td class="pagination col-xs-12 text-right"></td>
+          </tr>
+        </tFoot>
+        <!--<tFoot class=""><tr><td><h5 class="link-credit">Results Are From Site: <a href="#">Yadda.com</a></h5></td></tr></tFoot>-->
+      </table>
+    </div>
   </div>
-  
+
   <div class="alert-system alert alert-info" style="display:none;">
     <span>Invalid Notification</span>
   </div>
   <script type="text/javascript">
-      /**
-       * This tiny script just helps us demonstrate
-       * what the various example callbacks are doing
-       */
-      var AlertSystem = (function() {
-        "use strict";
-    
-        var elem,
-            hideHandler,
-            that = {};
-    
-        that.init = function(options) {
-            elem = $(options.selector);
-        };
-    
-        that.show = function(text, alertType) {
-            clearTimeout(hideHandler);
-            
-            if (!!alertType) { 
-               elem.removeClass(elem.attr("class").split(' ')[2]);
-               elem.addClass(alertType);
-            }
-            
-            elem.find("span").html(text);
-            console.log("ELEM -- FIND CLASS", $(elem));
-            elem.delay(200).fadeIn().delay(4000).fadeOut();
-        };
-    
-        return that;
+    /**
+     * This tiny script just helps us demonstrate
+     * what the various example callbacks are doing
+     */
+    var AlertSystem = (function() {
+      "use strict";
+
+      var elem,
+        hideHandler,
+        that = {};
+
+      that.init = function(options) {
+        elem = $(options.selector);
+      };
+
+      that.show = function(text, alertType) {
+        clearTimeout(hideHandler);
+
+        if (!!alertType) {
+          elem.removeClass(elem.attr("class").split(' ')[2]);
+          elem.addClass(alertType);
+        }
+
+        elem.find("span").html(text);
+        console.log("ELEM -- FIND CLASS", $(elem));
+        elem.delay(200).fadeIn().delay(4000).fadeOut();
+      };
+
+      return that;
     }());
-    
-     (function(){
-       AlertSystem.init({
-           "selector": ".alert-system"
-       });
+
+    (function() {
+      AlertSystem.init({
+        "selector": ".alert-system"
+      });
     }());
-    
- </script>
+  </script>
   <script>
     // var searchTerm = document.getElementById('searchTerm');
     var searchBtn = document.getElementsByClassName('search-btn');
-
-    searchBtn[0].addEventListener("click", function(e) {
-        // console.log(["Search Button", searchBtn], ["Search Term Value", searchTerm.value]);
-        var url = "/mealDescriptionPage.html";
-        var term = e.target.parentNode.parentNode.children[0].value;
-        // console.log("Search Term Value:", term);
-        window.commands.searchNutritionSiteFor(term).then(function(res){
-          // console.log("Heres a rempose",res);
-          var resultsList = document.getElementById('resultsList');
-          // Empty Table
-          while(resultsList.hasChildNodes() == true){
-            resultsList.removeChild(resultsList.firstChild);
-          }
-          
-          res.forEach(function(e, i){
-            var tr = document.createElement('tr');
-                tr.classList.add('text-left');
-            var td = document.createElement('td');
-                td.className = "result";
-            var link = document.createElement('a');
-                link.href = "#";
-                link.innerHTML = e.name;
-                link.className = "result-link col-xs-12 item-"+i;
-                link.value = resultsList;
-                link.data = e;
-                link.addEventListener("click", function(ev){
-                  // console.log("E", e, "URL", url);
-                  window.commands.searchNutritionSiteFor(link.data.href, true).then(function(res){
-                    // Sending you to your page
-                    // console.log("SEND TO URL WITH DATA", res, url);
-                    // alert("RES NAME " + e.name);
-                    window.commands.sendData(url, {data: res, name: e.name});
-                  });
-                });
-            
-            td.appendChild(link);
-            tr.appendChild(td);
-            resultsList.appendChild(tr);
-
-          });
-        });
-
+    var ref = window.commands.grabData(window.location.search) || "{}";
+    var url = "/mealDescriptionPage.html";
+    // If term property, parse term
+    var linkData = !!ref.search('term') >= 0 ? JSON.parse(ref) : null;
+    // Then Search for the term
+    if (!!linkData.term) window.commands.searchNutritionSiteFor(linkData.term, false).then(function(list){
+      list.term = linkData.term;
+      buildList(list);
+      buildPagination(list);
     });
+    
+    searchBtn[0].addEventListener("click", function(e) {
+      // console.log(["Search Button", searchBtn], ["Search Term Value", searchTerm.value]);
+      var term = e.target.parentNode.parentNode.children[0].value;
+      // console.log("Search Term Value:", term);
+      window.commands.searchNutritionSiteFor(term).then(function(res) {
+        res.term = term;
+        // Build Results List
+        buildList(res);
+        // Build Pagination
+        buildPagination(res);
+      });
+    });
+    
+    function buildList(results) {
+        var resultsList = document.getElementById('resultsList');
+        
+        // console.log("Heres a rempose",results);
+        // Empty Table
+        while (resultsList.hasChildNodes() == true) {
+          resultsList.removeChild(resultsList.firstChild);
+        }
+
+        results.forEach(function(e, i) {
+          var tr = document.createElement('tr');
+          tr.classList.add('text-left');
+          var td = document.createElement('td');
+          td.className = "result";
+          var link = document.createElement('a');
+          link.href = "#";
+          link.innerHTML = e.name;
+          link.className = "result-link item-" + i;
+          if (window.document.body.offsetWidth <= 500 && link.innerHTML.length >= 40) {
+            link.innerHTML = link.innerHTML.substr(0, 38);
+            link.innerHTML += " ...";
+          }
+          link.value = resultsList;
+          link.data = e;
+          link.addEventListener("click", function(ev) {
+            // console.log("E", e, "URL", url);
+            window.commands.searchNutritionSiteFor(link.data.href, true).then(function(res) {
+              // Sending you to your page
+              // console.log("SEND TO URL WITH DATA", res, url);
+              // alert("RES NAME " + e.name);
+              // console.log("Find the term to send to page", results.term);
+              window.commands.sendData(url, {
+                data: res,
+                name: e.name,
+                term: results.term
+              });
+            });
+          });
+
+          td.appendChild(link);
+          tr.appendChild(td);
+          resultsList.appendChild(tr);
+
+        });
+      }
+
+      function buildPagination(data) {
+        var pagination = document.getElementsByClassName('pagination');
+        // Empty Table
+        while (pagination[0].hasChildNodes() == true) {
+          // console.log("Has Child", pagination[0]);
+          pagination[0].removeChild(pagination[0].firstChild);
+        }
+        // Iterate over number of maxPages
+        for (var i = 0; i < parseInt(data[0].maxPages, 10); i++) {
+          var pag = document.createElement('span');
+          var pageNum = i + 1;
+          pag.className = "page-" + pageNum;
+          // Determine Active Pagination
+          if (!arguments[1] && pageNum === 1) pag.classList.add('active');
+          else if (!!arguments[1] && pageNum === arguments[1]) pag.classList.add('active');
+          // Set Pagination Data on Element
+          pag.data = {
+            term: data.term,
+            number: pageNum
+          };
+          // console.log("Pagination Item Data", pag.data);
+          // Add Event Listner to each pagination items
+          pag.addEventListener('click', function(e) {
+            // console.log("Pagination Data", e.target.parentNode.parentNode.children);
+            var _this = e.target;
+            var term = _this.data.term;
+            var pageNum = _this.data.number;
+            // Search For New Page Number
+            window.commands.searchNutritionSiteFor(term, false, pageNum).then(function(newPage) {
+              // Add Term to data
+              newPage.term = term;
+              // Build Results list
+              buildList(newPage);
+              // Build Pagination
+              buildPagination(newPage, pageNum);
+            });
+          });
+          // Set Pagination Number
+          pag.innerHTML = pageNum;
+          pagination[0].appendChild(pag);
+        }
+      }
   </script>
 </body>
 

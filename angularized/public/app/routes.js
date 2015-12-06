@@ -224,20 +224,29 @@ window.angular.module('vitalityApp').config(function($stateProvider, $urlRouterP
         })
         .state('activity', {
             url: '/activity',
-            abstract: true
+            views: {
+                'body@': {
+                    templateUrl: './app/pages/activity.html',
+                    controller: 'ActivityController'
+                },
+                'nav@': {
+                    templateUrl: './app/templates/navigation.html',
+                    controller: 'ActivityController'
+                }
+            }
         })
         .state('activity.list', {
             url: '/list',
             views: {
                 'body@': {
-                    // templateUrl: './app/pages/activityList.html',
-                    // controller: ''
-                    template: '<div>Activity List Template</div>'
+                    templateUrl: './app/pages/activityList.html',
+                    controller: 'ActivityController'
+                    // template: '<div>Activity List Template</div>'
                 },
                 'nav@': {
-                    // templateUrl: './app/templates/navigation.html',
-                    // controller: ''
-                    template: '<nav>Nav Template</Nav>'
+                    templateUrl: './app/templates/navigation.html',
+                    controller: 'ActivityController'
+                    // template: '<nav>Nav Template</Nav>'
                 }
             }
         })
@@ -245,14 +254,14 @@ window.angular.module('vitalityApp').config(function($stateProvider, $urlRouterP
             url: '/create',
             views: {
                 'body@': {
-                    // templateUrl: './app/pages/activityList.html',
-                    // controller: ''
-                    template: '<div>Activity List Template</div>'
+                    templateUrl: './app/pages/activityCreate.html',
+                    controller: 'ActivityCreateController'
+                    // template: '<div>Activity List Template</div>'
                 },
                 'nav@': {
-                    // templateUrl: './app/templates/navigation.html',
-                    // controller: ''
-                    template: '<nav>Nav Template</Nav>'
+                    templateUrl: './app/templates/navigation.html',
+                    controller: 'ActivityCreateController'
+                    // template: '<nav>Nav Template</Nav>'
                 }
             }
         });

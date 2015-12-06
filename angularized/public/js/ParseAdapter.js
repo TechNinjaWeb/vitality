@@ -111,7 +111,13 @@ function ParseAdapter() {
             } else {
                 // Make New Parse Query, then
                 let ParseClass = new window.Parse.Query(definedResourceClassObject.name);
+                // set basic existent property
                 ParseClass.exists('objectId');
+                // Iterate over conditions
+                params.conditions = Array.isArray(params.conditions) ?  params.conditions : [{}];
+                params.conditions.forEach(function(condition){
+                    if(!!condition.type) ParseClass[condition.type](condition.col, condition.val);
+                });
                 ParseClass.find({
                     success: function(res) {
                 // Save Results Array to Collection, then
@@ -226,6 +232,51 @@ function ParseAdapter() {
                 tasks.push(_this.destroy(definedResourceClassObject, item[definedResourceClassObject.idAttribute], options));
             });
             return Promise.all(tasks);
+        });
+    };
+    
+    ParseAdapter.prototype.special = function(definedResourceClassObject, params, options) {
+        console.warn("Argz in special func", arguments);
+        addLocalDataTo(definedResourceClassObject);
+        // Save Reference to Adapter
+        var that = this;
+        let localStore = localStorageObject;
+        console.log("This", that, definedResourceClassObject);
+        // Set Defaults
+        if (params == 'undefined' || params == null) params = {};
+        if (options == 'undefined' || options == null) options = {};
+        // Return Promise to resolve data
+        return new Promise(function(resolve, reject) {
+            console.log(["Getting All", arguments], ["Collection Length", localStorageObject[definedResourceClassObject.name].collection.length > 0]);
+            if (localStorageObject[definedResourceClassObject.name].collection.length > 0) {
+                console.info(["LocalStorageObject", localStorageObject], ["Options", options]);
+                resolve(localStorageObject[definedResourceClassObject.name].collection);
+            } else {
+                console.log("Querying Parse");
+                // Create Parse Query
+                let ParseClass = new window.Parse.Query(definedResourceClassObject.name);
+                // Iterate over conditions
+                params.conditions = Array.isArray(params.conditions) ?  params.conditions : [{}];
+                params.conditions.forEach(function(condition){
+                    if(!!condition.type) ParseClass[condition.type](condition.col, condition.val);
+                });
+                // Get ObjectID
+                return ParseClass.find({
+                    success: function(res) {
+                        // Create Save Object
+                        res.forEach(function(item){
+                            // Add Item To Local Storage Tree
+                            that.returnSaveObject(definedResourceClassObject, item);
+                        });
+                        // Return Resolved Save Object to Client
+                        resolve(localStore[definedResourceClassObject.name].collection);
+                    },
+                    error: function(res,err) {
+                        let error = {message: res.message, response: res, error: err};
+                        reject(error);
+                    }
+                });
+            }
         });
     };
 }

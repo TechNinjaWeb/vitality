@@ -1,4 +1,4 @@
-window.angular.module('vitalityApp').controller('GoalsController', ['$scope', '$rootScope', '$sce', 'LoginService', 'JSData', function($scope, $rootScope, $sce, parse, DB){
+window.angular.module('vitalityApp').controller('GoalsController', ['$scope', '$rootScope', '$sce', 'JSData', function($scope, $rootScope, $sce, DB){
 	$scope.nav = { left: {}, right: {} };
 	
 	$rootScope.$emit('pageId', {id: 'goals.list'});
@@ -11,17 +11,9 @@ window.angular.module('vitalityApp').controller('GoalsController', ['$scope', '$
 	
 	
 	$scope.getList = window.getList = function(listName, query) {
-	    return DB.getFromList(listName, query);
+
 	};
 	
-	var goalList = window.goalList = (function() {
-	    var list = [];
-	    DB.getFromList('Goals', {type: 'findAll', conditions: {}}).then(function(goals){
-	        return goals.forEach(function(item){
-	           list.push(item); 
-	        });
-	    });
-	    return list;
-	}());
+	
 	
 }]);

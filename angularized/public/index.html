@@ -36,10 +36,14 @@
     <!--JBoot-->
     <script data-require="jquery" data-semver="2.1.4" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script data-require="bootstrap" data-semver="3.3.5" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <!--LocalForage LocalStorage Plugins-->
+    <script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.2.1/localforage.nopromises.min.js"></script>
+    <script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.3.0/localforage.min.js"></script>
     <!--JS Data-->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.3.0/localforage.min.js"></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-data/2.8.2/js-data.js"></script>
-	<script type="text/javascript" src="/js/ParseAdapter.js"></script>
+    <script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-data/2.8.2/js-data.js"></script>
+    <script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-data-localforage/2.1.1/js-data-localforage.js"></script>
+    
+	<!--<script type="text/javascript" src="/js/ParseAdapter.js"></script>-->
     <!--Custom Script-->
     <script src="/js/script.js"></script>
     <!--<script type="text/javascript" src="cordova.js"></script>-->
@@ -79,22 +83,7 @@
     <script type="application/javascript" src="/app/controllers/goals.controller.js"></script>
     <script type="application/javascript" src="/app/controllers/tracker.controller.js"></script>
     <script type="application/javascript" src="/app/controllers/rateme.controller.js"></script>
-    <script type="text/javascript">
-    // var homeBtns = document.getElementsByClassName('home-btns');
-    // var loginBox = document.getElementById('loginBox');
-    // var profileBtn = document.getElementById('profileBtn');
-    // var hiddenElems = Array.prototype.slice.call(document.getElementsByClassName('hidden'));
-    //     if (Parse.User.current()){
-    //         console.log("User Is Logged In");
-    //         loginBox.classList.add('hidden');
-    //         homeBtns[0].classList.remove('hidden');
-    //         hiddenElems.forEach(function(e){
-    //             e.classList.remove('hidden');
-    //         });
-    //     } else {
-    //         console.log("User Not Logged In");
-    //     }
-    </script>
+    <script type="application/javascript" src="/app/controllers/activity.controller.js"></script>
 </body>
 
 </html>

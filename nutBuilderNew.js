@@ -1,5 +1,5 @@
 function searchNutritionSiteFor(item) {
-    window.console.warn('Searching for item - ' + item);
+    window.console.warn('Searching for item - ' + item, arguments);
     var args = Array.prototype.slice.call(arguments);
     !args[2] ? args[2] = "1" : args[2] = args[2];
 

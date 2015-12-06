@@ -4,12 +4,6 @@ var app = window.angular.module('vitalityApp', [
 ]);
 
 app.run(function($rootScope, $timeout, $state){
-    // Link JS Data to Angular;
-    $rootScope.JSData = window.angularData;
-    // Load Adapter
-	var adapter = new window.ParseAdapter();
-	// Register Adapter
-	$rootScope.JSData.registerAdapter('ParseAdapter', adapter, { default: true });
     // Enable Alert System Messages
     $rootScope.AlertSystem = window.AlertSystem = (function($state) {
         "use strict";
@@ -47,7 +41,7 @@ app.run(function($rootScope, $timeout, $state){
     var sref = window.location.href;
     sref = sref.split('/');
     sref.splice(0, 4);
-    console.warn("Sref", sref);
+    // console.warn("Sref", sref);
     sref = sref.join('.').replace(window.location.host, '');
     $rootScope.pageId = sref;
     // Set Page ID for Routing
