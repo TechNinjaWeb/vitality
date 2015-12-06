@@ -214,6 +214,8 @@ a {
   margin: 0 auto;
 }
 .ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
 }
 
@@ -292,14 +294,15 @@ a {
   margin-bottom: 20px;
 }
 
-.pagination span {
-  cursor: pointer;
+.pagination, .results-table {
+  width: 100%;
 }
 .pagination > .active {
   color: #2780e3; 
 }
 
 .pagination span {
+  cursor: pointer;
   margin-right: 15px;
   text-align: right;
   font-size: 20px;
