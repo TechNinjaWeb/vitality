@@ -9,7 +9,6 @@ console.log("USERNAME", userName);
 
 window.onload = function() {
     var pageTitle = window.commands.pageTitle = document.getElementsByTagName('body');
-    
 };
 
 /**
@@ -51,7 +50,7 @@ var AlertSystem = window.AlertSystem = (function() {
 // PRIMARY APP FUNCTIONS
 function encodeAndSend(url, data) {
     var h = window.location.pathname.split("/");
-    h.shift(), h.pop(), host = h.join("/");
+    h.shift(), h.pop(); var host = h.join("/");
 
     var s = JSON.stringify(data);
     var u = url + "?";
@@ -85,7 +84,7 @@ commands.sendData = encodeAndSend;
 commands.grabData = decodeData;
 
 function queryParse(Class, method, actions) {
-    var query = new Parse.Query(Class);
+    var query = new window.Parse.Query(Class);
     var response = [];
 
     // Grab All Users query
@@ -149,13 +148,13 @@ function queryParse(Class, method, actions) {
 commands.queryParse = queryParse;
 
 function createUser(userDetails) {
-    var user = new Parse.User();
+    var user = new window.Parse.User();
     // console.log("Received Parse Test User Data", "Attempting to Create Parse User");
 
     // Using Parses user.set() method to set the Users
     // login data before querying the server
    
-   var userDetailsLength = Object.keys(userDetails).length
+   var userDetailsLength = Object.keys(userDetails).length;
    console.log("USER DETS LEN", userDetailsLength);
    
    for (var i = 0; i < userDetailsLength; i++) {
@@ -169,7 +168,48 @@ function createUser(userDetails) {
     user.signUp(null, {
         success: function(user) {
             console.log("Redirecting You To Home State");
-            window.commands.sendData('/index.html');
+            return (function createDemoActivities(u){
+                var activities = [{ instructions: {"0":"Find a quiet place","1":"Sit undisturbed for 20 minutes","2":"Concentrate on mindfullness"},
+                        item: 'Meditate',
+                        trackBy: 1,
+                        type: 1,
+                        userName: u.get('username')
+                    },
+                    { instructions: {"0":"Run around the block","1":"Two times"},
+                        item: 'Job',
+                        trackBy: 1,
+                        type: 0,
+                        userName: u.get('username')
+                    },
+                    { instructions: {"0":"Ham Sandwich","1":"Pork Chops","2":"Cereal"},
+                        item: 'Prepare A Healthy Meal',
+                        trackBy: 1,
+                        type: 2,
+                        userName: u.get('username')
+                    },
+                    { instructions: {"0":"Find a local charity","1":"Apply to volunteer","2":"Offer 20 minutes of your time"},
+                        item: 'Volunteer',
+                        trackBy: 1,
+                        type: 3,
+                        userName: u.get('username')
+                    }];
+                console.warn("Sign Up Success:", u, ["Activities", activities]);
+                var o = window.Parse.Object.extend('ActivityList');
+                var q = new o();
+                return new Promise(function(res, rej){
+                    res((function(){
+                        for (var i = 0; i < activities.length; i++)
+                        q.save(activities[i], {
+                            success: function(res) {console.info("Saved Activity: Response -", res)},
+                            error: function(err, res) {console.error("Could Not Save Activity", [err, res])}
+                        });
+                    }()));
+                }).then(function(user){
+                    debugger;
+                    window.commands.sendData('/index.html');
+                });
+            }(user));
+            
         },
         error: function(user, error) {
             // Show the error message somewhere and let the user try again.
@@ -177,7 +217,7 @@ function createUser(userDetails) {
         }
     });
 
-};
+}
 
 commands.createUser = createUser;
 
@@ -187,7 +227,7 @@ function login(username, password) {
     // most recent data from the user
     // Grab the username & password and send it
     // into a Parse.User.logIn function
-    Parse.User.logIn(username, password, {
+    window.Parse.User.logIn(username, password, {
         success: function(user) {
             // Do stuff after successful login.
             console.log("Success! Parse has logged in the user: " + username);
@@ -199,15 +239,15 @@ function login(username, password) {
             console.log(user, error);
         }
     });
-};
+}
 
 commands.login = login;
 
 function logout(sessionUser) {
-    console.log("I heard your request to logout")
+    console.log("I heard your request to logout");
 
-    if (Parse.User.current()) {
-        Parse.User.logOut();
+    if (window.Parse.User.current()) {
+        window.Parse.User.logOut();
         console.log("User Logged Out");
         window.commands.sendData('/index.html');
     }
@@ -215,7 +255,7 @@ function logout(sessionUser) {
         console.log("Please Login");
         window.commands.sendData('login.html');
     }
-};
+}
 
 commands.logout = logout;
 
