@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Vitality Tracker</title>
+  <title>Vitality For Life</title>
   <!--<meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta name="description" content="Improve Vitality. Improve Life" />
@@ -31,7 +31,7 @@
     ================================================== -->
   <script data-require="jquery" data-semver="2.1.4" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
   <script data-require="bootstrap" data-semver="3.3.5" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-  <script src="script.js"></script>
+  <script type="text/javascript" src="script.js"></script>
 </head>
 
 <body id="goalsPage">
@@ -90,10 +90,10 @@
     // RatingsQuery.greaterThanOrEqualTo('createdAt', today);
     // FitnessQuery.greaterThanOrEqualTo('createdAt', today);
     // User Name Condition
-    MealQuery.equalTo('userName', Parse.User.current().get('username'));
-    MeasurementsQuery.equalTo('userName', Parse.User.current().get('username'));
-    RatingsQuery.equalTo('userName', Parse.User.current().get('username'));
-    FitnessQuery.equalTo('userName', Parse.User.current().get('username'));
+    MealQuery.equalTo('userName', window.Parse.User.current().get('username'));
+    MeasurementsQuery.equalTo('userName', window.Parse.User.current().get('username'));
+    RatingsQuery.equalTo('userName', window.Parse.User.current().get('username'));
+    FitnessQuery.equalTo('userName', window.Parse.User.current().get('username'));
 
     MealQuery.find({
       success: function(res) {
@@ -159,18 +159,28 @@
     }).then(function(res) {
       // Grab weight from last week and compare to most recnent
       var weightDiff = QueryResults.measurements[0].reduce(function(o, measurement, i, a) {
+        // Set 7 Day Date Requirement
+        var d = new Date(); 
+        var dOld = d.setDate(d.getDate() - 7);
+        var validTime = measurement.data.createdAt.getTime() >= new Date(dOld).getTime();
+        // console.log("Valid Measurement?", validTime);
         // Verify that weight is a valid measurement
         var validWeight;
         var createdAt = measurement.data.createdAt;
         // determine if weight is oldest or newest
         o.oldestDate = new Date(o.oldestDate).getTime() <= new Date(createdAt).getTime() ? o.oldestDate : createdAt;
         // Get Valid Weight  
-        if (measurement.data.weight != "") validWeight = measurement.data.weight;
+        if (measurement.data.weight != "" && validTime) validWeight = measurement.data.weight;
         // Determine Start Weight
-        if (o.oldestDate.getTime() >= createdAt.getTime()) o.startWeight = {
+        if (validTime) o.startWeight = {
           weight: validWeight,
           date: createdAt
-        };
+        }; else {
+          o.startWeight = {
+            weight: 0,
+            date: new Date(Date.now())
+          };
+        }
         // Determine End Weight
         if (createdAt.getTime() >= o.oldestDate.getTime()) o.endWeight = {
           weight: validWeight,
@@ -213,12 +223,20 @@
     }).then(function(res) {
       // console.log("QUERY.RATINGS", QueryResults.ratings);
       var averageRatings = QueryResults.ratings[0].reduce(function(o, rating, i, a) {
+        // Set 7 Day Date Requirement
+        var d = new Date(); 
+        var dOld = d.setDate(d.getDate() - 7);
         // For each entry, determine the average
         // Divide by the number of entries
         // Divide by the difference in days
         // console.log("RATING", rating);
         for (var prop in rating["data"]) {
-          if (!isNaN(rating["data"][prop]) && prop != "createdAt" && prop != "updatedAt")
+          // 7 Day Validation, not in use due to
+          // not enough tracked data. Using formula
+          // to suit total tracked data
+          var valid = rating.data.createdAt.getTime() >= new Date(dOld).getTime();
+          // console.log("This is Valid Rating", valid);
+          if (!isNaN(rating["data"][prop]) && valid && prop != "createdAt" && prop != "updatedAt")
             o["totals"][prop] = !!o["totals"][prop] ? rating["data"][prop] + o["totals"][prop] : rating["data"][prop];
         }
         for (var p in o.totals)
@@ -252,11 +270,16 @@
       }
     }).then(function(res) {
       // console.log("QUERY.RATINGS", QueryResults.ratings);
-      var activityCount = QueryResults.fitness[0].reduce(function(o, activity, i, a) {
+      var activityCount = QueryResults.fitness[0].reduce(function(o, activity, i, ar) {
+        // Set 7 Day Date Requirement
+        var d = new Date(); 
+        var dOld = d.setDate(d.getDate() - 7);
         // Count Activities Completed
         var a = activity.data.item;
-        // console.log("Activity", a);
-        o[a] = isNaN(o[a]) ? 1 : o[a] + 1;
+        var valid = activity.data.createdAt.getTime() >= dOld;
+        // console.log("Activity", a, "What is it?", o[a], "Data Item", a);
+        // console.log("Activity Data For " + a, activity, ["valid?", valid], ["Math", activity.data.createdAt.getTime() >= dOld], ["On", activity.data.createdAt, new Date(dOld)]);
+        o[a] = isNaN(o[a]) && valid ? 1 : o[a] + 1;
         // console.log("Activity Count", o);
         return o;
       }, {});
@@ -272,8 +295,13 @@
     var goalConditions = [{
       condition: "equalTo",
       col: "userName",
-      val: Parse.User.current().get('username')
+      val: window.Parse.User.current().get('username')
     }];
+    // , {
+    //   condition: "lessThanOrEqualTo",
+    //   col: "createdAt",
+    //   val: new Date(d)
+    // }];
 
     // console.log("Stats", Stats);
 
@@ -281,9 +309,11 @@
     goals.then(function(res) {
       // console.log("RESPONSE FROM FIRST CHAIN", res);
       var data = Array.prototype.slice.call(res).reduce(function(p, c, i, a) {
+        // Create Goal Object
         var o = {};
         o[c.id] = c.attributes;
-        // console.log("RES", c, "OBJECT", o);
+        // console.log("RES", c, "OBJECT", [o[c.id].createdAt.getTime(), new Date(dOld).getTime()], ["Greater Than?", o[c.id].createdAt.getTime() >= new Date(dOld).getTime()]);
+        // if (o[c.id].createdAt.getTime() >= new Date(dOld).getTime()) p.push(o);
         p.push(o);
         return p;
       }, []);
@@ -380,7 +410,7 @@
                 // Append Collected Stats
                 // console.warn("LOOKING FOR KEY", el[prop][p], el[prop][p].id, "PROP", p, "LENGTH", el[prop][p].length > 0);
                 if (el[prop][p].length > 0) createAndAppendTr(table, p, el[prop][p]);
-                else console.log("SKIPPING UNDEFINED", prop);
+                else continue;
               }
             }
           }
@@ -494,8 +524,8 @@
         function removeBtn(ev) {
           var tr = ev.target.parentNode.parentNode.parentNode;
           console.log("REMOVING", tr);
-          var del = new Parse.Query('Goals');
-          del.equalTo('userName', Parse.User.current().get('username'));
+          var del = new window.Parse.Query('Goals');
+          del.equalTo('userName', window.Parse.User.current().get('username'));
           del.get(tr.parseData.id, {
             success: function(res) {
               // Remove Index from Save Data

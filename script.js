@@ -52,15 +52,15 @@ function encodeAndSend(url, data) {
     var h = window.location.pathname.split("/");
     h.shift(), h.pop(); var host = h.join("/");
 
-    var s = JSON.stringify(data);
-    var u = url + "?";
-    var encData = encodeURIComponent(s);
-
     if (!data || data == 'undefined' || data == null)
         data = {
             message: "Data is null"
         };
-
+    
+    var s = JSON.stringify(data);
+    var u = url + "?";
+    var encData = encodeURIComponent(s);
+    
     if (window.location.href[0] == "f") {
         u = "file:///" + host + u;
         console.log(["You're running on local host"], ["pathname", window.location.pathname], ["Sending to u", u]);
@@ -232,7 +232,7 @@ function login(username, password) {
             // Do stuff after successful login.
             console.log("Success! Parse has logged in the user: " + username);
             // Reload Window To Update Scope
-            window.commands.sendData("/index.html");
+            window.commands.sendData("index.html");
         },
         error: function(user, error) {
             // The login failed. Check error to see why.
@@ -249,7 +249,7 @@ function logout(sessionUser) {
     if (window.Parse.User.current()) {
         window.Parse.User.logOut();
         console.log("User Logged Out");
-        window.commands.sendData('/index.html');
+        window.commands.sendData('index.html');
     }
     else {
         console.log("Please Login");

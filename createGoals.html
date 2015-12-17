@@ -3,7 +3,7 @@
 
 <head>
    <meta charset="utf-8" />
-   <title>Vitality Tracker</title>
+   <title>Vitality For Life</title>
    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
    <meta name="description" content="Improve Vitality. Improve Life" />
@@ -32,7 +32,7 @@
    <script data-require="bootstrap" data-semver="3.3.5" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
    <!--<script data-require="bootbox" data-semver="4.4.0" src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>-->
 
-   <script src="script.js"></script>
+   <script type="text/javascript" src="script.js"></script>
 </head>
 
 <body id="createGoals">
@@ -89,10 +89,10 @@
             </div>
             <div class="modal-body">
                <div class="modal-body-heading"></div>
-               <input type="number" min="1" max="" name="goal-input" class="body-input form-control" />
                <select name="goal-select" class="activity-select form-control hidden">
                   <option class="activity-option" value=" " selected="selected"></option>
                </select>
+               <input type="number" min="1" max="" name="goal-input" class="body-input form-control" />
             </div>
             <div class="modal-footer">
                <button type="button" class="weight-btn hidden btn btn-success pull-left" data-dismiss="modal" onclick="confirmWeight('lose')">Lose</button>
@@ -243,7 +243,7 @@
             },
             fitness: {
                title: "Track Your Fitness Activities",
-               questions: ["What activity do you want to track?", "How many times a week will you do this?"],
+               questions: ["What activity do you want to track? <br> How many times a week?"],
                list: data,
                type: "prompt"
             }
@@ -330,14 +330,14 @@
          // console.log("SHOWING FIT BTNS");
          
          selectBox[0].classList.remove('hidden');
-         document.getElementsByClassName('body-input')[0].classList.add('hidden');
+         // document.getElementsByClassName('body-input')[0].classList.add('hidden');
       }
       
       function hideFitnessOptions() {
          // console.log("HIDDING FIT BTNS");
          
          selectBox[0].classList.add('hidden');
-         document.getElementsByClassName('body-input')[0].classList.remove('hidden');
+         // document.getElementsByClassName('body-input')[0].classList.remove('hidden');
       }
       
       function addItem(){
@@ -464,7 +464,7 @@
             calories: ["eat", parseInt(savedInputs.input, 10), "calories"],
             weight: [savedInputs.weight, parseInt(savedInputs.input, 10), "pounds"],
             emotion: ["feel", parseInt(savedInputs.input, 10), "on my Rate Me scale"],
-            fitness: [activity, 3]
+            fitness: [activity, parseInt(savedInputs.input, 10)]
          };
          // console.log("DATA TO USE", args);
          var tmp;

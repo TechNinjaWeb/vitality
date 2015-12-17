@@ -373,3 +373,19 @@ a {
     margin-top: 18px;
     font-size: 25px;
 }
+
+#infoPage .page-content{
+  margin-bottom: 60px;
+}
+
+#infoPage .description:first-child {
+    margin-bottom: 50px;
+}
+
+#infoPage .description:not(:first-child) {
+    margin-bottom: 40px;
+}
+
+#infoPage .credits {
+    margin-top: 10px;
+}
